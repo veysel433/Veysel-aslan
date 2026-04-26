@@ -101,7 +101,7 @@ export default {
        ═══════════════════════════════════════════ */
     .parallax-hero{
       position:relative;
-      height:300vh; /* Uzun scroll alanı */
+      height:200vh; /* Uzun scroll alanı */
       overflow:hidden;
     }
     .parallax-hero-inner{
@@ -122,6 +122,7 @@ export default {
         radial-gradient(ellipse 60% 40% at 70% 30%, rgba(232,114,42,0.08) 0%, transparent 50%),
         linear-gradient(180deg, #050d1a 0%, #030810 40%, #050810 100%);
       will-change:transform;
+      transform:translateZ(0);
     }
     /* Nebula rings */
     .layer-bg::before{
@@ -149,6 +150,7 @@ export default {
       position:absolute;inset:0;z-index:1;
       will-change:transform;
       pointer-events:none;
+      transform:translateZ(0);
     }
     .mountain-svg{
       position:absolute;bottom:0;width:100%;height:70%;
@@ -167,6 +169,7 @@ export default {
       position:absolute;inset:0;z-index:3;
       pointer-events:none;
       will-change:transform;
+      transform:translateZ(0);
     }
 
     /* Layer 4 – Particles canvas */
@@ -548,7 +551,7 @@ export default {
       .nav-links{display:none}
       .about-card{padding:3rem 1.5rem}
       .connect-grid{grid-template-columns:1fr}
-      .parallax-hero{height:200vh}
+      .parallax-hero{height:150vh}
       .quote-text{font-size:clamp(1.4rem,5vw,2rem)}
     }
   </style>
@@ -768,20 +771,29 @@ export default {
     /* ── CURSOR ── */
     const cur=document.getElementById('cursor');
     const ring=document.getElementById('cursorRing');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{
-      mx=e.clientX;my=e.clientY;
-      cur.style.left=mx+'px';cur.style.top=my+'px';
-    });
-    (function loop(){
-      rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
-      ring.style.left=rx+'px';ring.style.top=ry+'px';
-      requestAnimationFrame(loop);
-    })();
-    document.querySelectorAll('a,button,.connect-card,.about-card').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{cur.classList.add('hov');ring.classList.add('hov')});
-      el.addEventListener('mouseleave',()=>{cur.classList.remove('hov');ring.classList.remove('hov')});
-    });
+
+    // Touch cihazlarda imleci gizle
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if(isTouchDevice){
+      cur.style.display='none';
+      ring.style.display='none';
+      document.body.style.cursor='auto';
+    } else {
+      let mx=0,my=0,rx=0,ry=0;
+      document.addEventListener('mousemove',e=>{
+        mx=e.clientX;my=e.clientY;
+        cur.style.left=mx+'px';cur.style.top=my+'px';
+      });
+      (function loop(){
+        rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+        ring.style.left=rx+'px';ring.style.top=ry+'px';
+        requestAnimationFrame(loop);
+      })();
+      document.querySelectorAll('a,button,.connect-card,.about-card').forEach(el=>{
+        el.addEventListener('mouseenter',()=>{cur.classList.add('hov');ring.classList.add('hov')});
+        el.addEventListener('mouseleave',()=>{cur.classList.remove('hov');ring.classList.remove('hov')});
+      });
+    }
 
     /* ── CARD MOUSE RADIAL ── */
     document.querySelectorAll('.connect-card').forEach(c=>{
@@ -796,34 +808,34 @@ export default {
        PARALLAX SCROLL — Video Tarzı Çok Katmanlı
        ═══════════════════════════════════════════ */
 
-    // Layer 0: Background (en yavaş — 0.1x)
+    // Layer 0: Background (en yavaş)
     gsap.to('#layerBg',{
-      yPercent:-10,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+      yPercent:-8,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
     });
 
-    // Layer 1: Mid mountains (yavaş — 0.3x)
+    // Layer 1: Mid mountains (yavaş)
     gsap.to('#layerMid',{
-      yPercent:-30,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+      yPercent:-20,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
     });
 
     // Layer 2: Mist (orta)
     gsap.to('#layerMist',{
-      yPercent:-20,opacity:.3,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+      yPercent:-12,opacity:.3,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
     });
 
-    // Layer 3: Foreground rocks (orta-hızlı — 0.6x)
+    // Layer 3: Foreground rocks (orta-hızlı)
     gsap.to('#layerFg',{
-      yPercent:40,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+      yPercent:25,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
     });
 
-    // Layer 5: Hero content (en hızlı — scroll ile yukarı çıkar, 1.0x)
+    // Layer 5: Hero content (en hızlı)
     gsap.to('#heroContent',{
-      yPercent:-80,opacity:0,scale:0.9,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'70% top',scrub:true}
+      yPercent:-50,opacity:0,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'70% top',scrub:1}
     });
 
     /* ═══════════════════════════════════════════
@@ -861,7 +873,7 @@ export default {
       init(){
         this.x=Math.random()*W;this.y=Math.random()*H;
         this.size=Math.random()*1.2+.3;
-        this.vx=(Math.random()-.5)*.25;this.vy=-Math.random()*.35-.05;
+        this.vx=(Math.random()-.5)*.15;this.vy=-Math.random()*.2-.03;
         this.life=0;this.maxLife=Math.random()*200+100;
         this.type=Math.random()<.6?'teal':'orange';
         this.opacity=0;
@@ -881,7 +893,8 @@ export default {
       }
     }
     const particles=[];
-    for(let i=0;i<180;i++){
+    const particleCount = isTouchDevice ? 25 : 60;
+    for(let i=0;i<particleCount;i++){
       const p=new Particle();
       p.life=Math.random()*p.maxLife;
       particles.push(p);
