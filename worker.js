@@ -1,969 +1,1104 @@
 export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    if (url.pathname !== '/' && url.pathname !== '/index.html') {
-      return new Response('Not Found', { status: 404 });
-    }
-
+  async fetch(request, env, ctx) {
     const html = `<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Veysel Aslan / Creative Developer</title>
+  <meta name="description" content="Veysel Aslan - Sınırları Aş, İz Bırak. Yaratıcı geliştirici ve tasarımcı kişisel portföy sitesi.">
+  <meta name="keywords" content="Veysel Aslan, creative developer, tasarımcı, yazılım, portfolio">
+  <meta name="author" content="Veysel Aslan">
+  <meta name="language" content="Turkish">
+  <title>Veysel Aslan | Creative Developer</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --bg:#050810;
-      --teal-deep:#0a1628;
-      --teal:#0d4f5c;
-      --teal-glow:rgba(13,200,200,0.15);
-      --orange:#e8722a;
-      --orange-glow:rgba(232,114,42,0.25);
-      --gold:#d4a853;
-      --gold-glow:rgba(212,168,83,0.3);
-      --text-primary:#e8e0d0;
-      --text-secondary:#8a9bb0;
-      --border:rgba(13,200,200,0.12);
-      --surface:rgba(10,22,40,0.7);
-    }
-    html{scroll-behavior:smooth;background:var(--bg);overflow-x:hidden}
-    body{
-      font-family:'Raleway',sans-serif;
-      background:var(--bg);
-      color:var(--text-primary);
-      overflow-x:hidden;
-      cursor:none;
-      -webkit-font-smoothing:antialiased;
-    }
-
-    /* ── CURSOR ── */
-    .cursor{
-      position:fixed;width:10px;height:10px;
-      background:var(--orange);border-radius:50%;
-      pointer-events:none;z-index:99999;
-      transform:translate(-50%,-50%);
-      box-shadow:0 0 10px var(--orange-glow),0 0 20px var(--orange-glow);
-      transition:width .2s,height .2s;
-    }
-    .cursor-ring{
-      position:fixed;width:40px;height:40px;
-      border:1px solid rgba(13,200,200,0.6);border-radius:50%;
-      pointer-events:none;z-index:99998;
-      transform:translate(-50%,-50%);
-      transition:all .12s ease-out;
-    }
-    .cursor.hov{width:50px;height:50px;background:rgba(232,114,42,.15);border:1px solid var(--orange)}
-    .cursor-ring.hov{width:70px;height:70px;border-color:rgba(232,114,42,.4)}
-
-    /* ── NAV ── */
-    .nav{
-      position:fixed;top:0;left:0;right:0;z-index:100;
-      padding:1.8rem 4rem;
-      display:flex;justify-content:space-between;align-items:center;
-      background:linear-gradient(to bottom,rgba(5,8,16,0.6),transparent);
-      backdrop-filter:blur(0px);
-      transition:all .4s;
-    }
-    .nav.scrolled{
-      backdrop-filter:blur(20px);
-      background:rgba(5,8,16,0.85);
-      border-bottom:1px solid var(--border);
-      padding:1.2rem 4rem;
-    }
-    .nav-logo{
-      font-family:'Cinzel',serif;
-      font-weight:700;font-size:1.1rem;
-      letter-spacing:4px;text-transform:uppercase;
-      color:var(--text-primary);
-    }
-    .nav-logo span{color:var(--orange)}
-    .nav-links{display:flex;gap:3rem;list-style:none}
-    .nav-links a{
-      color:rgba(232,224,208,.6);text-decoration:none;
-      font-size:.75rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
-      transition:color .3s;position:relative;
-    }
-    .nav-links a::after{
-      content:'';position:absolute;bottom:-4px;left:0;
-      width:0;height:1px;background:var(--teal);transition:width .3s;
-    }
-    .nav-links a:hover{color:rgba(13,220,220,.9)}
-    .nav-links a:hover::after{width:100%}
-
-    /* ═══════════════════════════════════════════
-       PARALLAX HERO — Çok Katmanlı (Video Tarzı)
-       ═══════════════════════════════════════════ */
-    .parallax-hero{
-      position:relative;
-      height:200vh; /* Uzun scroll alanı */
-      overflow:hidden;
-    }
-    .parallax-hero-inner{
-      position:sticky;
-      top:0;
-      height:100vh;
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    /* Layer 0 – Sky / deep bg (en yavaş) */
-    .layer-bg{
-      position:absolute;inset:0;z-index:0;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(13,79,92,0.5) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 70% 30%, rgba(232,114,42,0.08) 0%, transparent 50%),
-        linear-gradient(180deg, #050d1a 0%, #030810 40%, #050810 100%);
-      will-change:transform;
-      transform:translateZ(0);
-    }
-    /* Nebula rings */
-    .layer-bg::before{
-      content:'';position:absolute;
-      width:700px;height:700px;
-      top:50%;left:50%;transform:translate(-50%,-60%);
-      background:radial-gradient(circle, rgba(13,200,200,0.07) 0%, rgba(13,79,92,0.05) 30%, transparent 70%);
-      border-radius:50%;
-      box-shadow:0 0 120px 40px rgba(13,200,200,0.04),inset 0 0 80px rgba(13,200,200,0.03);
-      animation:nebulaPulse 8s ease-in-out infinite;
-    }
-    .layer-bg::after{
-      content:'';position:absolute;
-      width:400px;height:400px;
-      top:30%;left:55%;transform:translate(-50%,-50%);
-      background:radial-gradient(circle, rgba(232,114,42,0.12) 0%, transparent 70%);
-      border-radius:50%;
-      animation:moonGlow 6s ease-in-out infinite alternate;
-    }
-    @keyframes nebulaPulse{0%,100%{opacity:.7;transform:translate(-50%,-60%) scale(1)}50%{opacity:1;transform:translate(-50%,-60%) scale(1.05)}}
-    @keyframes moonGlow{0%{opacity:.6}100%{opacity:1}}
-
-    /* Layer 1 – Floating mountains (mid, yavaş) */
-    .layer-mid{
-      position:absolute;inset:0;z-index:1;
-      will-change:transform;
-      pointer-events:none;
-      transform:translateZ(0);
-    }
-    .mountain-svg{
-      position:absolute;bottom:0;width:100%;height:70%;
-    }
-
-    /* Layer 2 – Mist / atmosphere */
-    .layer-mist{
-      position:absolute;inset:0;z-index:2;
-      pointer-events:none;
-      background:linear-gradient(to top, rgba(5,8,16,0) 0%, rgba(5,8,16,0.08) 50%, rgba(5,8,16,0) 100%);
-      will-change:transform;
-    }
-
-    /* Layer 3 – Foreground rocks silhouette (orta hız) */
-    .layer-fg{
-      position:absolute;inset:0;z-index:3;
-      pointer-events:none;
-      will-change:transform;
-      transform:translateZ(0);
-    }
-
-    /* Layer 4 – Particles canvas */
-    #particle-canvas{
-      position:absolute;inset:0;z-index:4;
-      pointer-events:none;
-      opacity:.9;
-    }
-
-    /* Layer 5 – Hero content (en hızlı — scroll ile yukarı çıkar) */
-    .hero-content{
-      position:relative;z-index:10;
-      text-align:center;
-      padding:2rem;
-      will-change:transform;
-    }
-    .hero-badge{
-      display:inline-block;
-      padding:.5rem 2rem;
-      border:1px solid rgba(13,200,200,0.3);
-      border-radius:2px;
-      font-size:.65rem;letter-spacing:6px;
-      text-transform:uppercase;
-      color:rgba(13,220,220,0.8);
-      margin-bottom:2rem;
-      background:rgba(13,200,200,0.05);
-      backdrop-filter:blur(10px);
-      clip-path:polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    }
-    .hero-title{
-      font-family:'Cinzel',serif;
-      font-size:clamp(4rem,11vw,9.5rem);
-      font-weight:900;
-      line-height:.88;
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      color:var(--text-primary);
-      text-shadow:0 0 60px rgba(13,200,200,0.15),0 0 120px rgba(13,200,200,0.08);
-      margin-bottom:1.5rem;
-    }
-    .hero-title .fire{
-      display:block;
-      background:linear-gradient(135deg,#e8722a 0%,#f0a050 40%,#d4a853 60%,#e8722a 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      filter:drop-shadow(0 0 30px rgba(232,114,42,0.4));
-      animation:fireShimmer 4s ease-in-out infinite;
-    }
-    @keyframes fireShimmer{
-      0%,100%{filter:drop-shadow(0 0 30px rgba(232,114,42,.4))}
-      50%{filter:drop-shadow(0 0 50px rgba(232,114,42,.7)) drop-shadow(0 0 80px rgba(212,168,83,.3))}
-    }
-    .hero-sub{
-      font-family:'Raleway',sans-serif;
-      font-size:.9rem;font-weight:300;
-      letter-spacing:5px;text-transform:uppercase;
-      color:var(--text-secondary);
-      margin-top:1rem;
-    }
-    .hero-cta{
-      display:inline-flex;align-items:center;gap:.8rem;
-      margin-top:3rem;
-      padding:1rem 3rem;
-      background:rgba(232,114,42,0.1);
-      border:1px solid rgba(232,114,42,0.4);
-      border-radius:2px;
-      color:var(--orange);
-      text-decoration:none;
-      font-family:'Raleway',sans-serif;
-      font-size:.8rem;letter-spacing:4px;text-transform:uppercase;
-      backdrop-filter:blur(20px);
-      transition:all .4s;
-      clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
-      position:relative;overflow:hidden;
-    }
-    .hero-cta::before{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(90deg,transparent,rgba(232,114,42,.1),transparent);
-      transform:translateX(-100%);transition:transform .6s;
-    }
-    .hero-cta:hover::before{transform:translateX(100%)}
-    .hero-cta:hover{
-      background:rgba(232,114,42,0.2);
-      border-color:rgba(232,114,42,0.7);
-      box-shadow:0 0 30px rgba(232,114,42,0.3),inset 0 0 20px rgba(232,114,42,0.05);
-      color:#f0c070;
-    }
-
-    /* Scroll indicator */
-    .scroll-indicator{
-      position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
-      display:flex;flex-direction:column;align-items:center;gap:.8rem;
-      z-index:10;color:rgba(255,255,255,.3);
-      font-size:.6rem;letter-spacing:4px;text-transform:uppercase;
-    }
-    .scroll-line{
-      width:1px;height:60px;
-      background:linear-gradient(to bottom,var(--teal),transparent);
-      animation:scrollDrop 2s ease-in-out infinite;
-    }
-    @keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-
-    /* ═══════════════════════════════════════════
-       SCROLL QUOTES — Video Tarzı Metin Overlay
-       ═══════════════════════════════════════════ */
-    .quotes-section{
-      position:relative;
-      min-height:400vh;
-      background:linear-gradient(180deg,var(--bg) 0%,rgba(8,15,28,1) 30%,var(--bg) 100%);
-      overflow:hidden;
-    }
-    .quotes-section::before{
-      content:'';position:absolute;
-      width:600px;height:600px;
-      top:20%;left:50%;transform:translate(-50%,-50%);
-      background:radial-gradient(circle,rgba(13,200,200,0.04) 0%,transparent 70%);
-      pointer-events:none;
-    }
-
-    .quote-layer{
-      position:sticky;
-      top:0;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-
-    .quote-item{
-      position:absolute;
-      text-align:center;
-      max-width:800px;
-      padding:2rem;
-      opacity:0;
-      transform:translateY(60px) scale(0.95);
-      transition:none;
-    }
-    .quote-item.active{
-      opacity:1;
-      transform:translateY(0) scale(1);
-    }
-
-    .quote-text{
-      font-family:'Cinzel',serif;
-      font-size:clamp(1.8rem,4vw,3.2rem);
-      font-weight:600;
-      line-height:1.5;
-      color:var(--text-primary);
-      margin-bottom:1.5rem;
-      text-shadow:0 0 40px rgba(13,200,200,0.1);
-    }
-    .quote-text .teal{color:rgba(13,220,220,0.9);text-shadow:0 0 20px rgba(13,200,200,0.4)}
-    .quote-text .fire-text{
-      background:linear-gradient(135deg,#e8722a,#f0a050,#d4a853);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .quote-author{
-      font-size:.7rem;letter-spacing:6px;text-transform:uppercase;
-      color:rgba(13,200,200,0.5);
-    }
-    .quote-author::before{
-      content:'';display:inline-block;width:30px;height:1px;
-      background:rgba(13,200,200,0.4);vertical-align:middle;margin-right:1rem;
-    }
-    .quote-author::after{
-      content:'';display:inline-block;width:30px;height:1px;
-      background:rgba(13,200,200,0.4);vertical-align:middle;margin-left:1rem;
-    }
-
-    /* Dekoratif süsleme */
-    .quote-ornament{
-      font-family:'Cinzel',serif;
-      font-size:6rem;
-      color:rgba(13,200,200,0.05);
-      position:absolute;
-      line-height:1;
-      user-select:none;
-      pointer-events:none;
-    }
-
-    /* ═══════════════════════════════════════════
-       ABOUT / BİYOGRAFİ
-       ═══════════════════════════════════════════ */
-    .about-section{
-      min-height:100vh;display:flex;align-items:center;justify-content:center;
-      padding:8rem 2rem;position:relative;
-      background:linear-gradient(180deg,var(--bg) 0%,rgba(8,15,28,1) 50%,var(--bg) 100%);
-      overflow:hidden;
-    }
-    .about-section::before{
-      content:'';position:absolute;
-      width:600px;height:600px;
-      top:50%;left:50%;transform:translate(-50%,-50%);
-      background:radial-gradient(circle,rgba(13,200,200,0.04) 0%,transparent 70%);
-      pointer-events:none;
-    }
-    .about-card{
-      max-width:820px;width:100%;
-      background:rgba(10,22,40,0.6);
-      border:1px solid var(--border);
-      border-radius:4px;
-      padding:5rem 4rem;
-      text-align:center;
-      position:relative;
-      overflow:hidden;
-      backdrop-filter:blur(40px);
-      clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
-    }
-    .about-card::before{
-      content:'';position:absolute;
-      top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(13,200,200,0.4),rgba(232,114,42,0.4),transparent);
-    }
-    .about-card::after{
-      content:'';position:absolute;
-      bottom:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(232,114,42,0.3),transparent);
-    }
-    .about-ornament{
-      font-family:'Cinzel',serif;
-      font-size:5rem;color:rgba(13,200,200,0.06);
-      position:absolute;top:1.5rem;left:2.5rem;
-      line-height:1;user-select:none;
-    }
-    .about-quote{
-      font-family:'Cinzel',serif;
-      font-size:clamp(1.6rem,3.5vw,2.5rem);
-      font-weight:600;line-height:1.4;
-      color:var(--text-primary);
-      margin-bottom:2rem;position:relative;z-index:1;
-    }
-    .about-quote .teal{color:rgba(13,220,220,0.9);text-shadow:0 0 20px rgba(13,200,200,0.4)}
-    .about-quote .fire-text{
-      background:linear-gradient(135deg,#e8722a,#f0a050,#d4a853);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .about-author{
-      font-size:.7rem;letter-spacing:6px;text-transform:uppercase;
-      color:rgba(13,200,200,0.5);position:relative;z-index:1;
-    }
-    .about-author::before{
-      content:'';display:inline-block;width:30px;height:1px;
-      background:rgba(13,200,200,0.4);vertical-align:middle;margin-right:1rem;
-    }
-    .about-author::after{
-      content:'';display:inline-block;width:30px;height:1px;
-      background:rgba(13,200,200,0.4);vertical-align:middle;margin-left:1rem;
-    }
-
-    /* ═══════════════════════════════════════════
-       CONNECT
-       ═══════════════════════════════════════════ */
-    .connect-section{
-      padding:10rem 2rem;min-height:100vh;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      position:relative;
-      background:var(--bg);
-    }
-    .connect-section::before{
-      content:'';position:absolute;inset:0;
-      background:
-        radial-gradient(ellipse 50% 40% at 30% 50%,rgba(13,79,92,0.08) 0%,transparent 60%),
-        radial-gradient(ellipse 40% 30% at 70% 50%,rgba(232,114,42,0.06) 0%,transparent 60%);
-      pointer-events:none;
-    }
-    .section-eyebrow{
-      font-size:.65rem;letter-spacing:7px;text-transform:uppercase;
-      color:rgba(13,220,220,0.7);margin-bottom:1.2rem;
-    }
-    .section-title{
-      font-family:'Cinzel',serif;
-      font-size:clamp(2.5rem,6vw,5rem);
-      font-weight:700;letter-spacing:.05em;text-transform:uppercase;
-      line-height:.9;text-align:center;margin-bottom:5rem;
-    }
-    .section-title .fire{
-      display:block;
-      background:linear-gradient(135deg,#e8722a,#f0a050,#d4a853);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      filter:drop-shadow(0 0 20px rgba(232,114,42,0.3));
-    }
-    .connect-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:1.5rem;max-width:900px;width:100%;
-    }
-    .connect-card{
-      background:rgba(10,22,40,0.5);
-      border:1px solid rgba(13,200,200,0.12);
-      border-radius:4px;
-      padding:3rem 2rem;
-      text-decoration:none;color:inherit;
-      transition:all .4s cubic-bezier(.16,1,.3,1);
-      position:relative;overflow:hidden;
-      display:flex;flex-direction:column;align-items:center;
-      text-align:center;gap:1.5rem;
-      clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
-      backdrop-filter:blur(20px);
-    }
-    .connect-card::before{
-      content:'';position:absolute;
-      top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(13,200,200,0.5),transparent);
-      opacity:0;transition:opacity .4s;
-    }
-    .connect-card:hover::before{opacity:1}
-    .connect-card::after{
-      content:'';position:absolute;inset:0;
-      background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(13,200,200,0.08) 0%,transparent 60%);
-      opacity:0;transition:opacity .4s;
-    }
-    .connect-card:hover::after{opacity:1}
-    .connect-card:hover{
-      border-color:rgba(13,200,200,0.3);
-      transform:translateY(-6px);
-      box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(13,200,200,0.08);
-    }
-    .connect-card.orange-card:hover{
-      border-color:rgba(232,114,42,0.3);
-      box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(232,114,42,0.1);
-    }
-    .connect-card.orange-card::after{
-      background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(232,114,42,0.1) 0%,transparent 60%);
-    }
-    .connect-card.orange-card::before{
-      background:linear-gradient(90deg,transparent,rgba(232,114,42,0.5),transparent);
-    }
-    .connect-icon{
-      width:64px;height:64px;border-radius:50%;
-      background:rgba(13,200,200,0.06);
-      border:1px solid rgba(13,200,200,0.2);
-      display:flex;align-items:center;justify-content:center;
-      position:relative;z-index:1;
-      transition:all .4s;
-    }
-    .connect-card.orange-card .connect-icon{
-      background:rgba(232,114,42,0.06);border-color:rgba(232,114,42,0.2);
-    }
-    .connect-card:hover .connect-icon{box-shadow:0 0 20px rgba(13,200,200,0.2)}
-    .connect-card.orange-card:hover .connect-icon{box-shadow:0 0 20px rgba(232,114,42,0.2)}
-    .connect-icon svg{width:26px;height:26px;fill:rgba(13,220,220,0.8)}
-    .connect-card.orange-card .connect-icon svg{fill:var(--orange)}
-    .connect-platform{
-      font-family:'Cinzel',serif;font-weight:600;font-size:1.2rem;
-      letter-spacing:.05em;position:relative;z-index:1;
-    }
-    .connect-username{
-      font-size:.8rem;color:var(--text-secondary);
-      position:relative;z-index:1;letter-spacing:1px;
-    }
-    .connect-arrow{
-      position:relative;z-index:1;
-      font-size:1.1rem;color:rgba(13,220,220,0.6);
-      transition:transform .3s;
-    }
-    .connect-card.orange-card .connect-arrow{color:rgba(232,114,42,0.6)}
-    .connect-card:hover .connect-arrow{transform:translate(4px,-4px);color:rgba(13,220,220,1)}
-    .connect-card.orange-card:hover .connect-arrow{color:var(--orange)}
-
-    /* ── FOOTER ── */
-    .footer{
-      padding:4rem 2rem;text-align:center;
-      border-top:1px solid rgba(13,200,200,0.08);
-      background:var(--bg);
-    }
-    .footer-name{
-      font-family:'Cinzel',serif;font-size:1.8rem;font-weight:700;
-      letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;
-    }
-    .footer-name .fire{
-      background:linear-gradient(135deg,#e8722a,#f0a050,#d4a853);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .footer-copy{font-size:.7rem;color:rgba(138,155,176,.5);letter-spacing:3px;text-transform:uppercase}
-
-    ::selection{background:rgba(13,200,200,0.25);color:#fff}
-
-    @media(max-width:768px){
-      .nav{padding:1.5rem}
-      .nav-links{display:none}
-      .about-card{padding:3rem 1.5rem}
-      .connect-grid{grid-template-columns:1fr}
-      .parallax-hero{height:150vh}
-      .quote-text{font-size:clamp(1.4rem,5vw,2rem)}
+    :root {
+      --midnight: #050810;
+      --teal: #0d4f5c;
+      --orange: #e8722a;
+      --gold: #d4a853;
+      --text-light: #e0e6ed;
+      --text-muted: #8a9bb3;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Raleway', sans-serif;
+      background-color: var(--midnight);
+      color: var(--text-light);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    
+    /* Custom Cursor */
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  background-color 0.3s ease;
+    }
+    
+    .cursor-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--orange);
+      box-shadow: 0 0 10px var(--orange), 0 0 20px var(--orange);
+    }
+    
+    .cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--teal);
+      box-shadow: 0 0 15px rgba(13, 79, 92, 0.5);
+    }
+    
+    .cursor-ring.hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--orange);
+      background-color: rgba(232, 114, 42, 0.1);
+    }
+    
+    /* Touch Device */
+    @media (pointer: coarse) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none !important; }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--midnight);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--teal);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--orange);
+    }
+    
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .nav.scrolled {
+      background: rgba(5, 8, 16, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(13, 79, 92, 0.3);
+      padding: 1rem 3rem;
+    }
+    
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      letter-spacing: 2px;
+    }
+    
+    .nav-logo .accent-dot {
+      color: var(--orange);
+      font-size: 2rem;
+      line-height: 0;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--orange);
+      transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .nav-links a:hover {
+      color: var(--orange);
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .parallax-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      will-change: transform;
+    }
+    
+    /* Layer 1: Nebula Sky */
+    .layer-nebula {
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(13, 79, 92, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(232, 114, 42, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(212, 168, 83, 0.1) 0%, transparent 60%),
+        var(--midnight);
+      z-index: 1;
+    }
+    
+    .nebula-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(13, 79, 92, 0.3) 0%, transparent 70%);
+      animation: nebulaPulse 8s ease-in-out infinite;
+    }
+    
+    @keyframes nebulaPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+    
+    /* Layer 2: Mountain Silhouettes */
+    .layer-mountains {
+      z-index: 2;
+      bottom: 0;
+      top: auto;
+      height: 60%;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .mountain-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Layer 3: Mist Overlay */
+    .layer-mist {
+      z-index: 3;
+      background: linear-gradient(to top, rgba(5, 8, 16, 0.9) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    
+    /* Layer 4: Foreground Rocks */
+    .layer-rocks {
+      z-index: 4;
+      bottom: 0;
+      top: auto;
+      height: 35%;
+    }
+    
+    /* Layer 5: Particles */
+    .layer-particles {
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    #particle-canvas {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Hero Content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 0 2rem;
+    }
+    
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, var(--orange), var(--gold), var(--orange), var(--gold));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fireShimmer 4s linear infinite;
+      letter-spacing: 4px;
+    }
+    
+    @keyframes fireShimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+    
+    .hero-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+    
+    .hero-cta {
+      display: inline-block;
+      padding: 1rem 3rem;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(13, 79, 92, 0.3), rgba(232, 114, 42, 0.2));
+      border: 1px solid rgba(212, 168, 83, 0.3);
+      clip-path: polygon(10% 0%, 100% 0%, 100% 70%, 90% 100%, 0% 100%, 0% 30%);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(232, 114, 42, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .hero-cta:hover::before {
+      left: 100%;
+    }
+    
+    .hero-cta:hover {
+      border-color: var(--orange);
+      box-shadow: 0 0 30px rgba(232, 114, 42, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--orange), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      50.1% { transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+    
+    .scroll-text {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    
+    /* Quotes Section */
+    .quotes-section {
+      position: relative;
+      min-height: 500vh;
+      background: var(--midnight);
+    }
+    
+    .quotes-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .quote-container {
+      position: absolute;
+      max-width: 900px;
+      padding: 0 2rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    
+    .quote-text {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text-light);
+      position: relative;
+    }
+    
+    .quote-ornament {
+      font-size: 4rem;
+      color: var(--teal);
+      line-height: 0;
+      display: block;
+      margin-bottom: 2rem;
+      opacity: 0.5;
+    }
+    
+    .quote-accent {
+      background: linear-gradient(90deg, var(--teal), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .quote-divider {
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+    }
+    
+    .quote-topic {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+    }
+    
+    /* About Section */
+    .about-section {
+      padding: 10rem 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, var(--midnight), rgba(13, 79, 92, 0.1), var(--midnight));
+    }
+    
+    .about-card {
+      position: relative;
+      max-width: 800px;
+      width: 100%;
+      padding: 4rem;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(212, 168, 83, 0.1);
+      clip-path: polygon(0% 0%, 95% 0%, 100% 5%, 100% 100%, 5% 100%, 0% 95%);
+      overflow: hidden;
+    }
+    
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--orange), var(--gold));
+    }
+    
+    .about-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--orange), var(--teal));
+    }
+    
+    .about-ornament {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 8rem;
+      color: rgba(13, 79, 92, 0.15);
+      line-height: 0;
+      pointer-events: none;
+    }
+    
+    .about-quote {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 500;
+      line-height: 1.8;
+      color: var(--text-light);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .about-accent-teal {
+      color: var(--teal);
+      text-shadow: 0 0 20px rgba(13, 79, 92, 0.5);
+    }
+    
+    .about-accent-fire {
+      background: linear-gradient(90deg, var(--orange), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Connect Section */
+    .connect-section {
+      padding: 8rem 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4rem;
+    }
+    
+    .connect-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .connect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+      gap: 3rem;
+      width: 100%;
+      max-width: 1000px;
+      justify-content: center;
+    }
+    
+    .connect-card {
+      position: relative;
+      padding: 3rem 2rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(13, 79, 92, 0.2);
+      clip-path: polygon(5% 0%, 100% 0%, 100% 95%, 95% 100%, 0% 100%, 0% 5%);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .connect-card::before {
+      content: '';
+      position: absolute;
+      top: var(--mouse-y, 50%);
+      left: var(--mouse-x, 50%);
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--glow-color, var(--teal)) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .connect-card:hover::before {
+      opacity: 0.3;
+    }
+    
+    .connect-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--glow-color, var(--teal));
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .connect-card.teal {
+      --glow-color: var(--teal);
+    }
+    
+    .connect-card.orange {
+      --glow-color: var(--orange);
+    }
+    
+    .connect-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      position: relative;
+    }
+    
+    .connect-card.teal .connect-icon {
+      background: rgba(13, 79, 92, 0.2);
+      border: 2px solid var(--teal);
+      box-shadow: 0 0 20px rgba(13, 79, 92, 0.3);
+      color: var(--teal);
+    }
+    
+    .connect-card.orange .connect-icon {
+      background: rgba(232, 114, 42, 0.2);
+      border: 2px solid var(--orange);
+      box-shadow: 0 0 20px rgba(232, 114, 42, 0.3);
+      color: var(--orange);
+    }
+    
+    .connect-platform {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+    
+    .connect-handle {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(13, 79, 92, 0.2);
+    }
+    
+    .footer-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--orange), var(--gold), var(--orange));
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fireShimmer 3s linear infinite;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    
+    .footer-copy {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .nav-links a { font-size: 0.7rem; letter-spacing: 2px; }
+      .about-card { padding: 2.5rem 1.5rem; }
+      .connect-grid { grid-template-columns: 1fr; }
+      .hero-subtitle { letter-spacing: 4px; }
     }
   </style>
 </head>
 <body>
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
 
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Navigation -->
   <nav class="nav" id="nav">
-    <div class="nav-logo">V<span>.</span>A</div>
+    <a href="#" class="nav-logo">
+      V<span class="accent-dot">.</span>A
+    </a>
     <ul class="nav-links">
-      <li><a href="#home">Anasayfa</a></li>
+      <li><a href="#hero">Anasayfa</a></li>
       <li><a href="#quotes">Sözler</a></li>
       <li><a href="#about">Hakkımda</a></li>
       <li><a href="#connect">İletişim</a></li>
     </ul>
   </nav>
 
-  <!-- ═══════════════════════════════════════════
-       PARALLAX HERO — Video Tarzı Çok Katmanlı
-       ═══════════════════════════════════════════ -->
-  <section class="parallax-hero" id="home">
-    <div class="parallax-hero-inner">
-      <!-- Layer 0: Background sky (en yavaş) -->
-      <div class="layer-bg" id="layerBg"></div>
-
-      <!-- Layer 1: Mountain silhouettes (mid, yavaş) -->
-      <div class="layer-mid" id="layerMid">
-        <svg class="mountain-svg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-          <!-- Floating mountains (back) -->
-          <g opacity="0.5">
-            <path d="M-50,600 L100,320 L200,400 L350,180 L500,350 L600,260 L700,380 L800,200 L950,340 L1100,160 L1250,300 L1380,220 L1490,350 L1490,600 Z" fill="url(#mountGrad1)"/>
-          </g>
-          <!-- Mid mountains -->
-          <g opacity="0.7">
-            <path d="M-50,600 L150,420 L280,480 L420,300 L520,380 L650,320 L750,420 L900,280 L1000,370 L1100,290 L1250,400 L1380,340 L1490,420 L1490,600 Z" fill="url(#mountGrad2)"/>
-          </g>
-          <!-- Glowing portal circle -->
-          <circle cx="720" cy="230" r="90" fill="none" stroke="url(#portalGrad)" stroke-width="2" opacity="0.6"/>
-          <circle cx="720" cy="230" r="70" fill="url(#portalFill)" opacity="0.15"/>
-          <circle cx="720" cy="230" r="60" fill="none" stroke="rgba(13,200,200,0.3)" stroke-width="1"/>
-          <!-- Adventurer silhouette -->
-          <g transform="translate(700,340)">
-            <rect x="-3" y="-50" width="6" height="50" fill="#060d1a" rx="3"/>
-            <ellipse cx="0" cy="-55" rx="7" ry="7" fill="#060d1a"/>
-            <path d="M-3,-45 L-20,0 L20,0 L3,-45" fill="#060d1a"/>
-            <path d="M0,-40 L-15,-15" stroke="#060d1a" stroke-width="3" stroke-linecap="round"/>
-            <path d="M0,-40 L18,-20" stroke="#060d1a" stroke-width="2" stroke-linecap="round"/>
-          </g>
-          <defs>
-            <linearGradient id="mountGrad1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0a2030" stop-opacity="0.9"/>
-              <stop offset="100%" stop-color="#060d1a" stop-opacity="1"/>
-            </linearGradient>
-            <linearGradient id="mountGrad2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#050d1a" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#030810" stop-opacity="1"/>
-            </linearGradient>
-            <radialGradient id="portalGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="rgba(13,220,220,0.8)"/>
-              <stop offset="100%" stop-color="rgba(232,114,42,0.8)"/>
-            </radialGradient>
-            <radialGradient id="portalFill" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="rgba(13,200,200,1)"/>
-              <stop offset="100%" stop-color="rgba(232,114,42,0)"/>
-            </radialGradient>
-          </defs>
-        </svg>
-      </div>
-
-      <!-- Layer 2: Atmospheric mist -->
-      <div class="layer-mist" id="layerMist"></div>
-
-      <!-- Layer 3: Foreground rocks (orta hız) -->
-      <div class="layer-fg" id="layerFg">
-        <svg style="position:absolute;bottom:0;width:100%;height:50%" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-          <path d="M-20,300 L0,150 L30,220 L70,80 L100,180 L140,60 L180,140 L220,300 Z" fill="#020508"/>
-          <path d="M1220,300 L1260,120 L1300,200 L1340,90 L1380,160 L1420,80 L1460,300 Z" fill="#020508"/>
-          <path d="M0,140 L8,300 L-8,300 Z" fill="#030a18" opacity="0.8"/>
-          <path d="M25,80 L33,300 L17,300 Z" fill="#030a18" opacity="0.7"/>
-          <path d="M55,140 L63,300 L47,300 Z" fill="#030a18" opacity="0.8"/>
-          <path d="M1415,90 L1423,300 L1407,300 Z" fill="#030a18" opacity="0.8"/>
-          <path d="M1390,150 L1398,300 L1382,300 Z" fill="#030a18" opacity="0.7"/>
-          <path d="M-20,300 L1460,300 L1460,260 Q900,240 720,255 Q400,270 -20,250 Z" fill="#030810" opacity="0.9"/>
-        </svg>
-      </div>
-
-      <!-- Layer 4: Particles canvas -->
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <!-- Layer 1: Nebula -->
+    <div class="parallax-layer layer-nebula" data-speed="0.1">
+      <div class="nebula-pulse"></div>
+    </div>
+    
+    <!-- Layer 2: Mountains -->
+    <div class="parallax-layer layer-mountains" data-speed="0.3">
+      <svg class="mountain-svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#0d1f2d;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#050810;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M0,400 L0,250 Q200,100 400,200 T800,150 T1200,180 L1440,120 L1440,400 Z" fill="url(#mountainGrad)" opacity="0.8"/>
+        <path d="M0,400 L0,300 Q300,200 500,250 T900,200 T1440,250 L1440,400 Z" fill="#080d18" opacity="0.9"/>
+      </svg>
+    </div>
+    
+    <!-- Layer 3: Mist -->
+    <div class="parallax-layer layer-mist" data-speed="0.2"></div>
+    
+    <!-- Layer 4: Rocks -->
+    <div class="parallax-layer layer-rocks" data-speed="0.5">
+      <svg class="mountain-svg" viewBox="0 0 1440 300" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="rockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#0a0f1a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#050810;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M0,300 L0,150 L50,100 L80,140 L120,80 L160,130 L200,60 L250,120 L300,50 L350,110 L400,70 L450,130 L500,90 L550,140 L600,80 L650,120 L700,60 L750,110 L800,70 L850,130 L900,90 L950,140 L1000,80 L1050,120 L1100,60 L1150,110 L1200,70 L1250,130 L1300,90 L1350,140 L1400,80 L1440,120 L1440,300 Z" fill="url(#rockGrad)"/>
+      </svg>
+    </div>
+    
+    <!-- Layer 5: Particles -->
+    <div class="parallax-layer layer-particles" data-speed="0.15">
       <canvas id="particle-canvas"></canvas>
-
-      <!-- Layer 5: Hero content (en hızlı — scroll ile yukarı çıkar) -->
-      <div class="hero-content" id="heroContent">
-        <div class="hero-badge">Creative Developer</div>
-        <h1 class="hero-title">
-          Veysel<br>
-          <span class="fire">Aslan</span>
-        </h1>
-        <p class="hero-sub">Sınırları Aş — İz Bırak</p>
-        <a href="#connect" class="hero-cta">Birlikte Çalış ↗</a>
-      </div>
-
-      <div class="scroll-indicator">
-        <span>Keşfet</span>
-        <div class="scroll-line"></div>
-      </div>
+    </div>
+    
+    <!-- Hero Content -->
+    <div class="hero-content" id="hero-content">
+      <h1 class="hero-title">Veysel Aslan</h1>
+      <p class="hero-subtitle">Sınırları Aş — İz Bırak</p>
+      <a href="#quotes" class="hero-cta">Keşfet</a>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <span class="scroll-text">Aşağı Kaydır</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       SCROLL QUOTES — Video Tarzı Özlü Sözler
-       ═══════════════════════════════════════════ -->
+  <!-- Quotes Section -->
   <section class="quotes-section" id="quotes">
-    <div class="quote-layer">
-      <!-- Söz 1: Vizyon -->
-      <div class="quote-item" id="quote1">
-        <div class="quote-ornament" style="top:-2rem;left:2rem">"</div>
+    <div class="quotes-sticky">
+      <div class="quote-container" data-quote="1">
+        <span class="quote-ornament">"</span>
         <p class="quote-text">
-          <span class="teal">Vizyon</span> sahibi olmak,<br>
-          karanlıkta bir <span class="fire-text">yıldızı</span> görebilmektir.
+          <span class="quote-accent">Görüş</span>, karanlıkta yolunu bulabilen tek ışıktır. Gözlerin göremediğini, ruhun <span class="quote-accent">sezer</span>.
         </p>
-        <p class="quote-author">Veysel Aslan</p>
+        <div class="quote-divider"></div>
+        <span class="quote-topic">Vizyon</span>
       </div>
-
-      <!-- Söz 2: Sabır -->
-      <div class="quote-item" id="quote2">
-        <div class="quote-ornament" style="top:-2rem;right:2rem">"</div>
+      
+      <div class="quote-container" data-quote="2">
+        <span class="quote-ornament">"</span>
         <p class="quote-text">
-          <span class="teal">Sabır</span>, büyük işlerin<br>
-          en sessiz <span class="fire-text">mimaridir.</span>
+          Sabır, <span class="quote-accent">zamanın</span> mermerine kazınan bir sanattır. Acele eden, kendini kaybeder; bekleyen, <span class="quote-accent">zaferi</span> bulur.
         </p>
-        <p class="quote-author">Veysel Aslan</p>
+        <div class="quote-divider"></div>
+        <span class="quote-topic">Sabır</span>
       </div>
-
-      <!-- Söz 3: Azim -->
-      <div class="quote-item" id="quote3">
-        <div class="quote-ornament" style="bottom:-2rem;left:2rem">"</div>
+      
+      <div class="quote-container" data-quote="3">
+        <span class="quote-ornament">"</span>
         <p class="quote-text">
-          Her düşüş, kalkış için<br>
-          bir <span class="fire-text">fırsattır.</span>
+          <span class="quote-accent">Kararlılık</span>, düşmanın pes ettiği anda seni ayakta tutan tek şeydir. Yorul, ama <span class="quote-accent">yıkılma</span>.
         </p>
-        <p class="quote-author">Veysel Aslan</p>
+        <div class="quote-divider"></div>
+        <span class="quote-topic">Azim</span>
       </div>
-
-      <!-- Söz 4: Yaratıcılık -->
-      <div class="quote-item" id="quote4">
-        <div class="quote-ornament" style="bottom:-2rem;right:2rem">"</div>
+      
+      <div class="quote-container" data-quote="4">
+        <span class="quote-ornament">"</span>
         <p class="quote-text">
-          Kod, sadece dil değil;<br>
-          <span class="teal">hayal</span> gücünün <span class="fire-text">şeklidir.</span>
+          Yaratıcılık, <span class="quote-accent">sınırların</span> ötesinde saklı bir hazinedir. Kuralları bil, sonra onları <span class="quote-accent">parçala</span>.
         </p>
-        <p class="quote-author">Veysel Aslan</p>
+        <div class="quote-divider"></div>
+        <span class="quote-topic">Yaratıcılık</span>
       </div>
-
-      <!-- Söz 5: Gelecek -->
-      <div class="quote-item" id="quote5">
-        <div class="quote-ornament" style="top:50%;left:50%;transform:translate(-50%,-50%);font-size:10rem;opacity:0.03">"</div>
+      
+      <div class="quote-container" data-quote="5">
+        <span class="quote-ornament">"</span>
         <p class="quote-text">
-          Geleceği inşa edenler,<br>
-          bugün <span class="teal">sınırları</span> <span class="fire-text">aşanlardır.</span>
+          Gelecek, <span class="quote-accent">bugün</span> attığın adımların yankısıdır. Ne ekersen, zamanın <span class="quote-accent">sahibi</span> olursun.
         </p>
-        <p class="quote-author">Veysel Aslan</p>
+        <div class="quote-divider"></div>
+        <span class="quote-topic">Gelecek</span>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       ABOUT / BİYOGRAFİ
-       ═══════════════════════════════════════════ -->
+  <!-- About Section -->
   <section class="about-section" id="about">
     <div class="about-card">
-      <div class="about-ornament">"</div>
+      <span class="about-ornament">"</span>
       <p class="about-quote">
-        İyi bir <span class="teal">tasarım</span> sadece görülmez.<br>
-        Hissedilir, yaşanır ve <span class="fire-text">hatırlanır.</span>
+        İyi bir tasarım sadece <span class="about-accent-teal">görülmez</span>. <span class="about-accent-fire">Hissedilir</span>, yaşanır ve <span class="about-accent-teal">hatırlanır</span>.
       </p>
-      <p class="about-author">Veysel Aslan</p>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       CONNECT
-       ═══════════════════════════════════════════ -->
+  <!-- Connect Section -->
   <section class="connect-section" id="connect">
-    <p class="section-eyebrow">Bağlantı Kur</p>
-    <h2 class="section-title">
-      Birlikte<br>
-      <span class="fire">Çalışalım.</span>
-    </h2>
+    <h2 class="connect-title">İletişim</h2>
     <div class="connect-grid">
-      <a href="https://www.instagram.com/veyseloffical433?igsh=cjZjbG9yNHIyc3B2&utm_source=qr" target="_blank" rel="noopener" class="connect-card orange-card" id="ig-card">
+      <a href="https://instagram.com/veyseloffical433" target="_blank" class="connect-card teal" data-card="instagram">
         <div class="connect-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
         </div>
-        <div class="connect-platform">Instagram</div>
-        <div class="connect-username">@veyseloffical433</div>
-        <span class="connect-arrow">↗</span>
+        <h3 class="connect-platform">Instagram</h3>
+        <p class="connect-handle">@veyseloffical433</p>
       </a>
-      <a href="https://t.me/veyseloffical" target="_blank" rel="noopener" class="connect-card" id="tg-card">
+      
+      <a href="https://t.me/veyseloffical" target="_blank" class="connect-card orange" data-card="telegram">
         <div class="connect-icon">
-          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
         </div>
-        <div class="connect-platform">Telegram</div>
-        <div class="connect-username">@veyseloffical</div>
-        <span class="connect-arrow">↗</span>
+        <h3 class="connect-platform">Telegram</h3>
+        <p class="connect-handle">@veyseloffical</p>
       </a>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
-    <p class="footer-name"><span class="fire">Veysel</span> Aslan</p>
-    <p class="footer-copy">© 2026 — Tüm hakları saklıdır</p>
+    <span class="footer-name">Veysel Aslan</span>
+    <p class="footer-copy">© 2026 Tüm Hakları Saklıdır.</p>
   </footer>
 
   <script>
+    // Register GSAP Plugin
     gsap.registerPlugin(ScrollTrigger);
-
-    /* ── CURSOR ── */
-    const cur=document.getElementById('cursor');
-    const ring=document.getElementById('cursorRing');
-
-    // Touch cihazlarda imleci gizle
+    
+    // Detect Touch Device
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
-    if(isTouchDevice){
-      cur.style.display='none';
-      ring.style.display='none';
-      document.body.style.cursor='auto';
-    } else {
-      let mx=0,my=0,rx=0,ry=0;
-      document.addEventListener('mousemove',e=>{
-        mx=e.clientX;my=e.clientY;
-        cur.style.left=mx+'px';cur.style.top=my+'px';
+    
+    // =====================
+    // CUSTOM CURSOR
+    // =====================
+    if (!isTouchDevice) {
+      const cursorDot = document.querySelector('.cursor-dot');
+      const cursorRing = document.querySelector('.cursor-ring');
+      
+      let mouseX = 0, mouseY = 0;
+      let ringX = 0, ringY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
       });
-      (function loop(){
-        rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
-        ring.style.left=rx+'px';ring.style.top=ry+'px';
-        requestAnimationFrame(loop);
-      })();
-      document.querySelectorAll('a,button,.connect-card,.about-card').forEach(el=>{
-        el.addEventListener('mouseenter',()=>{cur.classList.add('hov');ring.classList.add('hov')});
-        el.addEventListener('mouseleave',()=>{cur.classList.remove('hov');ring.classList.remove('hov')});
+      
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top = ringY + 'px';
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+      
+      // Hover effects
+      const interactiveElements = document.querySelectorAll('a, button, .connect-card');
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
       });
     }
-
-    /* ── CARD MOUSE RADIAL ── */
-    document.querySelectorAll('.connect-card').forEach(c=>{
-      c.addEventListener('mousemove',e=>{
-        const r=c.getBoundingClientRect();
-        c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-        c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-      });
+    
+    // =====================
+    // NAVIGATION SCROLL
+    // =====================
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
     });
-
-    /* ═══════════════════════════════════════════
-       PARALLAX SCROLL — Video Tarzı Çok Katmanlı
-       ═══════════════════════════════════════════ */
-
-    // Layer 0: Background (en yavaş)
-    gsap.to('#layerBg',{
-      yPercent:-8,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
-    });
-
-    // Layer 1: Mid mountains (yavaş)
-    gsap.to('#layerMid',{
-      yPercent:-20,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
-    });
-
-    // Layer 2: Mist (orta)
-    gsap.to('#layerMist',{
-      yPercent:-12,opacity:.3,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
-    });
-
-    // Layer 3: Foreground rocks (orta-hızlı)
-    gsap.to('#layerFg',{
-      yPercent:25,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:1}
-    });
-
-    // Layer 5: Hero content (en hızlı)
-    gsap.to('#heroContent',{
-      yPercent:-50,opacity:0,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'70% top',scrub:1}
-    });
-
-    /* ═══════════════════════════════════════════
-       SCROLL QUOTES — Video Tarzı Söz Geçişleri
-       ═══════════════════════════════════════════ */
-    const quotes = document.querySelectorAll('.quote-item');
-
-    quotes.forEach(function(quote, i) {
-      gsap.fromTo(quote,
-        { opacity: 0, y: 80, scale: 0.9 },
-        {
-          opacity: 1, y: 0, scale: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.quotes-section',
-            start: function() { return (i * 18) + "% top"; },
-            end: function() { return ((i + 1) * 18) + "% top"; },
-            toggleActions: 'play reverse play reverse',
-            scrub: 0.5
-          }
+    
+    // =====================
+    // PARTICLE SYSTEM
+    // =====================
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let particles = [];
+    const particleCount = isTouchDevice ? 25 : 60;
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.color = Math.random() > 0.5 ? 'rgba(13, 79, 92,' : 'rgba(232, 114, 42,';
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.reset();
         }
-      );
-    });
-
-    /* ── PARTICLE CANVAS ── */
-    const canvas=document.getElementById('particle-canvas');
-    const ctx=canvas.getContext('2d');
-    let W,H;
-    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
-    window.addEventListener('resize',resize);resize();
-
-    class Particle{
-      constructor(){this.init()}
-      init(){
-        this.x=Math.random()*W;this.y=Math.random()*H;
-        this.size=Math.random()*1.2+.3;
-        this.vx=(Math.random()-.5)*.15;this.vy=-Math.random()*.2-.03;
-        this.life=0;this.maxLife=Math.random()*200+100;
-        this.type=Math.random()<.6?'teal':'orange';
-        this.opacity=0;
       }
-      update(){
-        this.life++;
-        const t=this.life/this.maxLife;
-        this.opacity=t<.2?(t/.2):(1-t);
-        this.x+=this.vx;this.y+=this.vy;
-        if(this.life>=this.maxLife)this.init();
-      }
-      draw(){
-        ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        const col=this.type==='teal'?'13,200,200':'232,114,42';
-        ctx.fillStyle='rgba('+col+','+this.opacity+')';
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + this.opacity + ')';
         ctx.fill();
       }
     }
-    const particles=[];
-    const particleCount = isTouchDevice ? 25 : 60;
-    for(let i=0;i<particleCount;i++){
-      const p=new Particle();
-      p.life=Math.random()*p.maxLife;
-      particles.push(p);
+    
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
     }
-
-    function drawMist(){
-      const g=ctx.createLinearGradient(0,H*.6,0,H);
-      g.addColorStop(0,'rgba(5,8,16,0)');
-      g.addColorStop(1,'rgba(5,8,16,0.15)');
-      ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
     }
-
-    function animate(){
-      ctx.clearRect(0,0,W,H);
-      drawMist();
-      for(let i=0;i<particles.length;i++){
-        for(let j=i+1;j<particles.length;j++){
-          if(particles[i].type!=='teal'||particles[j].type!=='teal')continue;
-          const dx=particles[i].x-particles[j].x;
-          const dy=particles[i].y-particles[j].y;
-          const d=Math.sqrt(dx*dx+dy*dy);
-          if(d<80){
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x,particles[i].y);
-            ctx.lineTo(particles[j].x,particles[j].y);
-            ctx.strokeStyle='rgba(13,200,200,'+(0.05*(1-d/80))+')';
-            ctx.lineWidth=.5;ctx.stroke();
+    animateParticles();
+    
+    // =====================
+    // PARALLAX LAYERS
+    // =====================
+    const parallaxLayers = document.querySelectorAll('.parallax-layer');
+    
+    parallaxLayers.forEach(layer => {
+      const speed = parseFloat(layer.getAttribute('data-speed')) || 0;
+      gsap.to(layer, {
+        yPercent: speed * 30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+    
+    // =====================
+    // HERO CONTENT FADE
+    // =====================
+    gsap.to('.hero-content', {
+      y: -150,
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: '50% top',
+        scrub: true
+      }
+    });
+    
+    gsap.to('.scroll-indicator', {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: '10% top',
+        end: '30% top',
+        scrub: true
+      }
+    });
+    
+    // =====================
+    // QUOTES SCROLLTRIGGER
+    // =====================
+    const quotes = document.querySelectorAll('.quote-container');
+    const quotesSection = document.querySelector('.quotes-section');
+    
+    quotes.forEach((quote, index) => {
+      const startPercent = (index / quotes.length) * 100;
+      const endPercent = ((index + 1) / quotes.length) * 100;
+      
+      // Fade in
+      gsap.fromTo(quote, 
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: quotesSection,
+            start: \`\${startPercent + 5}% top\`,
+            end: \`\${startPercent + 15}% top\`,
+            scrub: true
           }
         }
-      }
-      particles.forEach(p=>{p.update();p.draw()});
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    /* ── NAV SCROLL ── */
-    window.addEventListener('scroll',()=>{
-      document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+      );
+      
+      // Fade out
+      gsap.to(quote, {
+        opacity: 0,
+        y: -50,
+        ease: 'power2.in',
+        scrollTrigger: {
+          trigger: quotesSection,
+          start: \`\${endPercent - 15}% top\`,
+          end: \`\${endPercent - 5}% top\`,
+          scrub: true
+        }
+      });
     });
-
-    /* ── REVEAL ANIMATIONS ── */
-    gsap.fromTo('.about-card',
-      {opacity:0,y:60},
-      {opacity:1,y:0,duration:1,ease:'power3.out',
-        scrollTrigger:{trigger:'.about-section',start:'top 75%'}}
-    );
-    gsap.fromTo('.connect-card',
-      {opacity:0,y:40},
-      {opacity:1,y:0,duration:.8,ease:'power3.out',stagger:.2,
-        scrollTrigger:{trigger:'.connect-section',start:'top 75%'}}
-    );
-    gsap.fromTo('.section-title,.section-eyebrow',
-      {opacity:0,y:30},
-      {opacity:1,y:0,duration:.8,ease:'power3.out',stagger:.1,
-        scrollTrigger:{trigger:'.connect-section',start:'top 80%'}}
-    );
-
-    // Hero entrance
-    gsap.fromTo('.hero-badge',{opacity:0,y:20},{opacity:1,y:0,duration:1,delay:.3,ease:'power3.out'});
-    gsap.fromTo('.hero-title',{opacity:0,y:40},{opacity:1,y:0,duration:1.2,delay:.5,ease:'power3.out'});
-    gsap.fromTo('.hero-sub',{opacity:0,y:20},{opacity:1,y:0,duration:1,delay:.9,ease:'power3.out'});
-    gsap.fromTo('.hero-cta',{opacity:0,y:20},{opacity:1,y:0,duration:1,delay:1.1,ease:'power3.out'});
-
-    /* ── SMOOTH SCROLL ── */
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click',e=>{
+    
+    // =====================
+    // ABOUT CARD REVEAL
+    // =====================
+    gsap.from('.about-card', {
+      y: 100,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about-section',
+        start: 'top 70%',
+        toggleActions: 'play none none reverse'
+      }
+    });
+    
+    // =====================
+    // CONNECT CARDS STAGGER
+    // =====================
+    gsap.from('.connect-card', {
+      y: 80,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.connect-section',
+        start: 'top 70%',
+        toggleActions: 'play none none reverse'
+      }
+    });
+    
+    // =====================
+    // CONNECT CARD MOUSE FOLLOW
+    // =====================
+    document.querySelectorAll('.connect-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', x + '%');
+        card.style.setProperty('--mouse-y', y + '%');
+      });
+    });
+    
+    // =====================
+    // SMOOTH SCROLL FOR NAV
+    // =====================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        const t=document.querySelector(a.getAttribute('href'));
-        if(t)t.scrollIntoView({behavior:'smooth'});
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
       });
     });
   </script>
@@ -972,8 +1107,7 @@ export default {
 
     return new Response(html, {
       headers: {
-        'Content-Type': 'text/html; charset=UTF-8',
-        'Cache-Control': 'public, max-age=3600',
+        'content-type': 'text/html;charset=UTF-8',
       },
     });
   },
