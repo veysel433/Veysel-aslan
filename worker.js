@@ -10,229 +10,203 @@ export default {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>League of Legends Parallax Effect</title>
+  <title>Workers / Creative Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;900&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
-    /* Temel Ayarlar ve Buz Teması */
+    :root {
+      --bg: #03070a;
+      --accent: #00d2ff;
+      --text: #e0e6ed;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background-color: #01060e; /* Derin buz mavisi/siyah */
-      color: #ffffff;
-      font-family: 'Roboto', sans-serif;
+    body { 
+      background: var(--bg); 
+      color: var(--text); 
+      font-family: 'Raleway', sans-serif; 
       overflow-x: hidden;
     }
 
-    /* Videodaki Üst Logo (LEAGUE OF LEGENDS Tarzı) */
-    .top-logo {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      font-family: 'Cinzel', serif;
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 10px rgba(25, 197, 255, 0.5), 0 0 20px rgba(25, 197, 255, 0.3);
-      pointer-events: none;
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; width: 100%; padding: 2rem 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000; transition: 0.5s;
     }
+    .nav.scrolled { background: rgba(3,7,10,0.9); backdrop-filter: blur(10px); padding: 1rem 5%; }
+    .logo { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.5rem; letter-spacing: 2px; }
 
-    /* Ana Kaydırma Alanı - Sayfanın uzunluğunu belirler */
-    .main-wrapper {
+    /* PARALLAX CONTAINER */
+    .viewport {
       position: relative;
-      height: 300vh; /* Kaydırma miktarını artırmak için yüksekliği artırdık */
-      overflow: hidden;
+      height: 300vh; /* Derinlik için uzun tutuyoruz */
+      background: #03070a;
     }
 
-    /* ── ARKA PLAN KATMANI (YAVAŞ HAREKET EDER) ── */
-    .bg-layer {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 150%; /* Fazladan alan */
+    .section {
+      position: sticky; top: 0; height: 100vh;
+      width: 100%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* KATMANLAR (Layers) */
+    .layer {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 120%; /* Hareket payı */
+      background-size: cover; background-position: center bottom;
+      will-change: transform;
+    }
+
+    /* Arka Plan (Yıldızlar/Gök) */
+    .layer-bg {
       z-index: 1;
-      will-change: transform;
+      background: radial-gradient(circle at 50% 40%, #0a192f 0%, #03070a 80%);
     }
 
-    /* Sahne 1: Dağlar ve Portal */
-    .scene-1-bg {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100vh;
-      display: flex; justify-content: center; align-items: center;
-      /* Dağ efekti için gradient */
-      background: linear-gradient(to bottom, #031428 0%, #01060e 100%);
+    /* Uzak Dağlar / Yapılar */
+    .layer-mid {
+      z-index: 2;
+      display: flex; align-items: flex-end; justify-content: center;
     }
-    .portal-glow {
-      width: 400px; height: 500px;
-      border: 8px solid #4df8ff;
-      border-radius: 50% 50% 10px 10px;
-      box-shadow: 0 0 50px #19c5ff, inset 0 0 50px #19c5ff;
-      background: radial-gradient(circle, rgba(25,197,255,0.4) 0%, transparent 70%);
-      position: relative;
-    }
+    .mountain-svg { width: 120%; height: 60%; fill: #050d16; }
 
-    /* Sahne 2: Mağara Arka Planı */
-    .scene-2-bg {
-      position: absolute;
-      top: 100vh; left: 0; width: 100%; height: 100vh;
-      background: #000205; /* Çok daha karanlık */
-      display: flex; justify-content: center; align-items: center;
+    /* ANA BAŞLIK */
+    .hero-content {
+      position: relative; z-index: 3; text-align: center;
     }
-    /* Mağara yan duvarları (Buz sarkıtları) */
-    .cave-walls {
-      position: absolute; width: 100%; height: 100%;
-      background: 
-        radial-gradient(circle at 0% 50%, rgba(10,30,60,0.8) 0%, transparent 40%),
-        radial-gradient(circle at 100% 50%, rgba(10,30,60,0.8) 0%, transparent 40%);
+    .hero-title {
+      font-family: 'Cinzel', serif; font-size: clamp(3rem, 10vw, 8rem);
+      line-height: 0.9; text-transform: uppercase;
+      text-shadow: 0 0 30px rgba(0,0,0,0.9);
     }
+    .hero-title span { color: var(--accent); }
 
-    /* ── ÖN PLAN KATMANI (KARAKTERLER - ÇOK HIZLI HAREKET EDER) ── */
-    .fg-layer {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 200%;
-      z-index: 10;
-      will-change: transform;
-      pointer-events: none;
+    /* ÖN PLAN (Kayalıklar ve Karakter) */
+    .layer-fg {
+      z-index: 4;
+      display: flex; align-items: flex-end; justify-content: center;
     }
+    .foreground-svg { width: 110%; height: 50%; fill: #010204; }
 
-    /* Karakter 1 (Yukarı fırlayan) */
-    .char-1 {
-      position: absolute;
-      top: 60vh; /* Ekranın alt kısımlarından başlar */
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center;
+    /* İkinci Bölüm (Mağara İçi) */
+    .content-section {
+      position: relative; z-index: 10;
+      padding: 10rem 5%; background: #010204;
+      min-height: 100vh; text-align: center;
     }
-    /* Karakter 1'in üstünde durduğu kayalık */
-    .rock-pedestal {
-      width: 300px; height: 150px;
-      background: #020c17;
-      border-top: 5px solid #19c5ff;
-      clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-      box-shadow: 0 -10px 30px rgba(25,197,255,0.2);
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem; margin-top: 4rem;
     }
-    /* Karakter 1 Silüeti (Burayı PNG ile değiştireceksin) */
-    .char-1-model {
-      width: 150px; height: 250px;
-      background: linear-gradient(to top, #19c5ff, transparent);
-      margin-bottom: -20px;
-      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    .worker-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+      padding: 3rem; border-radius: 20px; transition: 0.3s;
     }
-
-    /* Karakter 2 (Mağaradaki parlayan karakter) */
-    .char-2-scene {
-      position: absolute;
-      top: 150vh; /* İkinci sahnede yer alacak */
-      left: 0; width: 100%; height: 100vh;
-      display: flex; justify-content: center; align-items: center;
-      position: relative;
-    }
-    /* Karakter 2 Modeli */
-    .char-2-model {
-      width: 200px; height: 350px;
-      background: #ffffff;
-      border-radius: 100px;
-      box-shadow: 0 0 60px #ffffff, 0 0 100px #19c5ff;
-      filter: blur(5px);
-    }
-
-    /* Videodaki Yan Metinler */
-    .side-text {
-      position: absolute;
-      width: 250px;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.7);
-      text-align: left;
-    }
-    .text-left { left: 15%; top: 50%; transform: translateY(-50%); }
-    .text-right { right: 15%; top: 50%; transform: translateY(-50%); }
+    .worker-card:hover { border-color: var(--accent); transform: translateY(-10px); }
 
   </style>
 </head>
 <body>
 
-  <div class="top-logo">LEAGUE OF LEGENDS</div>
+  <nav class="nav" id="mainNav">
+    <div class="logo">WORKERS<span>.</span></div>
+    <div style="font-size: 0.8rem; letter-spacing: 3px;">CREATIVE STUDIO</div>
+  </nav>
 
-  <div class="main-wrapper">
-    
-    <div class="bg-layer" id="bgLayer">
-      <div class="scene-1-bg">
-        <div class="portal-glow">
-          </div>
+  <div class="viewport">
+    <div class="section">
+      <div class="layer layer-bg" id="l-bg"></div>
+
+      <div class="layer layer-mid" id="l-mid">
+        <svg class="mountain-svg" viewBox="0 0 1440 400">
+          <path d="M0,400 L200,150 L400,300 L700,50 L1000,350 L1200,100 L1440,400 Z"></path>
+        </svg>
       </div>
-      <div class="scene-2-bg">
-        <div class="cave-walls"></div>
+
+      <div class="hero-content" id="l-text">
+        <h1 class="hero-title">THE<br><span>WORKERS</span></h1>
+        <p style="letter-spacing: 5px; margin-top: 20px; opacity: 0.7;">BEYOND THE HORIZON</p>
+      </div>
+
+      <div class="layer layer-fg" id="l-fg">
+        <svg class="foreground-svg" viewBox="0 0 1440 400">
+          <path d="M0,400 L0,50 L300,300 L500,400 Z"></path>
+          <path d="M1440,400 L1440,20 L1100,250 L900,400 Z"></path>
+          <rect x="710" y="300" width="20" height="60" rx="10"></rect>
+          <circle cx="720" cy="290" r="10"></circle>
+        </svg>
       </div>
     </div>
+  </div>
 
-    <div class="fg-layer" id="fgLayer">
-      
-      <div class="char-1">
-        <div class="char-1-model">
-          </div>
-        <div class="rock-pedestal"></div>
+  <div class="content-section" id="about">
+    <h2 style="font-family: 'Cinzel'; font-size: 3rem;">Neler Yapıyoruz?</h2>
+    <div class="card-grid">
+      <div class="worker-card">
+        <h3>Tasarım</h3>
+        <p>Sınırları zorlayan, modern ve karanlık estetiğe sahip arayüzler.</p>
       </div>
-
-      <div class="char-2-scene">
-        
-        <div class="side-text text-left">
-          Bu alan videodaki gibi sol taraftaki metinleri temsil eder. Buraya karakterin özellikleri, hikayesi veya projenin detayları hakkında uzun açıklamalar yazabilirsin.
-        </div>
-        
-        <div class="char-2-model">
-           </div>
-
-        <div class="side-text text-right">
-          Bu alan da sağ taraftaki metinleri temsil eder. Parallax efekti sayesinde sen aşağı kaydırdıkça bu metinler ve ortadaki karakter harika bir derinlik hissiyle ekrana gelir.
-        </div>
-
+      <div class="worker-card">
+        <h3>Kodlama</h3>
+        <p>Cloudflare Workers üzerinde çalışan, ışık hızında projeler.</p>
       </div>
-
+      <div class="worker-card">
+        <h3>Strateji</h3>
+        <p>Markanızı dijital dünyada en tepeye taşıyacak planlar.</p>
+      </div>
     </div>
-
   </div>
 
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    // VİDEODAKİ EFEKTİN SIRRI BURADA:
-    // Arka plan (bg-layer) aşağı kaydırdıkça çok yavaş yukarı çıkar (yPercent: -20)
-    gsap.to("#bgLayer", {
-      yPercent: -30, 
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".main-wrapper",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.5 // Yumuşaklık hissi (0.5 saniye gecikme)
-      }
+    // NAV SCROLL EFEKTİ
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 100);
     });
 
-    // Ön plan (fg-layer) ise aşağı kaydırdıkça çok hızlı yukarı çıkar (yPercent: -80)
-    // Bu sayede ilk karakter portalın önünden hızla uçup geçer!
-    gsap.to("#fgLayer", {
-      yPercent: -80,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".main-wrapper",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.5 
-      }
+    // VİDEODAKİ O MEŞHUR PARALLAX MEKANİĞİ
+    
+    // 1. Arka plan çok hafif hareket eder (Derinlik hissi)
+    gsap.to("#l-bg", {
+      y: "10%",
+      scrollTrigger: { trigger: ".viewport", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    // 2. Orta plan dağlar biraz daha hızlı
+    gsap.to("#l-mid", {
+      y: "-15%",
+      scrollTrigger: { trigger: ".viewport", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    // 3. Yazı yukarı doğru kaybolur
+    gsap.to("#l-text", {
+      y: "-150%",
+      opacity: 0,
+      scrollTrigger: { trigger: ".viewport", start: "top top", end: "50% top", scrub: true }
+    });
+
+    // 4. ÖN PLAN (Karakter) ÇOK HIZLI YUKARI ÇIKAR (Kamera yaklaşma efekti)
+    gsap.to("#l-fg", {
+      scale: 1.2,
+      y: "-30%",
+      scrollTrigger: { trigger: ".viewport", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    // Kartlar için giriş animasyonu
+    gsap.from(".worker-card", {
+      y: 100, opacity: 0, duration: 1, stagger: 0.2,
+      scrollTrigger: { trigger: ".content-section", start: "top 80%" }
     });
   </script>
 </body>
 </html>`;
 
     return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html; charset=UTF-8',
-        'Cache-Control': 'public, max-age=3600',
-      },
+      headers: { 'Content-Type': 'text/html; charset=UTF-8' },
     });
   },
 };
