@@ -10,12 +10,12 @@ export default {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE WORKERS / Cinematic Parallax</title>
+  <title>Veysel Aslan / Creative Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"><\/script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"><\/script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     :root{
@@ -61,11 +61,60 @@ export default {
     .cursor.hov{width:50px;height:50px;background:rgba(232,114,42,.15);border:1px solid var(--orange)}
     .cursor-ring.hov{width:70px;height:70px;border-color:rgba(232,114,42,.4)}
 
-    /* ── PARALLAX HERO ── */
-    .parallax-hero{
-      position:relative;height:100vh;overflow:hidden;
-      display:flex;align-items:center;justify-content:center;
+    /* ── NAV ── */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:1.8rem 4rem;
+      display:flex;justify-content:space-between;align-items:center;
+      background:linear-gradient(to bottom,rgba(5,8,16,0.6),transparent);
+      backdrop-filter:blur(0px);
+      transition:all .4s;
     }
+    .nav.scrolled{
+      backdrop-filter:blur(20px);
+      background:rgba(5,8,16,0.85);
+      border-bottom:1px solid var(--border);
+      padding:1.2rem 4rem;
+    }
+    .nav-logo{
+      font-family:'Cinzel',serif;
+      font-weight:700;font-size:1.1rem;
+      letter-spacing:4px;text-transform:uppercase;
+      color:var(--text-primary);
+    }
+    .nav-logo span{color:var(--orange)}
+    .nav-links{display:flex;gap:3rem;list-style:none}
+    .nav-links a{
+      color:rgba(232,224,208,.6);text-decoration:none;
+      font-size:.75rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
+      transition:color .3s;position:relative;
+    }
+    .nav-links a::after{
+      content:'';position:absolute;bottom:-4px;left:0;
+      width:0;height:1px;background:var(--teal);transition:width .3s;
+    }
+    .nav-links a:hover{color:rgba(13,220,220,.9)}
+    .nav-links a:hover::after{width:100%}
+
+    /* ═══════════════════════════════════════════
+       PARALLAX HERO — Çok Katmanlı (Video Tarzı)
+       ═══════════════════════════════════════════ */
+    .parallax-hero{
+      position:relative;
+      height:300vh; /* Uzun scroll alanı */
+      overflow:hidden;
+    }
+    .parallax-hero-inner{
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Layer 0 – Sky / deep bg (en yavaş) */
     .layer-bg{
       position:absolute;inset:0;z-index:0;
       background:
@@ -74,6 +123,7 @@ export default {
         linear-gradient(180deg, #050d1a 0%, #030810 40%, #050810 100%);
       will-change:transform;
     }
+    /* Nebula rings */
     .layer-bg::before{
       content:'';position:absolute;
       width:700px;height:700px;
@@ -94,6 +144,7 @@ export default {
     @keyframes nebulaPulse{0%,100%{opacity:.7;transform:translate(-50%,-60%) scale(1)}50%{opacity:1;transform:translate(-50%,-60%) scale(1.05)}}
     @keyframes moonGlow{0%{opacity:.6}100%{opacity:1}}
 
+    /* Layer 1 – Floating mountains (mid, yavaş) */
     .layer-mid{
       position:absolute;inset:0;z-index:1;
       will-change:transform;
@@ -102,27 +153,35 @@ export default {
     .mountain-svg{
       position:absolute;bottom:0;width:100%;height:70%;
     }
+
+    /* Layer 2 – Mist / atmosphere */
     .layer-mist{
       position:absolute;inset:0;z-index:2;
       pointer-events:none;
       background:linear-gradient(to top, rgba(5,8,16,0) 0%, rgba(5,8,16,0.08) 50%, rgba(5,8,16,0) 100%);
       will-change:transform;
     }
+
+    /* Layer 3 – Foreground rocks silhouette (orta hız) */
     .layer-fg{
       position:absolute;inset:0;z-index:3;
       pointer-events:none;
       will-change:transform;
     }
+
+    /* Layer 4 – Particles canvas */
     #particle-canvas{
       position:absolute;inset:0;z-index:4;
       pointer-events:none;
       opacity:.9;
     }
 
+    /* Layer 5 – Hero content (en hızlı — scroll ile yukarı çıkar) */
     .hero-content{
       position:relative;z-index:10;
       text-align:center;
       padding:2rem;
+      will-change:transform;
     }
     .hero-badge{
       display:inline-block;
@@ -195,6 +254,7 @@ export default {
       color:#f0c070;
     }
 
+    /* Scroll indicator */
     .scroll-indicator{
       position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
       display:flex;flex-direction:column;align-items:center;gap:.8rem;
@@ -208,99 +268,92 @@ export default {
     }
     @keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-    /* ── NAV ── */
-    .nav{
-      position:fixed;top:0;left:0;right:0;z-index:100;
-      padding:1.8rem 4rem;
-      display:flex;justify-content:space-between;align-items:center;
-      background:linear-gradient(to bottom,rgba(5,8,16,0.6),transparent);
-      backdrop-filter:blur(0px);
-      transition:all .4s;
-    }
-    .nav.scrolled{
-      backdrop-filter:blur(20px);
-      background:rgba(5,8,16,0.85);
-      border-bottom:1px solid var(--border);
-      padding:1.2rem 4rem;
-    }
-    .nav-logo{
-      font-family:'Cinzel',serif;
-      font-weight:700;font-size:1.1rem;
-      letter-spacing:4px;text-transform:uppercase;
-      color:var(--text-primary);
-    }
-    .nav-logo span{color:var(--orange)}
-    .nav-links{display:flex;gap:3rem;list-style:none}
-    .nav-links a{
-      color:rgba(232,224,208,.6);text-decoration:none;
-      font-size:.75rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
-      transition:color .3s;position:relative;
-    }
-    .nav-links a::after{
-      content:'';position:absolute;bottom:-4px;left:0;
-      width:0;height:1px;background:var(--teal);transition:width .3s;
-    }
-    .nav-links a:hover{color:rgba(13,220,220,.9)}
-    .nav-links a:hover::after{width:100%}
-
-    /* ── CAVE TRANSITION ── */
-    .cave-transition{
-      position:relative;height:100vh;overflow:hidden;
-      background:var(--bg);
-    }
-    .cave-bg{
-      position:absolute;inset:0;
-      background:
-        radial-gradient(ellipse 60% 50% at 50% 50%, #020508 0%, #000 100%);
-    }
-    .cave-vignette{
-      position:absolute;inset:0;
-      background:radial-gradient(ellipse 60% 40% at 50% 45%, transparent 0%, #000 70%);
-      z-index:2;
-    }
-    .cave-glow{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:500px;height:400px;
-      background:radial-gradient(ellipse, rgba(13,200,200,0.06) 0%, transparent 70%);
-      z-index:1;
-    }
-    .reveal-character{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      z-index:3;text-align:center;
-    }
-    .reveal-silhouette{
-      width:120px;height:240px;
-      margin:0 auto;
+    /* ═══════════════════════════════════════════
+       SCROLL QUOTES — Video Tarzı Metin Overlay
+       ═══════════════════════════════════════════ */
+    .quotes-section{
       position:relative;
+      min-height:400vh;
+      background:linear-gradient(180deg,var(--bg) 0%,rgba(8,15,28,1) 30%,var(--bg) 100%);
+      overflow:hidden;
     }
-    .reveal-silhouette svg{
-      width:100%;height:100%;
-    }
-    .reveal-text-left{
-      position:absolute;left:10%;top:50%;transform:translateY(-50%);
-      z-index:3;text-align:right;
-      opacity:0;
-    }
-    .reveal-text-right{
-      position:absolute;right:10%;top:50%;transform:translateY(-50%);
-      z-index:3;text-align:left;
-      opacity:0;
-    }
-    .reveal-text-title{
-      font-family:'Cinzel',serif;font-size:2.5rem;font-weight:700;
-      letter-spacing:.05em;color:var(--text-primary);
-      text-shadow:0 0 30px rgba(13,200,200,0.2);
-    }
-    .reveal-text-sub{
-      font-size:.8rem;letter-spacing:4px;text-transform:uppercase;
-      color:rgba(13,220,220,0.7);
+    .quotes-section::before{
+      content:'';position:absolute;
+      width:600px;height:600px;
+      top:20%;left:50%;transform:translate(-50%,-50%);
+      background:radial-gradient(circle,rgba(13,200,200,0.04) 0%,transparent 70%);
+      pointer-events:none;
     }
 
-    /* ── ABOUT ── */
+    .quote-layer{
+      position:sticky;
+      top:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .quote-item{
+      position:absolute;
+      text-align:center;
+      max-width:800px;
+      padding:2rem;
+      opacity:0;
+      transform:translateY(60px) scale(0.95);
+      transition:none;
+    }
+    .quote-item.active{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+
+    .quote-text{
+      font-family:'Cinzel',serif;
+      font-size:clamp(1.8rem,4vw,3.2rem);
+      font-weight:600;
+      line-height:1.5;
+      color:var(--text-primary);
+      margin-bottom:1.5rem;
+      text-shadow:0 0 40px rgba(13,200,200,0.1);
+    }
+    .quote-text .teal{color:rgba(13,220,220,0.9);text-shadow:0 0 20px rgba(13,200,200,0.4)}
+    .quote-text .fire-text{
+      background:linear-gradient(135deg,#e8722a,#f0a050,#d4a853);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .quote-author{
+      font-size:.7rem;letter-spacing:6px;text-transform:uppercase;
+      color:rgba(13,200,200,0.5);
+    }
+    .quote-author::before{
+      content:'';display:inline-block;width:30px;height:1px;
+      background:rgba(13,200,200,0.4);vertical-align:middle;margin-right:1rem;
+    }
+    .quote-author::after{
+      content:'';display:inline-block;width:30px;height:1px;
+      background:rgba(13,200,200,0.4);vertical-align:middle;margin-left:1rem;
+    }
+
+    /* Dekoratif süsleme */
+    .quote-ornament{
+      font-family:'Cinzel',serif;
+      font-size:6rem;
+      color:rgba(13,200,200,0.05);
+      position:absolute;
+      line-height:1;
+      user-select:none;
+      pointer-events:none;
+    }
+
+    /* ═══════════════════════════════════════════
+       ABOUT / BİYOGRAFİ
+       ═══════════════════════════════════════════ */
     .about-section{
       min-height:100vh;display:flex;align-items:center;justify-content:center;
       padding:8rem 2rem;position:relative;
-      background:linear-gradient(180deg,#000 0%,rgba(8,15,28,1) 50%,var(--bg) 100%);
+      background:linear-gradient(180deg,var(--bg) 0%,rgba(8,15,28,1) 50%,var(--bg) 100%);
       overflow:hidden;
     }
     .about-section::before{
@@ -363,7 +416,9 @@ export default {
       background:rgba(13,200,200,0.4);vertical-align:middle;margin-left:1rem;
     }
 
-    /* ── CONNECT ── */
+    /* ═══════════════════════════════════════════
+       CONNECT
+       ═══════════════════════════════════════════ */
     .connect-section{
       padding:10rem 2rem;min-height:100vh;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -493,9 +548,8 @@ export default {
       .nav-links{display:none}
       .about-card{padding:3rem 1.5rem}
       .connect-grid{grid-template-columns:1fr}
-      .reveal-text-left{left:5%}
-      .reveal-text-right{right:5%}
-      .reveal-text-title{font-size:1.5rem}
+      .parallax-hero{height:200vh}
+      .quote-text{font-size:clamp(1.4rem,5vw,2rem)}
     }
   </style>
 </head>
@@ -504,177 +558,208 @@ export default {
   <div class="cursor-ring" id="cursorRing"></div>
 
   <nav class="nav" id="nav">
-    <div class="nav-logo">THE<span>.</span>WORKERS</div>
+    <div class="nav-logo">V<span>.</span>A</div>
     <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#cave">The Depths</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#connect">Connect</a></li>
+      <li><a href="#home">Anasayfa</a></li>
+      <li><a href="#quotes">Sözler</a></li>
+      <li><a href="#about">Hakkımda</a></li>
+      <li><a href="#connect">İletişim</a></li>
     </ul>
   </nav>
 
-  <!-- ═══════════ PARALLAX HERO ═══════════ -->
+  <!-- ═══════════════════════════════════════════
+       PARALLAX HERO — Video Tarzı Çok Katmanlı
+       ═══════════════════════════════════════════ -->
   <section class="parallax-hero" id="home">
-    <div class="layer-bg" id="layerBg"></div>
+    <div class="parallax-hero-inner">
+      <!-- Layer 0: Background sky (en yavaş) -->
+      <div class="layer-bg" id="layerBg"></div>
 
-    <div class="layer-mid" id="layerMid">
-      <svg class="mountain-svg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-        <g opacity="0.5">
-          <path d="M-50,600 L100,320 L200,400 L350,180 L500,350 L600,260 L700,380 L800,200 L950,340 L1100,160 L1250,300 L1380,220 L1490,350 L1490,600 Z" fill="url(#mountGrad1)"/>
-        </g>
-        <g opacity="0.7">
-          <path d="M-50,600 L150,420 L280,480 L420,300 L520,380 L650,320 L750,420 L900,280 L1000,370 L1100,290 L1250,400 L1380,340 L1490,420 L1490,600 Z" fill="url(#mountGrad2)"/>
-        </g>
-        <circle cx="720" cy="230" r="90" fill="none" stroke="url(#portalGrad)" stroke-width="2" opacity="0.6"/>
-        <circle cx="720" cy="230" r="70" fill="url(#portalFill)" opacity="0.15"/>
-        <circle cx="720" cy="230" r="60" fill="none" stroke="rgba(13,200,200,0.3)" stroke-width="1"/>
-        <g transform="translate(700,340)">
-          <rect x="-3" y="-50" width="6" height="50" fill="#060d1a" rx="3"/>
-          <ellipse cx="0" cy="-55" rx="7" ry="7" fill="#060d1a"/>
-          <path d="M-3,-45 L-20,0 L20,0 L3,-45" fill="#060d1a"/>
-          <path d="M0,-40 L-15,-15" stroke="#060d1a" stroke-width="3" stroke-linecap="round"/>
-          <path d="M0,-40 L18,-20" stroke="#060d1a" stroke-width="2" stroke-linecap="round"/>
-        </g>
-        <defs>
-          <linearGradient id="mountGrad1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0a2030" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#060d1a" stop-opacity="1"/>
-          </linearGradient>
-          <linearGradient id="mountGrad2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#050d1a" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#030810" stop-opacity="1"/>
-          </linearGradient>
-          <radialGradient id="portalGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="rgba(13,220,220,0.8)"/>
-            <stop offset="100%" stop-color="rgba(232,114,42,0.8)"/>
-          </radialGradient>
-          <radialGradient id="portalFill" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="rgba(13,200,200,1)"/>
-            <stop offset="100%" stop-color="rgba(232,114,42,0)"/>
-          </radialGradient>
-        </defs>
-      </svg>
-    </div>
-
-    <div class="layer-mist" id="layerMist"></div>
-
-    <div class="layer-fg" id="layerFg">
-      <svg style="position:absolute;bottom:0;width:100%;height:50%" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-        <path d="M-20,300 L0,150 L30,220 L70,80 L100,180 L140,60 L180,140 L220,300 Z" fill="#020508"/>
-        <path d="M1220,300 L1260,120 L1300,200 L1340,90 L1380,160 L1420,80 L1460,300 Z" fill="#020508"/>
-        <path d="M0,140 L8,300 L-8,300 Z" fill="#030a18" opacity="0.8"/>
-        <path d="M25,80 L33,300 L17,300 Z" fill="#030a18" opacity="0.7"/>
-        <path d="M55,140 L63,300 L47,300 Z" fill="#030a18" opacity="0.8"/>
-        <path d="M1415,90 L1423,300 L1407,300 Z" fill="#030a18" opacity="0.8"/>
-        <path d="M1390,150 L1398,300 L1382,300 Z" fill="#030a18" opacity="0.7"/>
-        <path d="M-20,300 L1460,300 L1460,260 Q900,240 720,255 Q400,270 -20,250 Z" fill="#030810" opacity="0.9"/>
-      </svg>
-    </div>
-
-    <canvas id="particle-canvas"></canvas>
-
-    <div class="hero-content">
-      <div class="hero-badge">Cinematic Experience</div>
-      <h1 class="hero-title">
-        THE<br>
-        <span class="fire">WORKERS</span>
-      </h1>
-      <p class="hero-sub">Beyond Boundaries — Leave Your Mark</p>
-      <a href="#cave" class="hero-cta">Enter the Depths ↗</a>
-    </div>
-
-    <div class="scroll-indicator">
-      <span>Explore</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- ═══════════ CAVE TRANSITION / REVEAL ═══════════ -->
-  <section class="cave-transition" id="cave">
-    <div class="cave-bg"></div>
-    <div class="cave-glow" id="caveGlow"></div>
-    <div class="cave-vignette"></div>
-
-    <div class="reveal-text-left" id="revealLeft">
-      <p class="reveal-text-title">Forged in<br>Darkness</p>
-      <p class="reveal-text-sub" style="margin-top:1rem;">Discipline. Precision.</p>
-    </div>
-
-    <div class="reveal-text-right" id="revealRight">
-      <p class="reveal-text-title">Rise with<br>the Light</p>
-      <p class="reveal-text-sub" style="margin-top:1rem;">Vision. Impact.</p>
-    </div>
-
-    <div class="reveal-character" id="revealChar">
-      <div class="reveal-silhouette">
-        <svg viewBox="0 0 120 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Layer 1: Mountain silhouettes (mid, yavaş) -->
+      <div class="layer-mid" id="layerMid">
+        <svg class="mountain-svg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- Floating mountains (back) -->
+          <g opacity="0.5">
+            <path d="M-50,600 L100,320 L200,400 L350,180 L500,350 L600,260 L700,380 L800,200 L950,340 L1100,160 L1250,300 L1380,220 L1490,350 L1490,600 Z" fill="url(#mountGrad1)"/>
+          </g>
+          <!-- Mid mountains -->
+          <g opacity="0.7">
+            <path d="M-50,600 L150,420 L280,480 L420,300 L520,380 L650,320 L750,420 L900,280 L1000,370 L1100,290 L1250,400 L1380,340 L1490,420 L1490,600 Z" fill="url(#mountGrad2)"/>
+          </g>
+          <!-- Glowing portal circle -->
+          <circle cx="720" cy="230" r="90" fill="none" stroke="url(#portalGrad)" stroke-width="2" opacity="0.6"/>
+          <circle cx="720" cy="230" r="70" fill="url(#portalFill)" opacity="0.15"/>
+          <circle cx="720" cy="230" r="60" fill="none" stroke="rgba(13,200,200,0.3)" stroke-width="1"/>
+          <!-- Adventurer silhouette -->
+          <g transform="translate(700,340)">
+            <rect x="-3" y="-50" width="6" height="50" fill="#060d1a" rx="3"/>
+            <ellipse cx="0" cy="-55" rx="7" ry="7" fill="#060d1a"/>
+            <path d="M-3,-45 L-20,0 L20,0 L3,-45" fill="#060d1a"/>
+            <path d="M0,-40 L-15,-15" stroke="#060d1a" stroke-width="3" stroke-linecap="round"/>
+            <path d="M0,-40 L18,-20" stroke="#060d1a" stroke-width="2" stroke-linecap="round"/>
+          </g>
           <defs>
-            <radialGradient id="charGlow" cx="50%" cy="40%" r="50%">
-              <stop offset="0%" stop-color="rgba(13,200,200,0.5)"/>
-              <stop offset="100%" stop-color="rgba(13,200,200,0)"/>
+            <linearGradient id="mountGrad1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0a2030" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#060d1a" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="mountGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#050d1a" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#030810" stop-opacity="1"/>
+            </linearGradient>
+            <radialGradient id="portalGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(13,220,220,0.8)"/>
+              <stop offset="100%" stop-color="rgba(232,114,42,0.8)"/>
+            </radialGradient>
+            <radialGradient id="portalFill" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(13,200,200,1)"/>
+              <stop offset="100%" stop-color="rgba(232,114,42,0)"/>
             </radialGradient>
           </defs>
-          <ellipse cx="60" cy="100" rx="40" ry="50" fill="url(#charGlow)" opacity="0.7"/>
-          <!-- Head -->
-          <ellipse cx="60" cy="50" rx="12" ry="14" fill="#020508"/>
-          <!-- Body -->
-          <path d="M45,65 L30,140 L90,140 L75,65 Z" fill="#020508"/>
-          <!-- Shoulders -->
-          <path d="M30,75 L20,90 L35,80 Z" fill="#020508"/>
-          <path d="M90,75 L100,90 L85,80 Z" fill="#020508"/>
-          <!-- Arms -->
-          <path d="M35,80 L25,130 L40,120 Z" fill="#020508"/>
-          <path d="M85,80 L95,130 L80,120 Z" fill="#020508"/>
-          <!-- Legs -->
-          <rect x="50" y="135" width="8" height="60" rx="4" fill="#020508"/>
-          <rect x="62" y="135" width="8" height="60" rx="4" fill="#020508"/>
         </svg>
+      </div>
+
+      <!-- Layer 2: Atmospheric mist -->
+      <div class="layer-mist" id="layerMist"></div>
+
+      <!-- Layer 3: Foreground rocks (orta hız) -->
+      <div class="layer-fg" id="layerFg">
+        <svg style="position:absolute;bottom:0;width:100%;height:50%" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-20,300 L0,150 L30,220 L70,80 L100,180 L140,60 L180,140 L220,300 Z" fill="#020508"/>
+          <path d="M1220,300 L1260,120 L1300,200 L1340,90 L1380,160 L1420,80 L1460,300 Z" fill="#020508"/>
+          <path d="M0,140 L8,300 L-8,300 Z" fill="#030a18" opacity="0.8"/>
+          <path d="M25,80 L33,300 L17,300 Z" fill="#030a18" opacity="0.7"/>
+          <path d="M55,140 L63,300 L47,300 Z" fill="#030a18" opacity="0.8"/>
+          <path d="M1415,90 L1423,300 L1407,300 Z" fill="#030a18" opacity="0.8"/>
+          <path d="M1390,150 L1398,300 L1382,300 Z" fill="#030a18" opacity="0.7"/>
+          <path d="M-20,300 L1460,300 L1460,260 Q900,240 720,255 Q400,270 -20,250 Z" fill="#030810" opacity="0.9"/>
+        </svg>
+      </div>
+
+      <!-- Layer 4: Particles canvas -->
+      <canvas id="particle-canvas"></canvas>
+
+      <!-- Layer 5: Hero content (en hızlı — scroll ile yukarı çıkar) -->
+      <div class="hero-content" id="heroContent">
+        <div class="hero-badge">Creative Developer</div>
+        <h1 class="hero-title">
+          Veysel<br>
+          <span class="fire">Aslan</span>
+        </h1>
+        <p class="hero-sub">Sınırları Aş — İz Bırak</p>
+        <a href="#connect" class="hero-cta">Birlikte Çalış ↗</a>
+      </div>
+
+      <div class="scroll-indicator">
+        <span>Keşfet</span>
+        <div class="scroll-line"></div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════ ABOUT ═══════════ -->
+  <!-- ═══════════════════════════════════════════
+       SCROLL QUOTES — Video Tarzı Özlü Sözler
+       ═══════════════════════════════════════════ -->
+  <section class="quotes-section" id="quotes">
+    <div class="quote-layer">
+      <!-- Söz 1: Vizyon -->
+      <div class="quote-item" id="quote1">
+        <div class="quote-ornament" style="top:-2rem;left:2rem">"</div>
+        <p class="quote-text">
+          <span class="teal">Vizyon</span> sahibi olmak,<br>
+          karanlıkta bir <span class="fire-text">yıldızı</span> görebilmektir.
+        </p>
+        <p class="quote-author">Veysel Aslan</p>
+      </div>
+
+      <!-- Söz 2: Sabır -->
+      <div class="quote-item" id="quote2">
+        <div class="quote-ornament" style="top:-2rem;right:2rem">"</div>
+        <p class="quote-text">
+          <span class="teal">Sabır</span>, büyük işlerin<br>
+          en sessiz <span class="fire-text">mimaridir.</span>
+        </p>
+        <p class="quote-author">Veysel Aslan</p>
+      </div>
+
+      <!-- Söz 3: Azim -->
+      <div class="quote-item" id="quote3">
+        <div class="quote-ornament" style="bottom:-2rem;left:2rem">"</div>
+        <p class="quote-text">
+          Her düşüş, kalkış için<br>
+          bir <span class="fire-text">fırsattır.</span>
+        </p>
+        <p class="quote-author">Veysel Aslan</p>
+      </div>
+
+      <!-- Söz 4: Yaratıcılık -->
+      <div class="quote-item" id="quote4">
+        <div class="quote-ornament" style="bottom:-2rem;right:2rem">"</div>
+        <p class="quote-text">
+          Kod, sadece dil değil;<br>
+          <span class="teal">hayal</span> gücünün <span class="fire-text">şeklidir.</span>
+        </p>
+        <p class="quote-author">Veysel Aslan</p>
+      </div>
+
+      <!-- Söz 5: Gelecek -->
+      <div class="quote-item" id="quote5">
+        <div class="quote-ornament" style="top:50%;left:50%;transform:translate(-50%,-50%);font-size:10rem;opacity:0.03">"</div>
+        <p class="quote-text">
+          Geleceği inşa edenler,<br>
+          bugün <span class="teal">sınırları</span> <span class="fire-text">aşanlardır.</span>
+        </p>
+        <p class="quote-author">Veysel Aslan</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       ABOUT / BİYOGRAFİ
+       ═══════════════════════════════════════════ -->
   <section class="about-section" id="about">
     <div class="about-card">
       <div class="about-ornament">"</div>
       <p class="about-quote">
-        True <span class="teal">craftsmanship</span> is not just seen.<br>
-        It's felt, experienced, and <span class="fire-text">remembered.</span>
+        İyi bir <span class="teal">tasarım</span> sadece görülmez.<br>
+        Hissedilir, yaşanır ve <span class="fire-text">hatırlanır.</span>
       </p>
-      <p class="about-author">The Workers Collective</p>
+      <p class="about-author">Veysel Aslan</p>
     </div>
   </section>
 
-  <!-- ═══════════ CONNECT ═══════════ -->
+  <!-- ═══════════════════════════════════════════
+       CONNECT
+       ═══════════════════════════════════════════ -->
   <section class="connect-section" id="connect">
-    <p class="section-eyebrow">Join the Collective</p>
+    <p class="section-eyebrow">Bağlantı Kur</p>
     <h2 class="section-title">
-      Work<br>
-      <span class="fire">With Us.</span>
+      Birlikte<br>
+      <span class="fire">Çalışalım.</span>
     </h2>
     <div class="connect-grid">
-      <a href="#" target="_blank" rel="noopener" class="connect-card orange-card" id="ig-card">
+      <a href="https://www.instagram.com/veyseloffical433?igsh=cjZjbG9yNHIyc3B2&utm_source=qr" target="_blank" rel="noopener" class="connect-card orange-card" id="ig-card">
         <div class="connect-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         </div>
         <div class="connect-platform">Instagram</div>
-        <div class="connect-username">@the_workers</div>
+        <div class="connect-username">@veyseloffical433</div>
         <span class="connect-arrow">↗</span>
       </a>
-      <a href="#" target="_blank" rel="noopener" class="connect-card" id="tg-card">
+      <a href="https://t.me/veyseloffical" target="_blank" rel="noopener" class="connect-card" id="tg-card">
         <div class="connect-icon">
           <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
         </div>
         <div class="connect-platform">Telegram</div>
-        <div class="connect-username">@the_workers</div>
+        <div class="connect-username">@veyseloffical</div>
         <span class="connect-arrow">↗</span>
       </a>
     </div>
   </section>
 
   <footer class="footer">
-    <p class="footer-name"><span class="fire">THE</span> WORKERS</p>
-    <p class="footer-copy">© 2026 — All Rights Reserved</p>
+    <p class="footer-name"><span class="fire">Veysel</span> Aslan</p>
+    <p class="footer-copy">© 2026 — Tüm hakları saklıdır</p>
   </footer>
 
   <script>
@@ -707,49 +792,62 @@ export default {
       });
     });
 
-    /* ── PARALLAX SCROLL ── */
+    /* ═══════════════════════════════════════════
+       PARALLAX SCROLL — Video Tarzı Çok Katmanlı
+       ═══════════════════════════════════════════ */
+
+    // Layer 0: Background (en yavaş — 0.1x)
     gsap.to('#layerBg',{
-      yPercent:-20,ease:'none',
+      yPercent:-10,ease:'none',
       scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
-    });
-    gsap.to('#layerMid',{
-      yPercent:-50,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
-    });
-    gsap.to('#layerMist',{
-      yPercent:-30,opacity:.4,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
-    });
-    gsap.to('#layerFg',{
-      yPercent:30,scale:1.15,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
-    });
-    gsap.to('.hero-content',{
-      yPercent:-20,opacity:0,ease:'none',
-      scrollTrigger:{trigger:'.parallax-hero',start:'30% top',end:'bottom top',scrub:true}
     });
 
-    /* ── CAVE TRANSITION REVEAL ── */
-    gsap.fromTo('#caveGlow',
-      {opacity:0,scale:0.5},
-      {opacity:1,scale:1.2,duration:1.5,ease:'power2.inOut',
-        scrollTrigger:{trigger:'.cave-transition',start:'top 80%',end:'top 30%',scrub:true}}
-    );
-    gsap.fromTo('#revealChar',
-      {opacity:0,y:60,scale:0.8},
-      {opacity:1,y:0,scale:1,duration:1,ease:'power3.out',
-        scrollTrigger:{trigger:'.cave-transition',start:'top 70%',end:'top 30%',scrub:true}}
-    );
-    gsap.fromTo('#revealLeft',
-      {opacity:0,x:-60},
-      {opacity:1,x:0,duration:1,ease:'power3.out',
-        scrollTrigger:{trigger:'.cave-transition',start:'top 70%',end:'top 40%',scrub:true}}
-    );
-    gsap.fromTo('#revealRight',
-      {opacity:0,x:60},
-      {opacity:1,x:0,duration:1,ease:'power3.out',
-        scrollTrigger:{trigger:'.cave-transition',start:'top 70%',end:'top 40%',scrub:true}}
-    );
+    // Layer 1: Mid mountains (yavaş — 0.3x)
+    gsap.to('#layerMid',{
+      yPercent:-30,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+    });
+
+    // Layer 2: Mist (orta)
+    gsap.to('#layerMist',{
+      yPercent:-20,opacity:.3,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+    });
+
+    // Layer 3: Foreground rocks (orta-hızlı — 0.6x)
+    gsap.to('#layerFg',{
+      yPercent:40,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'bottom top',scrub:true}
+    });
+
+    // Layer 5: Hero content (en hızlı — scroll ile yukarı çıkar, 1.0x)
+    gsap.to('#heroContent',{
+      yPercent:-80,opacity:0,scale:0.9,ease:'none',
+      scrollTrigger:{trigger:'.parallax-hero',start:'top top',end:'70% top',scrub:true}
+    });
+
+    /* ═══════════════════════════════════════════
+       SCROLL QUOTES — Video Tarzı Söz Geçişleri
+       ═══════════════════════════════════════════ */
+    const quotes = document.querySelectorAll('.quote-item');
+
+    quotes.forEach((quote, i) => {
+      gsap.fromTo(quote,
+        { opacity: 0, y: 80, scale: 0.9 },
+        {
+          opacity: 1, y: 0, scale: 1,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.quotes-section',
+            start: () => `${i * 18}% top`,
+            end: () => `${(i + 1) * 18}% top`,
+            toggleActions: 'play reverse play reverse',
+            scrub: 0.5
+          }
+        }
+      );
+    });
 
     /* ── PARTICLE CANVAS ── */
     const canvas=document.getElementById('particle-canvas');
@@ -841,6 +939,7 @@ export default {
         scrollTrigger:{trigger:'.connect-section',start:'top 80%'}}
     );
 
+    // Hero entrance
     gsap.fromTo('.hero-badge',{opacity:0,y:20},{opacity:1,y:0,duration:1,delay:.3,ease:'power3.out'});
     gsap.fromTo('.hero-title',{opacity:0,y:40},{opacity:1,y:0,duration:1.2,delay:.5,ease:'power3.out'});
     gsap.fromTo('.hero-sub',{opacity:0,y:20},{opacity:1,y:0,duration:1,delay:.9,ease:'power3.out'});
@@ -866,4 +965,3 @@ export default {
     });
   },
 };
-```
