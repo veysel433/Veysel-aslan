@@ -831,7 +831,7 @@ export default {
        ═══════════════════════════════════════════ */
     const quotes = document.querySelectorAll('.quote-item');
 
-    quotes.forEach((quote, i) => {
+    quotes.forEach(function(quote, i) {
       gsap.fromTo(quote,
         { opacity: 0, y: 80, scale: 0.9 },
         {
@@ -840,8 +840,8 @@ export default {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: '.quotes-section',
-            start: () => `${i * 18}% top`,
-            end: () => `${(i + 1) * 18}% top`,
+            start: function() { return (i * 18) + "% top"; },
+            end: function() { return ((i + 1) * 18) + "% top"; },
             toggleActions: 'play reverse play reverse',
             scrub: 0.5
           }
