@@ -1,3 +1,8 @@
 name = "veysel-aslan"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+
+# Varsayılan olarak deploy edilecek route (kendi domaininizle değiştirin)
+# routes = [
+#   { pattern = "veyselaslan.com/*", custom_domain = true }
+# ]

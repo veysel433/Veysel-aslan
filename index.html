@@ -1,6 +1,4 @@
-export default {
-  async fetch(request, env, ctx) {
-    const html = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
@@ -908,10 +906,4 @@ export default {
     });
   </script>
 </body>
-</html>`;
-
-    return new Response(html, {
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
-  }
-};
+</html>
