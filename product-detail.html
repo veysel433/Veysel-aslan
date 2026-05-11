@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitap Detayı — Hanedan Sahaf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo"><i class="fa-solid fa-book-open navbar__logo-icon"></i><span>Hanedan Sahaf</span></a>
+      <nav class="navbar__menu">
+        <a href="index.html" class="navbar__link">Ana Sayfa</a>
+        <a href="products.html" class="navbar__link">Kitaplar</a>
+        <a href="about.html" class="navbar__link">Hakkımızda</a>
+      </nav>
+      <div class="navbar__actions">
+        <button class="navbar__icon-btn" id="searchToggle" aria-label="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <a href="products.html?wishlist=1" class="navbar__icon-btn" aria-label="Favorilerim"><i class="fa-regular fa-heart"></i><span class="navbar__badge" id="wishlistBadge" style="display:none">0</span></a>
+        <a href="cart.html" class="navbar__icon-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span class="navbar__badge" id="cartBadge" style="display:none">0</span></a>
+        <button class="navbar__icon-btn" id="themeToggle" aria-label="Tema değiştir"><i class="fa-solid fa-moon"></i></button>
+        <button class="navbar__icon-btn navbar__hamburger" id="hamburger" aria-label="Menüyü aç"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="search-bar" id="searchBar">
+      <input type="text" class="search-bar__input" id="searchInput" placeholder="Kitap veya yazar ara..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-menu__link">Ana Sayfa</a>
+    <a href="products.html" class="mobile-menu__link">Kitaplar</a>
+    <a href="about.html" class="mobile-menu__link">Hakkımızda</a>
+    <a href="cart.html" class="mobile-menu__link">Sepetim</a>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb__list" id="breadcrumbList">
+        <li class="breadcrumb__item"><a href="index.html">Ana Sayfa</a></li>
+        <li class="breadcrumb__sep"><i class="fa-solid fa-chevron-right" style="font-size:0.625rem;"></i></li>
+        <li class="breadcrumb__item"><a href="products.html" id="bcCategory">Kitaplar</a></li>
+        <li class="breadcrumb__sep"><i class="fa-solid fa-chevron-right" style="font-size:0.625rem;"></i></li>
+        <li class="breadcrumb__item breadcrumb__item--current" aria-current="page" id="bcTitle">...</li>
+      </ol>
+    </div>
+  </nav>
+
+  <main class="product-detail container">
+    <div class="product-detail__grid">
+      <div class="product-detail__gallery">
+        <div class="product-detail__main-img" id="mainImg"></div>
+        <div class="product-detail__thumbs" id="thumbs"></div>
+      </div>
+      <div>
+        <h1 class="product-detail__title" id="pdTitle"></h1>
+        <p class="product-detail__author"><a href="#" id="pdAuthor"></a></p>
+        <div class="product-detail__meta">
+          <div class="product-detail__rating"><span class="stars" id="pdStars"></span><span id="pdRating"></span></div>
+          <span class="badge" id="pdCondition"></span>
+          <span class="badge badge--stock" id="pdStock"></span>
+        </div>
+        <div class="product-detail__price-box">
+          <span class="product-detail__price" id="pdPrice"></span>
+          <span class="product-detail__old-price" id="pdOldPrice"></span>
+        </div>
+        <div class="product-detail__qty">
+          <button class="product-detail__qty-btn" onclick="changeQty(-1)" aria-label="Azalt"><i class="fa-solid fa-minus"></i></button>
+          <input type="number" class="product-detail__qty-input" id="pdQty" value="1" min="1" max="10" readonly>
+          <button class="product-detail__qty-btn" onclick="changeQty(1)" aria-label="Artır"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="product-detail__actions">
+          <button class="btn btn--primary btn--large btn--full" id="pdAddCart"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
+          <button class="btn btn--ghost btn--large" id="pdAddFav"><i class="fa-regular fa-heart"></i> Favorilere Ekle</button>
+        </div>
+        <div class="product-detail__share">
+          <span class="product-detail__share-label">Paylaş:</span>
+          <button class="product-detail__share-btn" aria-label="Twitter'da paylaş"><i class="fa-brands fa-x-twitter"></i></button>
+          <button class="product-detail__share-btn" aria-label="Facebook'ta paylaş"><i class="fa-brands fa-facebook-f"></i></button>
+          <button class="product-detail__share-btn" aria-label="WhatsApp'ta paylaş"><i class="fa-brands fa-whatsapp"></i></button>
+        </div>
+
+        <div class="tabs">
+          <div class="tabs__nav">
+            <button class="tabs__btn active" onclick="switchTab(this,'tabDetails')">Detaylar</button>
+            <button class="tabs__btn" onclick="switchTab(this,'tabDesc')">Açıklama</button>
+            <button class="tabs__btn" onclick="switchTab(this,'tabReviews')">Yorumlar</button>
+          </div>
+          <div class="tabs__panel active" id="tabDetails">
+            <table class="details-table">
+              <tr><th>Yazar</th><td id="detAuthor"></td></tr>
+              <tr><th>Yayınevi</th><td id="detPublisher"></td></tr>
+              <tr><th>Yayın Yılı</th><td id="detYear"></td></tr>
+              <tr><th>Sayfa Sayısı</th><td id="detPages"></td></tr>
+              <tr><th>ISBN</th><td id="detIsbn"></td></tr>
+              <tr><th>Dil</th><td id="detLang"></td></tr>
+              <tr><th>Kondisyon Notu</th><td id="detCondition"></td></tr>
+            </table>
+          </div>
+          <div class="tabs__panel" id="tabDesc">
+            <p id="detDesc" style="line-height:1.8;color:var(--color-text-muted);"></p>
+          </div>
+          <div class="tabs__panel" id="tabReviews">
+            <div id="reviewsList"></div>
+            <div class="review-form">
+              <h4 class="review-form__title">Yorum Yaz</h4>
+              <form id="reviewForm">
+                <div class="form-group">
+                  <label class="form-label">Puanınız</label>
+                  <div class="star-rating" id="starRating">
+                    <i class="fa-solid fa-star" data-val="1"></i>
+                    <i class="fa-solid fa-star" data-val="2"></i>
+                    <i class="fa-solid fa-star" data-val="3"></i>
+                    <i class="fa-solid fa-star" data-val="4"></i>
+                    <i class="fa-solid fa-star" data-val="5"></i>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="revName">Adınız</label>
+                  <input type="text" class="form-input" id="revName" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="revText">Yorumunuz</label>
+                  <textarea class="form-textarea" id="revText" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn--primary">Gönder</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-top:var(--space-3xl);" aria-labelledby="similar-title">
+      <div class="section-header">
+        <h2 class="section-header__title" id="similar-title">Benzer Kitaplar</h2>
+        <div class="section-header__line"></div>
+      </div>
+      <div class="carousel">
+        <button class="carousel__btn carousel__btn--prev" onclick="document.getElementById('similarTrack').scrollBy({left:-300,behavior:'smooth'})" aria-label="Önceki"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="carousel__track" id="similarTrack"></div>
+        <button class="carousel__btn carousel__btn--next" onclick="document.getElementById('similarTrack').scrollBy({left:300,behavior:'smooth'})" aria-label="Sonraki"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo"><i class="fa-solid fa-book-open"></i> Hanedan Sahaf</div>
+          <p class="footer__desc">2008'den beri nadir, ikinci el ve koleksiyonluk kitapları sizlerle buluşturuyoruz.</p>
+        </div>
+        <div>
+          <h4 class="footer__title">Hızlı Linkler</h4>
+          <a href="index.html" class="footer__link">Ana Sayfa</a>
+          <a href="products.html" class="footer__link">Tüm Kitaplar</a>
+          <a href="about.html" class="footer__link">Hakkımızda</a>
+        </div>
+        <div>
+          <h4 class="footer__title">Kategoriler</h4>
+          <a href="products.html?category=Roman" class="footer__link">Roman</a>
+          <a href="products.html?category=Tarih" class="footer__link">Tarih</a>
+          <a href="products.html?category=Felsefe" class="footer__link">Felsefe</a>
+        </div>
+        <div>
+          <h4 class="footer__title">İletişim</h4>
+          <div class="footer__contact-item"><i class="fa-solid fa-location-dot"></i><span>İstiklal Caddesi No: 45, Beyoğlu/İstanbul</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-phone"></i><span>+90 212 123 45 67</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-envelope"></i><span>info@hanedansahaf.com</span></div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 Hanedan Sahaf. Tüm hakları saklıdır.</p>
+        <a href="#" style="color:rgba(255,255,255,0.5)">Gizlilik Politikası</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Yukarı çık"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script src="books.js"></script>
+  <script src="categories.js"></script>
+  <script src="main.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const bookId = parseInt(params.get('id')) || 1;
+    const book = booksData.find(b => b.id === bookId);
+    if (!book) { window.location.href = '404.html'; }
+
+    document.getElementById('bcCategory').textContent = book.category;
+    document.getElementById('bcCategory').href = 'products.html?category=' + encodeURIComponent(book.category);
+    document.getElementById('bcTitle').textContent = book.title;
+    document.getElementById('pdTitle').textContent = book.title;
+    document.getElementById('pdAuthor').textContent = book.author;
+    document.getElementById('pdStars').innerHTML = renderStars(book.rating);
+    document.getElementById('pdRating').textContent = book.rating + ' (' + book.reviewCount + ' yorum)';
+    document.getElementById('pdCondition').textContent = book.condition;
+    document.getElementById('pdCondition').className = 'badge badge--condition-' + book.condition.toLowerCase().replace(/\s/g,'');
+    document.getElementById('pdStock').textContent = book.stock <= 3 ? 'Son ' + book.stock + ' adet!' : 'Stokta';
+    document.getElementById('pdStock').style.display = book.stock <= 3 ? 'inline-flex' : 'none';
+    document.getElementById('pdPrice').textContent = formatPrice(book.price);
+    const oldPriceEl = document.getElementById('pdOldPrice');
+    if (book.oldPrice) { oldPriceEl.textContent = formatPrice(book.oldPrice); oldPriceEl.style.display = 'inline'; }
+    else { oldPriceEl.style.display = 'none'; }
+
+    const mainImg = document.getElementById('mainImg');
+    mainImg.innerHTML = '<div style="width:100%;height:100%;background:' + (book.coverGradient || book.coverColor) + ';display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-family:var(--font-heading);font-size:4rem;font-weight:700;border-radius:var(--radius-lg);">' + book.title.charAt(0) + '</div>';
+    const thumbs = document.getElementById('thumbs');
+    for (let i = 0; i < 4; i++) {
+      thumbs.innerHTML += '<div class="product-detail__thumb ' + (i===0?'active':'') + '" style="background:' + (book.coverGradient || book.coverColor) + ';display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-family:var(--font-heading);font-size:1.5rem;font-weight:700;">' + book.title.charAt(0) + '</div>';
+    }
+
+    document.getElementById('detAuthor').textContent = book.author;
+    document.getElementById('detPublisher').textContent = book.publisher;
+    document.getElementById('detYear').textContent = book.year;
+    document.getElementById('detPages').textContent = book.pages;
+    document.getElementById('detIsbn').textContent = book.isbn;
+    document.getElementById('detLang').textContent = book.language;
+    document.getElementById('detCondition').textContent = book.condition + ' — Sayfalar temiz, cilt sağlam.';
+    document.getElementById('detDesc').textContent = book.description;
+
+    let qty = 1;
+    function changeQty(delta) { qty = Math.max(1, Math.min(qty + delta, book.stock)); document.getElementById('pdQty').value = qty; }
+
+    document.getElementById('pdAddCart').addEventListener('click', function() { addToCart(book.id, qty); });
+    const favBtn = document.getElementById('pdAddFav');
+    function updateFavBtn() {
+      const inList = isInWishlist(book.id);
+      favBtn.innerHTML = '<i class="fa-' + (inList ? 'solid' : 'regular') + ' fa-heart"></i> ' + (inList ? 'Favorilerden Çıkar' : 'Favorilere Ekle');
+    }
+    updateFavBtn();
+    favBtn.addEventListener('click', function() { toggleWishlist(book.id); updateFavBtn(); });
+
+    function switchTab(btn, panelId) {
+      document.querySelectorAll('.tabs__btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tabs__panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(panelId).classList.add('active');
+    }
+
+    let selectedRating = 0;
+    document.querySelectorAll('#starRating i').forEach(function(star) {
+      star.addEventListener('click', function() {
+        selectedRating = parseInt(star.dataset.val);
+        document.querySelectorAll('#starRating i').forEach(function(s,i) { s.classList.toggle('active', i < selectedRating); });
+      });
+    });
+
+    const demoReviews = [
+      { author: 'Ahmet Y.', date: '12 Mart 2024', rating: 5, text: 'Harika bir kitap! Kondisyonu çok iyiydi, beklediğimden daha iyi durumda geldi.' },
+      { author: 'Zeynep K.', date: '5 Şubat 2024', rating: 4, text: 'Kargo hızlıydı, paketleme özenliydi. Kitabın içindeki notlar bile hoşuma gitti.' }
+    ];
+    function renderReviews() {
+      const container = document.getElementById('reviewsList');
+      container.innerHTML = demoReviews.map(function(r) {
+        return '<div class="review"><div class="review__header"><span class="review__author">' + r.author + '</span><span class="review__date">' + r.date + '</span></div><div class="stars" style="margin-bottom:0.5rem;">' + renderStars(r.rating) + '</div><p class="review__text">' + r.text + '</p></div>';
+      }).join('');
+    }
+    renderReviews();
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('revName').value;
+      const text = document.getElementById('revText').value;
+      if (selectedRating === 0) { showToast('Lütfen puan seçin.', 'error'); return; }
+      demoReviews.unshift({ author: name, date: 'Bugün', rating: selectedRating, text: text });
+      renderReviews();
+      document.getElementById('reviewForm').reset();
+      selectedRating = 0;
+      document.querySelectorAll('#starRating i').forEach(function(s) { s.classList.remove('active'); });
+      showToast('Yorumunuz gönderildi, onay sonrası yayınlanacak.');
+    });
+
+    const similar = booksData.filter(function(b) { return b.category === book.category && b.id !== book.id; }).slice(0, 6);
+    const simTrack = document.getElementById('similarTrack');
+    similar.forEach(function(b) { simTrack.innerHTML += '<div class="carousel__item">' + renderBookCard(b) + '</div>'; });
+  </script>
+</body>
+</html>

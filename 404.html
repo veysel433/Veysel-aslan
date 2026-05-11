@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sayfa Bulunamadı — Hanedan Sahaf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo"><i class="fa-solid fa-book-open navbar__logo-icon"></i><span>Hanedan Sahaf</span></a>
+      <nav class="navbar__menu">
+        <a href="index.html" class="navbar__link">Ana Sayfa</a>
+        <a href="products.html" class="navbar__link">Kitaplar</a>
+        <a href="about.html" class="navbar__link">Hakkımızda</a>
+      </nav>
+      <div class="navbar__actions">
+        <button class="navbar__icon-btn" id="searchToggle" aria-label="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <a href="products.html?wishlist=1" class="navbar__icon-btn" aria-label="Favorilerim"><i class="fa-regular fa-heart"></i><span class="navbar__badge" id="wishlistBadge" style="display:none">0</span></a>
+        <a href="cart.html" class="navbar__icon-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span class="navbar__badge" id="cartBadge" style="display:none">0</span></a>
+        <button class="navbar__icon-btn" id="themeToggle" aria-label="Tema değiştir"><i class="fa-solid fa-moon"></i></button>
+        <button class="navbar__icon-btn navbar__hamburger" id="hamburger" aria-label="Menüyü aç"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-menu__link">Ana Sayfa</a>
+    <a href="products.html" class="mobile-menu__link">Kitaplar</a>
+    <a href="about.html" class="mobile-menu__link">Hakkımızda</a>
+    <a href="cart.html" class="mobile-menu__link">Sepetim</a>
+  </nav>
+
+  <main class="error-page">
+    <div>
+      <div class="error-page__code">404</div>
+      <h1 class="error-page__title">Sayfa Kayıp</h1>
+      <p class="error-page__text">Tıpkı kaybolan bir kitap gibi, aradığınız sayfayı bulamadık. Belki de başka bir rafta olabilir?</p>
+      <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+        <a href="index.html" class="btn btn--primary btn--large"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
+        <a href="products.html" class="btn btn--ghost btn--large"><i class="fa-solid fa-book-open"></i> Kitaplara Göz At</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo"><i class="fa-solid fa-book-open"></i> Hanedan Sahaf</div>
+          <p class="footer__desc">2008'den beri nadir, ikinci el ve koleksiyonluk kitapları sizlerle buluşturuyoruz.</p>
+        </div>
+        <div>
+          <h4 class="footer__title">Hızlı Linkler</h4>
+          <a href="index.html" class="footer__link">Ana Sayfa</a>
+          <a href="products.html" class="footer__link">Tüm Kitaplar</a>
+          <a href="about.html" class="footer__link">Hakkımızda</a>
+        </div>
+        <div>
+          <h4 class="footer__title">Kategoriler</h4>
+          <a href="products.html?category=Roman" class="footer__link">Roman</a>
+          <a href="products.html?category=Tarih" class="footer__link">Tarih</a>
+          <a href="products.html?category=Felsefe" class="footer__link">Felsefe</a>
+        </div>
+        <div>
+          <h4 class="footer__title">İletişim</h4>
+          <div class="footer__contact-item"><i class="fa-solid fa-location-dot"></i><span>İstiklal Caddesi No: 45, Beyoğlu/İstanbul</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-phone"></i><span>+90 212 123 45 67</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-envelope"></i><span>info@hanedansahaf.com</span></div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 Hanedan Sahaf. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="books.js"></script>
+  <script src="categories.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

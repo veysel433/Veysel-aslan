@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sepetim — Hanedan Sahaf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo"><i class="fa-solid fa-book-open navbar__logo-icon"></i><span>Hanedan Sahaf</span></a>
+      <nav class="navbar__menu">
+        <a href="index.html" class="navbar__link">Ana Sayfa</a>
+        <a href="products.html" class="navbar__link">Kitaplar</a>
+        <a href="about.html" class="navbar__link">Hakkımızda</a>
+      </nav>
+      <div class="navbar__actions">
+        <button class="navbar__icon-btn" id="searchToggle" aria-label="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <a href="products.html?wishlist=1" class="navbar__icon-btn" aria-label="Favorilerim"><i class="fa-regular fa-heart"></i><span class="navbar__badge" id="wishlistBadge" style="display:none">0</span></a>
+        <a href="cart.html" class="navbar__icon-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span class="navbar__badge" id="cartBadge" style="display:none">0</span></a>
+        <button class="navbar__icon-btn" id="themeToggle" aria-label="Tema değiştir"><i class="fa-solid fa-moon"></i></button>
+        <button class="navbar__icon-btn navbar__hamburger" id="hamburger" aria-label="Menüyü aç"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="search-bar" id="searchBar">
+      <input type="text" class="search-bar__input" id="searchInput" placeholder="Kitap veya yazar ara..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-menu__link">Ana Sayfa</a>
+    <a href="products.html" class="mobile-menu__link">Kitaplar</a>
+    <a href="about.html" class="mobile-menu__link">Hakkımızda</a>
+    <a href="cart.html" class="mobile-menu__link">Sepetim</a>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb__list">
+        <li class="breadcrumb__item"><a href="index.html">Ana Sayfa</a></li>
+        <li class="breadcrumb__sep"><i class="fa-solid fa-chevron-right" style="font-size:0.625rem;"></i></li>
+        <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Sepetim</li>
+      </ol>
+    </div>
+  </nav>
+
+  <main class="cart container">
+    <div class="cart__layout">
+      <div>
+        <h1 style="font-family:var(--font-heading);font-size:var(--font-size-2xl);margin-bottom:var(--space-xl);">Sepetim</h1>
+        <div class="cart__items" id="cartItems"></div>
+        <div class="cart-empty" id="cartEmpty" style="display:none;">
+          <div class="cart-empty__icon"><i class="fa-solid fa-basket-shopping"></i></div>
+          <h2 class="cart-empty__title">Sepetiniz Boş</h2>
+          <p class="cart-empty__text">Henüz sepetinize kitap eklemediniz. Nadir eserleri keşfetmeye ne dersiniz?</p>
+          <a href="products.html" class="btn btn--primary btn--large">Kitapları Keşfet</a>
+        </div>
+      </div>
+      <aside class="cart-summary" id="cartSummary" style="display:none;">
+        <h2 class="cart-summary__title">Sipariş Özeti</h2>
+        <div class="cart-summary__row"><span>Ara Toplam</span><span id="subTotal">0 ₺</span></div>
+        <div class="cart-summary__row"><span>Kargo</span><span id="shippingCost">0 ₺</span></div>
+        <div class="cart-summary__free-shipping" id="freeShippingBanner" style="display:none;"><i class="fa-solid fa-truck"></i> 150₺ üzeri kargo bedava!</div>
+        <div class="cart-summary__row cart-summary__row--total"><span>Toplam</span><span id="cartTotal">0 ₺</span></div>
+        <div class="cart-summary__coupon">
+          <input type="text" class="form-input cart-summary__coupon-input" placeholder="Kupon kodu" id="couponInput">
+          <button class="btn btn--ghost btn--small" onclick="applyCoupon()">Uygula</button>
+        </div>
+        <a href="checkout.html" class="btn btn--primary btn--full btn--large" style="margin-bottom:var(--space-md);"><i class="fa-solid fa-credit-card"></i> Ödemeye Geç</a>
+        <a href="products.html" class="btn btn--ghost btn--full btn--small"><i class="fa-solid fa-arrow-left"></i> Alışverişe Devam Et</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo"><i class="fa-solid fa-book-open"></i> Hanedan Sahaf</div>
+          <p class="footer__desc">2008'den beri nadir, ikinci el ve koleksiyonluk kitapları sizlerle buluşturuyoruz.</p>
+        </div>
+        <div>
+          <h4 class="footer__title">Hızlı Linkler</h4>
+          <a href="index.html" class="footer__link">Ana Sayfa</a>
+          <a href="products.html" class="footer__link">Tüm Kitaplar</a>
+          <a href="about.html" class="footer__link">Hakkımızda</a>
+        </div>
+        <div>
+          <h4 class="footer__title">Kategoriler</h4>
+          <a href="products.html?category=Roman" class="footer__link">Roman</a>
+          <a href="products.html?category=Tarih" class="footer__link">Tarih</a>
+          <a href="products.html?category=Felsefe" class="footer__link">Felsefe</a>
+        </div>
+        <div>
+          <h4 class="footer__title">İletişim</h4>
+          <div class="footer__contact-item"><i class="fa-solid fa-location-dot"></i><span>İstiklal Caddesi No: 45, Beyoğlu/İstanbul</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-phone"></i><span>+90 212 123 45 67</span></div>
+          <div class="footer__contact-item"><i class="fa-solid fa-envelope"></i><span>info@hanedansahaf.com</span></div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 Hanedan Sahaf. Tüm hakları saklıdır.</p>
+        <a href="#" style="color:rgba(255,255,255,0.5)">Gizlilik Politikası</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Yukarı çık"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script src="books.js"></script>
+  <script src="categories.js"></script>
+  <script src="main.js"></script>
+  <script>
+    function renderCart() {
+      const itemsContainer = document.getElementById('cartItems');
+      const emptyState = document.getElementById('cartEmpty');
+      const summary = document.getElementById('cartSummary');
+      if (AppState.cart.length === 0) {
+        itemsContainer.innerHTML = '';
+        emptyState.style.display = 'block';
+        summary.style.display = 'none';
+        return;
+      }
+      emptyState.style.display = 'none';
+      summary.style.display = 'block';
+      itemsContainer.innerHTML = AppState.cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item__img" style="background:${item.coverGradient || item.coverColor};display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-family:var(--font-heading);font-size:1.5rem;font-weight:700;border-radius:var(--radius-md);">${item.title.charAt(0)}</div>
+          <div class="cart-item__info">
+            <h3 class="cart-item__title"><a href="product-detail.html?id=${item.id}">${item.title}</a></h3>
+            <p class="cart-item__author">${item.author}</p>
+            <span class="badge badge--condition-${item.condition.toLowerCase().replace(/\s/g,'')} cart-item__condition">${item.condition}</span>
+          </div>
+          <span class="cart-item__price">${formatPrice(item.price)}</span>
+          <div class="cart-item__qty">
+            <button class="cart-item__qty-btn" onclick="updateCartQty(${item.id}, ${item.qty - 1})" aria-label="Azalt"><i class="fa-solid fa-minus"></i></button>
+            <input type="text" class="cart-item__qty-input" value="${item.qty}" readonly>
+            <button class="cart-item__qty-btn" onclick="updateCartQty(${item.id}, ${item.qty + 1})" aria-label="Artır"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <button class="cart-item__remove" onclick="removeFromCart(${item.id})" aria-label="Kaldır"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
+      `).join('');
+      updateSummary();
+    }
+    function updateSummary() {
+      const subtotal = getCartTotal();
+      const shipping = subtotal >= 150 ? 0 : 35;
+      document.getElementById('subTotal').textContent = formatPrice(subtotal);
+      document.getElementById('shippingCost').textContent = shipping === 0 ? 'Bedava' : formatPrice(shipping);
+      document.getElementById('cartTotal').textContent = formatPrice(subtotal + shipping);
+      document.getElementById('freeShippingBanner').style.display = subtotal < 150 ? 'block' : 'none';
+    }
+    function applyCoupon() {
+      const code = document.getElementById('couponInput').value.trim().toUpperCase();
+      if (code === 'HANEDAN10') {
+        showToast('Kupon uygulandı: %10 indirim');
+      } else if (code) {
+        showToast('Geçersiz kupon kodu', 'error');
+      }
+    }
+    renderCart();
+  </script>
+</body>
+</html>
