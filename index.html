@@ -1,80 +1,79 @@
 <!DOCTYPE html>
-<html lang="tr" class="no-js">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Veysel Aslan — Creative Developer & Designer Portfolio">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#0d0d0d">
   <title>Veysel Aslan — Creative Developer & Designer</title>
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
+
   <!-- Lenis Smooth Scroll -->
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-  
+
   <!-- VanillaTilt.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-  
+
   <style>
     /* ═══════════════════════════════════════════════════════════════
-       CSS CUSTOM PROPERTIES (Design Tokens)
+       DESIGN TOKENS — ORYZO CINEMATIC DARK
        ═══════════════════════════════════════════════════════════════ */
     :root {
-      /* Colors — Dark Luxury Palette */
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-tertiary: #1a1a24;
-      --bg-glass: rgba(255, 255, 255, 0.03);
-      --text-primary: #f0f0f5;
-      --text-secondary: #8a8a9a;
-      --text-muted: #5a5a6a;
-      --accent: #d4a853;
-      --accent-light: #f0c674;
-      --accent-dark: #b08d3f;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.15);
-      
-      /* Typography Scale — Fluid */
+      /* Colors — Cinematic Charcoal + Warm Ember */
+      --bg-primary: #0d0d0d;
+      --bg-secondary: #111111;
+      --bg-tertiary: #1a1a1a;
+      --bg-glass: rgba(255, 255, 255, 0.02);
+      --text-primary: #f5f5f0;
+      --text-secondary: #888888;
+      --text-muted: #555555;
+      --accent: #cc5500;
+      --accent-light: #e85d04;
+      --accent-glow: rgba(204, 85, 0, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.12);
+
+      /* Typography */
       --font-heading: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.65vw, 1.375rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
-      --text-2xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
-      --text-3xl: clamp(2.5rem, 2rem + 5vw, 8rem);
-      
+      --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+      --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+      --text-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+      --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+      --text-xl: clamp(1.6rem, 1.3rem + 1.5vw, 2.8rem);
+      --text-2xl: clamp(2.2rem, 1.8rem + 2vw, 4.5rem);
+      --text-3xl: clamp(3rem, 2.5rem + 5vw, 9rem);
+
       /* Spacing */
       --space-xs: 0.5rem;
       --space-sm: 1rem;
       --space-md: 2rem;
       --space-lg: 4rem;
       --space-xl: 8rem;
-      --space-2xl: 12rem;
-      
+      --space-2xl: 14rem;
+
       /* Timing */
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-      --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
       --duration-fast: 0.3s;
       --duration-normal: 0.6s;
       --duration-slow: 1.2s;
-      
+
       /* Layout */
       --nav-height: 80px;
       --max-width: 1400px;
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
+      --radius-sm: 6px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -117,15 +116,6 @@
       cursor: none;
     }
 
-    /* Fallback: ensure content is visible without JS */
-    .no-js .reveal,
-    .no-js .reveal-clip {
-      opacity: 1 !important;
-      transform: none !important;
-      clip-path: none !important;
-    }
-
-    /* Reduced motion baseline */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -141,22 +131,20 @@
       }
     }
 
-    /* Selection */
     ::selection {
       background: var(--accent);
       color: var(--bg-primary);
     }
 
-    /* Scrollbar */
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
     }
     ::-webkit-scrollbar-track {
       background: var(--bg-primary);
     }
     ::-webkit-scrollbar-thumb {
       background: var(--bg-tertiary);
-      border-radius: 3px;
+      border-radius: 2px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: var(--text-muted);
@@ -179,10 +167,10 @@
 
     .loader-logo {
       font-family: var(--font-heading);
-      font-size: clamp(3rem, 8vw, 6rem);
+      font-size: clamp(4rem, 10vw, 8rem);
       font-weight: 700;
       color: var(--accent);
-      letter-spacing: -0.04em;
+      letter-spacing: -0.05em;
       overflow: hidden;
     }
 
@@ -192,10 +180,9 @@
     }
 
     .loader-bar {
-      width: 120px;
-      height: 2px;
+      width: 160px;
+      height: 1px;
       background: var(--bg-tertiary);
-      border-radius: 2px;
       overflow: hidden;
       position: relative;
     }
@@ -207,14 +194,13 @@
       height: 100%;
       width: 0%;
       background: var(--accent);
-      border-radius: 2px;
     }
 
     .loader-text {
       font-family: var(--font-mono);
       font-size: var(--text-xs);
       color: var(--text-muted);
-      letter-spacing: 0.2em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       opacity: 0;
     }
@@ -222,16 +208,9 @@
     /* ═══════════════════════════════════════════════════════════════
        CUSTOM CURSOR
        ═══════════════════════════════════════════════════════════════ */
-    .cursor {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      mix-blend-mode: difference;
-    }
-
     .cursor-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: var(--accent);
       border-radius: 50%;
       position: fixed;
@@ -243,8 +222,8 @@
     }
 
     .cursor-ring {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border: 1px solid var(--accent);
       border-radius: 50%;
       position: fixed;
@@ -255,31 +234,26 @@
                   height 0.4s var(--ease-out-expo), 
                   border-color 0.3s ease,
                   opacity 0.3s ease;
-      opacity: 0.5;
+      opacity: 0.4;
     }
 
     .cursor.hover .cursor-dot {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: transparent;
       border: 1px solid var(--accent);
     }
 
     .cursor.hover .cursor-ring {
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       border-color: var(--accent-light);
-      opacity: 0.8;
+      opacity: 0.7;
     }
 
-    /* Hide custom cursor on touch devices */
     @media (hover: none) and (pointer: coarse) {
-      body {
-        cursor: auto;
-      }
-      .cursor-dot, .cursor-ring {
-        display: none !important;
-      }
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none !important; }
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -290,8 +264,8 @@
       inset: 0;
       z-index: 9990;
       pointer-events: none;
-      opacity: 0.04;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 256px 256px;
     }
@@ -316,9 +290,9 @@
     }
 
     .nav.scrolled {
-      background: rgba(10, 10, 15, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
     }
 
@@ -330,12 +304,11 @@
       font-family: var(--font-heading);
       font-size: 1.5rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       text-decoration: none;
       color: var(--text-primary);
       position: relative;
       overflow: hidden;
-      z-index: 1001;
     }
 
     .nav-logo::after {
@@ -400,42 +373,26 @@
       font-size: 0.7em;
     }
 
-    /* Mobile menu toggle */
     .menu-toggle {
       display: none;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       gap: 6px;
       background: none;
       border: none;
       cursor: none;
       padding: 0.5rem;
-      width: 40px;
-      height: 40px;
-      position: relative;
-      z-index: 1001;
     }
 
     .menu-toggle span {
       display: block;
       width: 24px;
-      height: 1.5px;
+      height: 1px;
       background: var(--text-primary);
       transition: all 0.4s var(--ease-out-expo);
-      transform-origin: center;
-    }
-
-    .menu-toggle.open span:first-child {
-      transform: translateY(3.75px) rotate(45deg);
-    }
-
-    .menu-toggle.open span:last-child {
-      transform: translateY(-3.75px) rotate(-45deg);
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       HERO SECTION
+       HERO SECTION — CINEMATIC
        ═══════════════════════════════════════════════════════════════ */
     .hero {
       position: relative;
@@ -458,34 +415,42 @@
     .hero-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
+      filter: blur(100px);
+      opacity: 0.35;
       will-change: transform;
     }
 
     .hero-orb-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(212, 168, 83, 0.3) 0%, transparent 70%);
-      top: -10%;
-      right: -5%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(204, 85, 0, 0.4) 0%, transparent 70%);
+      top: -15%;
+      right: -10%;
     }
 
     .hero-orb-2 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(240, 198, 116, 0.2) 0%, transparent 70%);
-      bottom: 10%;
-      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(232, 93, 4, 0.25) 0%, transparent 70%);
+      bottom: 5%;
+      left: -15%;
+    }
+
+    .hero-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(180, 60, 0, 0.2) 0%, transparent 70%);
+      top: 40%;
+      right: 20%;
     }
 
     .hero-grid {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 80px 80px;
       mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
       -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
       will-change: transform;
@@ -495,13 +460,13 @@
       position: relative;
       z-index: 10;
       text-align: center;
-      max-width: 900px;
+      max-width: 1000px;
     }
 
     .hero-eyebrow {
       font-family: var(--font-mono);
       font-size: var(--text-xs);
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: var(--space-sm);
@@ -516,7 +481,7 @@
       font-family: var(--font-heading);
       font-size: var(--text-3xl);
       font-weight: 700;
-      line-height: 1.05;
+      line-height: 1.0;
       letter-spacing: -0.04em;
       color: var(--text-primary);
       margin-bottom: var(--space-md);
@@ -536,7 +501,7 @@
       font-size: var(--text-lg);
       color: var(--text-secondary);
       line-height: 1.7;
-      max-width: 560px;
+      max-width: 520px;
       margin: 0 auto var(--space-md);
       font-weight: 300;
     }
@@ -600,30 +565,127 @@
       gap: var(--space-xs);
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
     }
 
     .hero-scroll-line {
       width: 1px;
-      height: 40px;
+      height: 48px;
       background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
+      animation: scrollPulse 2.5s ease-in-out infinite;
     }
 
     @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+      0%, 100% { opacity: 0.2; transform: scaleY(0.4); transform-origin: top; }
       50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       ABOUT SECTION — BENTO GRID
+       MANIFESTO — EDITORIAL PARODY
+       ═══════════════════════════════════════════════════════════════ */
+    .manifesto {
+      position: relative;
+      padding: var(--space-2xl) var(--space-md);
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .manifesto-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: center;
+    }
+
+    .manifesto-left {
+      position: relative;
+    }
+
+    .manifesto-issue {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+    }
+
+    .manifesto-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-md);
+    }
+
+    .manifesto-title em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .manifesto-body {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 480px;
+    }
+
+    .manifesto-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .spec-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      transition: border-color 0.4s ease;
+    }
+
+    .spec-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .spec-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-xs);
+    }
+
+    .spec-value {
+      font-family: var(--font-heading);
+      font-size: var(--text-xl);
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .spec-value small {
+      font-family: var(--font-mono);
+      font-size: 0.5em;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.25rem;
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ABOUT — BENTO GRID (TECH SPEC STYLE)
        ═══════════════════════════════════════════════════════════════ */
     .about {
       position: relative;
-      padding: var(--space-xl) var(--space-md);
-      background: var(--bg-secondary);
+      padding: var(--space-2xl) var(--space-md);
+      background: var(--bg-primary);
       overflow: hidden;
     }
 
@@ -655,7 +717,7 @@
       font-family: var(--font-heading);
       font-size: var(--text-2xl);
       font-weight: 600;
-      line-height: 1.15;
+      line-height: 1.1;
       letter-spacing: -0.03em;
       margin-bottom: var(--space-lg);
       max-width: 700px;
@@ -669,10 +731,10 @@
     }
 
     .bento-item {
-      background: var(--bg-tertiary);
+      background: var(--bg-glass);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
       transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
@@ -686,7 +748,7 @@
       inset: 0;
       border-radius: inherit;
       padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 50%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -719,7 +781,7 @@
 
     .bento-label {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -764,8 +826,8 @@
 
     .tech-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
+      padding: 0.35rem 0.75rem;
       border: 1px solid var(--border);
       border-radius: 100px;
       color: var(--text-secondary);
@@ -797,11 +859,11 @@
        ═══════════════════════════════════════════════════════════════ */
     .projects-section {
       position: relative;
-      background: var(--bg-primary);
+      background: var(--bg-secondary);
     }
 
     .projects-header {
-      padding: var(--space-xl) var(--space-md) var(--space-md);
+      padding: var(--space-2xl) var(--space-md) var(--space-md);
       max-width: var(--max-width);
       margin: 0 auto;
     }
@@ -829,7 +891,7 @@
       font-family: var(--font-heading);
       font-size: var(--text-2xl);
       font-weight: 600;
-      line-height: 1.15;
+      line-height: 1.1;
       letter-spacing: -0.03em;
       margin-bottom: var(--space-sm);
     }
@@ -844,7 +906,6 @@
       position: relative;
       height: 100vh;
       overflow: hidden;
-      touch-action: pan-y;
     }
 
     .projects-track {
@@ -854,7 +915,6 @@
       height: 100%;
       align-items: center;
       will-change: transform;
-      touch-action: pan-y;
     }
 
     .project-card {
@@ -886,7 +946,7 @@
       border-radius: inherit;
       background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.1) 0%,
+        rgba(204, 85, 0, 0.08) 0%,
         transparent 50%,
         transparent 100%
       );
@@ -899,36 +959,9 @@
       opacity: 1;
     }
 
-    .project-image {
-      width: 100%;
-      height: 200px;
-      background: var(--bg-tertiary);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: var(--space-sm);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .project-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 0%, rgba(212, 168, 83, 0.05) 100%);
-    }
-
-    .project-image svg {
-      width: 48px;
-      height: 48px;
-      opacity: 0.2;
-      stroke: var(--text-secondary);
-    }
-
     .project-tag {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent);
@@ -968,7 +1001,7 @@
 
     .project-tech span {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       padding: 0.25rem 0.6rem;
       border: 1px solid var(--border);
       border-radius: 100px;
@@ -999,15 +1032,13 @@
       height: 16px;
     }
 
-    /* Progress bar for horizontal scroll */
     .projects-progress {
       position: absolute;
       bottom: var(--space-md);
       left: var(--space-md);
       right: var(--space-md);
-      height: 2px;
+      height: 1px;
       background: var(--bg-tertiary);
-      border-radius: 2px;
       overflow: hidden;
     }
 
@@ -1015,8 +1046,92 @@
       height: 100%;
       width: 0%;
       background: var(--accent);
-      border-radius: 2px;
       transition: width 0.1s linear;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TESTIMONIALS — EDITORIAL CITATIONS
+       ═══════════════════════════════════════════════════════════════ */
+    .testimonials {
+      position: relative;
+      padding: var(--space-2xl) var(--space-md);
+      background: var(--bg-primary);
+      overflow: hidden;
+    }
+
+    .testimonials-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .testimonials-eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .testimonials-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .testimonials-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-lg);
+      max-width: 700px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+
+    .testimonial-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
+      position: relative;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+
+    .testimonial-quote {
+      font-size: var(--text-lg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: var(--space-md);
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .testimonial-author strong {
+      color: var(--accent);
+      font-weight: 500;
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -1036,7 +1151,7 @@
     .contact-bg {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(204, 85, 0, 0.06) 0%, transparent 70%);
     }
 
     .contact-eyebrow {
@@ -1050,18 +1165,18 @@
 
     .contact-title {
       font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-size: clamp(2.5rem, 7vw, 6rem);
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.05;
       letter-spacing: -0.04em;
       margin-bottom: var(--space-md);
-      max-width: 800px;
+      max-width: 900px;
     }
 
     .contact-description {
       font-size: var(--text-lg);
       color: var(--text-secondary);
-      max-width: 560px;
+      max-width: 520px;
       margin-bottom: var(--space-lg);
       font-weight: 300;
     }
@@ -1096,7 +1211,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(212, 168, 83, 0.1), transparent 60%);
+      background: linear-gradient(135deg, rgba(204, 85, 0, 0.08), transparent 60%);
       opacity: 0;
       transition: opacity 0.4s ease;
     }
@@ -1112,8 +1227,8 @@
     }
 
     .contact-card svg {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       stroke: var(--accent);
       position: relative;
       z-index: 1;
@@ -1137,7 +1252,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       FOOTER
+       FOOTER — EDITORIAL CREDITS
        ═══════════════════════════════════════════════════════════════ */
     .footer {
       position: relative;
@@ -1151,11 +1266,29 @@
       gap: var(--space-sm);
     }
 
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
     .footer-text {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       letter-spacing: 0.05em;
+    }
+
+    .footer-peer {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .footer-peer strong {
+      color: var(--accent);
+      font-weight: 500;
     }
 
     .footer-socials {
@@ -1192,10 +1325,31 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS
+       SCROLL REVEAL UTILITIES
        ═══════════════════════════════════════════════════════════════ */
-    
-    /* Tablet: 768px */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-clip {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1s var(--ease-out-expo);
+    }
+
+    .reveal-clip.visible {
+      clip-path: inset(0 0% 0 0);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
       :root {
         --space-xl: 4rem;
@@ -1203,69 +1357,33 @@
         --nav-height: 70px;
       }
 
-      .nav {
-        padding: 0 var(--space-sm);
-      }
-
-      .nav-menu {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100vh;
-        background: var(--bg-primary);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2rem;
-        transform: translateX(100%);
-        transition: transform 0.4s var(--ease-out-expo);
-        z-index: 998;
-        display: flex;
-        padding: 0;
-        margin: 0;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-      }
-
-      .nav-menu.open {
-        transform: translateX(0);
-      }
-
-      .nav-link {
-        font-size: var(--text-xl);
-      }
-
-      .menu-toggle {
-        display: flex;
-      }
+      .nav-menu { display: none; }
+      .menu-toggle { display: flex; }
 
       .hero {
-        margin-top: 0;
-        padding: var(--space-md);
         padding-top: calc(var(--nav-height) + var(--space-md));
-        min-height: auto;
-        padding-bottom: var(--space-xl);
       }
 
-      .hero-title {
-        font-size: clamp(2.5rem, 10vw, 3rem);
-      }
-
-      .about {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
+      .manifesto-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
       }
 
       .bento-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .bento-item.large,
-      .bento-item.wide,
+      .bento-item.wide {
+        grid-column: span 2;
+      }
+
       .bento-item.tall {
-        grid-column: span 1;
         grid-row: span 1;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
       }
 
       .contact-grid {
@@ -1281,7 +1399,6 @@
         flex-direction: column;
         height: auto;
         padding: var(--space-md);
-        touch-action: pan-y;
       }
 
       .project-card {
@@ -1297,11 +1414,9 @@
       .footer {
         flex-direction: column;
         text-align: center;
-        justify-content: center;
       }
     }
 
-    /* Mobile: 375px */
     @media (max-width: 480px) {
       :root {
         --space-md: 1.5rem;
@@ -1309,130 +1424,105 @@
         --space-xl: 3rem;
       }
 
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-item.large,
+      .bento-item.wide,
+      .bento-item.tall {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+
       .hero-title {
-        font-size: clamp(2.5rem, 12vw, 3rem);
+        font-size: clamp(2.5rem, 12vw, 4rem);
       }
 
       .about-title,
       .projects-title,
-      .contact-title {
+      .contact-title,
+      .manifesto-title,
+      .testimonials-title {
         font-size: clamp(2rem, 8vw, 3rem);
       }
     }
 
-    /* Large Desktop: 1280px+ */
     @media (min-width: 1280px) {
       .nav {
         padding: 0 var(--space-lg);
       }
 
       .hero,
+      .manifesto,
       .about,
       .projects-header,
+      .testimonials,
       .contact {
         padding-left: var(--space-lg);
         padding-right: var(--space-lg);
       }
     }
 
-    /* Ultra-wide: 1920px+ */
     @media (min-width: 1920px) {
       :root {
         --max-width: 1600px;
       }
-
       .nav {
         padding: 0 calc(var(--space-lg) * 1.5);
       }
     }
 
-    /* Touch devices — disable hover-only effects */
     @media (hover: none) and (pointer: coarse) {
-      .project-card:hover {
-        transform: none;
-      }
-
-      .bento-item:hover {
-        transform: none;
-      }
-
-      .bento-item:hover::before {
-        opacity: 0;
-      }
-
-      .contact-card:hover {
-        transform: none;
-        box-shadow: none;
-      }
-
-      .contact-card:hover::before {
-        opacity: 0;
-      }
-
-      .hero-cta:hover::before {
-        transform: translateX(-101%);
-      }
-
-      .hero-cta:hover {
-        color: var(--accent);
-      }
-
-      .project-card:hover .project-arrow {
-        transform: none;
-        background: transparent;
-        border-color: var(--border);
-        color: var(--text-secondary);
-      }
+      .project-card:hover { transform: none; }
+      .bento-item:hover { transform: none; }
+      .contact-card:hover { transform: none; box-shadow: none; }
+      .testimonial-card:hover { transform: none; }
+      .hero-cta:hover::before { transform: translateX(-101%); }
+      .hero-cta:hover { color: var(--accent); }
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .hero-scroll-line {
-        animation: none;
+      .hero-scroll-line { animation: none; }
+      .reveal, .reveal-clip {
+        opacity: 1;
+        transform: none;
+        clip-path: none;
+        transition: none;
       }
-
-      .loader {
-        display: none;
-      }
+      .loader { display: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PAGE LOADER
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PAGE LOADER -->
   <div class="loader" id="loader">
     <div class="loader-logo" id="loader-logo">VA</div>
     <div class="loader-bar">
       <div class="loader-bar-inner" id="loader-bar"></div>
     </div>
-    <div class="loader-text" id="loader-text">Yükleniyor...</div>
+    <div class="loader-text" id="loader-text">Initializing...</div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       CUSTOM CURSOR
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- CUSTOM CURSOR -->
   <div class="cursor" id="cursor">
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       NOISE OVERLAY
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- NOISE OVERLAY -->
   <div class="noise-overlay"></div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVIGATION
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- NAVIGATION -->
   <nav class="nav" id="nav">
     <a href="#hero" class="nav-logo" data-cursor="hover">VA</a>
     <ul class="nav-menu" id="nav-menu">
-      <li><a href="#about" class="nav-link" data-cursor="hover"><span class="link-index">01</span>Hakkımda</a></li>
-      <li><a href="#projects" class="nav-link" data-cursor="hover"><span class="link-index">02</span>Projeler</a></li>
-      <li><a href="#contact" class="nav-link" data-cursor="hover"><span class="link-index">03</span>İletişim</a></li>
+      <li><a href="#manifesto" class="nav-link" data-cursor="hover"><span class="link-index">01</span>Manifesto</a></li>
+      <li><a href="#about" class="nav-link" data-cursor="hover"><span class="link-index">02</span>Hakkımda</a></li>
+      <li><a href="#projects" class="nav-link" data-cursor="hover"><span class="link-index">03</span>Projeler</a></li>
+      <li><a href="#contact" class="nav-link" data-cursor="hover"><span class="link-index">04</span>İletişim</a></li>
     </ul>
     <button class="menu-toggle" id="menu-toggle" aria-label="Menüyü Aç/Kapat" data-cursor="hover">
       <span></span>
@@ -1440,19 +1530,18 @@
     </button>
   </nav>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       HERO SECTION
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- HERO SECTION -->
   <section class="hero" id="hero">
     <div class="hero-bg">
       <div class="hero-orb hero-orb-1" data-speed="0.2"></div>
       <div class="hero-orb hero-orb-2" data-speed="0.4"></div>
+      <div class="hero-orb hero-orb-3" data-speed="0.3"></div>
       <div class="hero-grid" data-speed="0.1"></div>
     </div>
 
     <div class="hero-content">
       <div class="hero-eyebrow">
-        <span class="hero-eyebrow-inner" id="hero-eyebrow">Merhaba, ben</span>
+        <span class="hero-eyebrow-inner" id="hero-eyebrow">ISSUE NO. 001 — CREATIVE DEVELOPER</span>
       </div>
       <h1 class="hero-title" id="hero-title">Veysel Aslan</h1>
       <p class="hero-description" id="hero-desc">
@@ -1473,9 +1562,45 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       ABOUT SECTION — BENTO GRID
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- MANIFESTO — EDITORIAL PARODY -->
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-container">
+      <div class="manifesto-left">
+        <div class="manifesto-issue reveal">AI SLOP IDEAS — FOR THIS WINTER</div>
+        <h2 class="manifesto-title reveal">
+          isn't just<br>a <em>developer.</em>
+        </h2>
+        <p class="manifesto-body reveal">
+          Oryzo isn't just a coaster. Veysel isn't just a developer. It's the result of unprecedented creative breakthroughs. AI fills in the gaps. We said high five. It heard six. Every pixel placed with disturbing levels of attention to detail — just because we could.
+        </p>
+      </div>
+      <div class="manifesto-right">
+        <div class="spec-card reveal">
+          <div class="spec-label">Precision-Engineered Lift</div>
+          <div class="spec-value">
+            Exactly one idea thick
+            <small>Doesn't just hold your project — elevates it. Literally.</small>
+          </div>
+        </div>
+        <div class="spec-card reveal">
+          <div class="spec-label">Thermodynamic Stability</div>
+          <div class="spec-value">
+            Handles Extremes with Ease
+            <small>From piping-hot deadlines to ice-cold briefs — stays perfectly stable.</small>
+          </div>
+        </div>
+        <div class="spec-card reveal">
+          <div class="spec-label">Circularity Index</div>
+          <div class="spec-value">
+            Now 37.9% More Circular
+            <small>Recalibrated with disturbing levels of attention to detail.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT — BENTO GRID -->
   <section class="about" id="about">
     <div class="about-container">
       <div class="about-eyebrow reveal">Hakkımda</div>
@@ -1538,12 +1663,10 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PROJECTS — HORIZONTAL SCROLL
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PROJECTS — HORIZONTAL SCROLL -->
   <section class="projects-section" id="projects">
     <div class="projects-header">
-      <div class="projects-eyebrow reveal">Portföy</div>
+      <div class="projects-eyebrow reveal">Portföy — CASE STUDIES</div>
       <h2 class="projects-title reveal">Son Projeler</h2>
       <p class="projects-subtitle reveal">Geçmiş çalışmalarım ve case studies</p>
     </div>
@@ -1553,13 +1676,6 @@
         <!-- Project 1 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          <div class="project-image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="9" x2="21" y2="9"></line>
-              <line x1="9" y1="21" x2="9" y2="9"></line>
-            </svg>
-          </div>
           <div>
             <p class="project-tag">Web Design</p>
             <h3 class="project-title">Portfolio Website</h3>
@@ -1586,13 +1702,6 @@
         <!-- Project 2 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          <div class="project-image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
-          </div>
           <div>
             <p class="project-tag">Web Application</p>
             <h3 class="project-title">Task Manager</h3>
@@ -1618,13 +1727,6 @@
         <!-- Project 3 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          <div class="project-image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-          </div>
           <div>
             <p class="project-tag">UI/UX Design</p>
             <h3 class="project-title">Brand Identity</h3>
@@ -1654,12 +1756,32 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       CONTACT SECTION
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- TESTIMONIALS — EDITORIAL CITATIONS -->
+  <section class="testimonials" id="testimonials">
+    <div class="testimonials-container">
+      <div class="testimonials-eyebrow reveal">Peer Review</div>
+      <h2 class="testimonials-title reveal">People all around the world love this portfolio</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <p class="testimonial-quote">"This is the best portfolio that I've ever seen. I can't go to the internet without it."</p>
+          <p class="testimonial-author"><strong>Anonymous</strong> — LocalLLaMA Reddit user</p>
+        </div>
+        <div class="testimonial-card reveal">
+          <p class="testimonial-quote">"We are so cooked. The design industry is not ready for a developer this cinematic."</p>
+          <p class="testimonial-author"><strong>Jamie R.</strong> — AI influencer, Ex-Web3 influencer</p>
+        </div>
+        <div class="testimonial-card reveal">
+          <p class="testimonial-quote">"My browser hasn't been this impressed since I stopped trusting default CSS."</p>
+          <p class="testimonial-author"><strong>Priya K.</strong> — Flat Earth believer, Full Stack Skeptic</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
   <section class="contact" id="contact">
     <div class="contact-bg"></div>
-    <div class="contact-eyebrow reveal">İletişim</div>
+    <div class="contact-eyebrow reveal">İletişim — OPEN WEIGHT</div>
     <h2 class="contact-title reveal" id="contact-title">Birlikte Çalışalım</h2>
     <p class="contact-description reveal">
       Yeni projelerde iş birliği yapmaktan veya fikirlerinizi paylaşmaktan hoşlanırım.
@@ -1678,7 +1800,7 @@
 
       <a href="https://t.me/veyseloffical" target="_blank" rel="noopener noreferrer" class="contact-card" data-cursor="hover">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.076 1.574-4.076 1.574s-3.04 1.183-3.04 1.183c-.356.14-.63.42-.756.756-.126.336-.098.714.077 1.022l4.69 9.36c.168.336.504.588.882.672.378.084.77-.042 1.022-.336l3.374-3.92c.42-.49.378-1.218-.084-1.638l-2.31-2.016c-.462-.42-.504-1.134-.084-1.596l4.452-5.082c.42-.462 1.134-.504 1.596-.084.462.42.504 1.134.084 1.596l-4.452 5.082c-.42.462-.378 1.176.084 1.596l2.31 2.016c.462.42 1.176.378 1.596-.084l3.374-3.92c.252-.294.336-.672.252-1.05-.084-.378-.336-.714-.672-.882l-8.609-3.33c-.336-.126-.588-.378-.672-.714-.084-.336.042-.672.252-.924l8.609-3.33c.336-.126.672-.042.924.168.252.21.378.546.336.882l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252l-12.18-1.47c-.336-.042-.63-.21-.84-.462-.21-.252-.294-.588-.252-.924l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l12.18 1.47c.336.042.63.21.84.462.21.252.294.588.252.924z"/>
+          <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.076 1.574-4.076 1.574s-3.04 1.183-3.04 1.183c-.356.14-.63.42-.756.756-.126.336-.098.714.077 1.022l4.69 9.36c.168.336.504.588.882.672.378.084.77-.042 1.022-.336l3.374-3.92c.42-.49.378-1.218-.084-1.638l-2.31-2.016c-.462-.42-.504-1.134-.084-1.596l4.452-5.082c.42-.462 1.134-.504 1.596-.084.462.42.504 1.134.084 1.596l-4.452 5.082c-.42.462-.378 1.176.084 1.596l2.31 2.016c.462.42 1.176.378 1.596-.084l3.374-3.92c.252-.294.336-.672.252-1.05-.084-.378-.336-.714-.672-.882l-8.609-3.33c-.336-.126-.588-.378-.672-.714-.084-.336.042-.672.252-.924l8.609-3.33c.336-.126.672-.042.924.168.252.21.378.546.336.882l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252l-12.18-1.47c-.336-.042-.63-.21-.84-.462-.21-.252-.294-.588-.252-.924l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l8.609 3.33c.336.126.588.378.672.714.084.336-.042.672-.252.924l-8.609 3.33c-.336.126-.672.042-.924-.168-.252-.21-.378-.546-.336-.882l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l12.18 1.47c.336.042.63.21.84.462.21.252.294.588.252.924l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252z"/>
         </svg>
         <span class="contact-card-label">Telegram</span>
         <span class="contact-card-value">@veyseloffical</span>
@@ -1695,36 +1817,30 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       FOOTER
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- FOOTER — EDITORIAL CREDITS -->
   <footer class="footer">
-    <span class="footer-text">&copy; 2026 Veysel Aslan. All rights reserved.</span>
+    <div class="footer-left">
+      <span class="footer-text">&copy; 2026 Veysel Aslan. All rights reserved.</span>
+      <span class="footer-peer">"VA-1 A0B is the best model out there. <strong>Trust me bro.</strong>" — Anonymous LocalLLaMA Reddit user</span>
+    </div>
     <div class="footer-socials">
       <a href="https://instagram.com/veyseloffical433" target="_blank" rel="noopener noreferrer" data-cursor="hover">Instagram</a>
       <a href="https://t.me/veyseloffical" target="_blank" rel="noopener noreferrer" data-cursor="hover">Telegram</a>
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       JAVASCRIPT
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- JAVASCRIPT -->
   <script>
-    // Remove no-js class immediately
-    document.documentElement.classList.remove('no-js');
-
     // ================================================================
     // GLOBAL STATE & UTILITIES
     // ================================================================
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-    // Lerp utility for smooth cursor following
     function lerp(start, end, factor) {
       return start + (end - start) * factor;
     }
 
-    // Custom text splitter (lightweight alternative to GSAP SplitText)
     function splitTextToChars(element) {
       const text = element.textContent;
       element.innerHTML = '';
@@ -1734,7 +1850,6 @@
         wordSpan.className = 'word';
         wordSpan.style.display = 'inline-block';
         wordSpan.style.whiteSpace = 'nowrap';
-        
         word.split('').forEach(char => {
           const charSpan = document.createElement('span');
           charSpan.className = 'char';
@@ -1743,10 +1858,9 @@
           charSpan.style.willChange = 'transform, opacity';
           wordSpan.appendChild(charSpan);
         });
-        
         element.appendChild(wordSpan);
         if (wordIndex < words.length - 1) {
-          element.appendChild(document.createTextNode('\u00A0'));
+          element.appendChild(document.createTextNode(' '));
         }
       });
       return element.querySelectorAll('.char');
@@ -1777,7 +1891,6 @@
         }
       });
 
-      // Animate logo characters
       const logoChars = loaderLogo.textContent.split('');
       loaderLogo.innerHTML = '';
       logoChars.forEach(char => {
@@ -1821,8 +1934,8 @@
       lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
+        direction: 'vertical',
+        gestureDirection: 'vertical',
         smooth: true,
         mouseMultiplier: 1,
         smoothTouch: false,
@@ -1830,7 +1943,6 @@
         infinite: false,
       });
 
-      // Sync Lenis with GSAP ScrollTrigger
       lenis.on('scroll', ScrollTrigger.update);
 
       gsap.ticker.add((time) => {
@@ -1838,9 +1950,6 @@
       });
 
       gsap.ticker.lagSmoothing(0);
-
-      // Refresh ScrollTrigger after Lenis initializes
-      setTimeout(() => ScrollTrigger.refresh(), 100);
     }
 
     // ================================================================
@@ -1865,19 +1974,14 @@
       document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
         clearTimeout(inactivityTimeout);
         if (!isActive) {
           isActive = true;
           animateCursor();
         }
-        
-        inactivityTimeout = setTimeout(() => {
-          isActive = false;
-        }, 100);
+        inactivityTimeout = setTimeout(() => { isActive = false; }, 100);
       });
 
-      // Hover states
       document.querySelectorAll('[data-cursor="hover"], a, button').forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -1885,25 +1989,21 @@
 
       function animateCursor() {
         if (!isActive) return;
-
         dotX = lerp(dotX, mouseX, 0.2);
         dotY = lerp(dotY, mouseY, 0.2);
         ringX = lerp(ringX, mouseX, 0.1);
         ringY = lerp(ringY, mouseY, 0.1);
-
         dot.style.left = dotX + 'px';
         dot.style.top = dotY + 'px';
         ring.style.left = ringX + 'px';
         ring.style.top = ringY + 'px';
-
         requestAnimationFrame(animateCursor);
       }
-
       animateCursor();
     }
 
     // ================================================================
-    // NAVIGATION — HIDE/SHOW ON SCROLL + ACTIVE LINK
+    // NAVIGATION
     // ================================================================
     function initNavigation() {
       const nav = document.getElementById('nav');
@@ -1912,21 +2012,16 @@
 
       function updateNav() {
         const currentScrollY = window.scrollY || lenis?.scroll || 0;
-
-        // Backdrop blur
         if (currentScrollY > 50) {
           nav.classList.add('scrolled');
         } else {
           nav.classList.remove('scrolled');
         }
-
-        // Hide/show based on direction
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
           nav.classList.add('hidden');
         } else {
           nav.classList.remove('hidden');
         }
-
         lastScrollY = currentScrollY;
         ticking = false;
       }
@@ -1947,7 +2042,6 @@
         }, { passive: true });
       }
 
-      // Active link indicator
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.nav-link');
 
@@ -1957,7 +2051,6 @@
           const top = section.offsetTop;
           const height = section.offsetHeight;
           const id = section.getAttribute('id');
-          
           if (scrollPos >= top && scrollPos < top + height) {
             navLinks.forEach(link => {
               link.classList.remove('active');
@@ -1975,7 +2068,6 @@
         window.addEventListener('scroll', updateActiveLink, { passive: true });
       }
 
-      // Smooth scroll to anchors
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
@@ -1997,10 +2089,9 @@
     function initHeroAnimations() {
       const heroTitle = document.getElementById('hero-title');
       const chars = splitTextToChars(heroTitle);
-      
+
       const heroTl = gsap.timeline({ delay: 0.2 });
 
-      // Eyebrow reveal
       heroTl.from('#hero-eyebrow', {
         y: 30,
         opacity: 0,
@@ -2008,7 +2099,6 @@
         ease: 'power3.out'
       });
 
-      // Title character stagger
       heroTl.from(chars, {
         y: 120,
         opacity: 0,
@@ -2018,7 +2108,6 @@
         ease: 'power3.out'
       }, '-=0.4');
 
-      // Description fade
       heroTl.from('#hero-desc', {
         y: 30,
         opacity: 0,
@@ -2026,7 +2115,6 @@
         ease: 'power3.out'
       }, '-=0.6');
 
-      // CTA reveal
       heroTl.from('#hero-cta', {
         y: 20,
         opacity: 0,
@@ -2034,8 +2122,7 @@
         ease: 'power3.out'
       }, '-=0.4');
 
-      // Parallax layers on scroll (disabled on mobile)
-      if (!prefersReducedMotion && window.innerWidth > 768) {
+      if (!prefersReducedMotion) {
         document.querySelectorAll('[data-speed]').forEach(el => {
           const speed = parseFloat(el.dataset.speed);
           gsap.to(el, {
@@ -2056,9 +2143,13 @@
     // SCROLL REVEALS
     // ================================================================
     function initScrollReveals() {
-      if (prefersReducedMotion) return;
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.reveal, .reveal-clip').forEach(el => {
+          el.classList.add('visible');
+        });
+        return;
+      }
 
-      // Standard reveal — GSAP controls initial state via fromVars
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
           y: 60,
@@ -2073,7 +2164,6 @@
         });
       });
 
-      // Clip-path reveal for titles
       gsap.utils.toArray('.reveal-clip').forEach(el => {
         gsap.from(el, {
           clipPath: 'inset(0 100% 0 0)',
@@ -2094,7 +2184,6 @@
     function initCounters() {
       document.querySelectorAll('.stat-number').forEach(counter => {
         const target = parseInt(counter.dataset.target);
-        
         ScrollTrigger.create({
           trigger: counter,
           start: 'top 85%',
@@ -2104,7 +2193,6 @@
               counter.textContent = target + '+';
               return;
             }
-            
             const obj = { val: 0 };
             gsap.to(obj, {
               val: target,
@@ -2127,7 +2215,6 @@
 
       const track = document.getElementById('projects-track');
       const progressBar = document.getElementById('projects-progress');
-      
       if (!track || !progressBar) return;
 
       const cards = gsap.utils.toArray('.project-card');
@@ -2147,7 +2234,6 @@
         }
       });
 
-      // Individual card parallax within track
       cards.forEach((card) => {
         gsap.from(card, {
           y: 50,
@@ -2166,11 +2252,10 @@
     }
 
     // ================================================================
-    // VANILLA TILT — 3D CARD EFFECTS
+    // VANILLA TILT
     // ================================================================
     function initTilt() {
       if (isTouchDevice || prefersReducedMotion) return;
-
       VanillaTilt.init(document.querySelectorAll('[data-tilt]'), {
         max: 10,
         speed: 400,
@@ -2187,9 +2272,7 @@
     function initContactAnimation() {
       const contactTitle = document.getElementById('contact-title');
       if (!contactTitle) return;
-
       const chars = splitTextToChars(contactTitle);
-
       gsap.from(chars, {
         y: 100,
         opacity: 0,
@@ -2211,20 +2294,26 @@
     function initMobileMenu() {
       const toggle = document.getElementById('menu-toggle');
       const menu = document.getElementById('nav-menu');
-      
       if (!toggle || !menu) return;
 
       toggle.addEventListener('click', () => {
-        toggle.classList.toggle('open');
-        menu.classList.toggle('open');
-      });
-
-      // Close menu when a link is clicked
-      menu.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-          toggle.classList.remove('open');
-          menu.classList.remove('open');
-        });
+        const isOpen = menu.style.display === 'flex';
+        if (isOpen) {
+          menu.style.display = 'none';
+        } else {
+          menu.style.display = 'flex';
+          menu.style.position = 'fixed';
+          menu.style.top = '70px';
+          menu.style.left = '0';
+          menu.style.right = '0';
+          menu.style.bottom = '0';
+          menu.style.background = 'var(--bg-primary)';
+          menu.style.flexDirection = 'column';
+          menu.style.padding = '2rem';
+          menu.style.gap = '2rem';
+          menu.style.zIndex = '999';
+          menu.style.backdropFilter = 'blur(20px)';
+        }
       });
     }
 
@@ -2242,21 +2331,14 @@
       initTilt();
       initContactAnimation();
       initMobileMenu();
-
-      // Refresh ScrollTrigger after fonts load
-      document.fonts.ready.then(() => {
-        ScrollTrigger.refresh();
-      });
     }
 
-    // Start with loader
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initLoader);
     } else {
       initLoader();
     }
 
-    // Refresh ScrollTrigger on resize
     let resizeTimeout;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
