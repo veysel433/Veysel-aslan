@@ -1,11 +1,13 @@
-pages_build_output_dir = "."
+name = "veysel-aslan"
+type = "javascript"
+compatibility_date = "2026-05-15"
 
 [build]
-command = "echo 'No build needed'"
-cwd = "."
+command = "echo 'No build required for static site'"
 
-[env.production]
-name = "veysel-aslan"
-routes = [
-  { pattern = "veyselaslan.com/*", zone_name = "veyselaslan.com" }
-]
+[build.upload]
+format = "service-worker"
+
+[assets]
+directory = "."
+include = ["*.html", "*.css", "*.js", "*.json"]
