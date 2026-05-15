@@ -1,2390 +1,669 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Veysel Aslan — Creative Developer & Designer Portfolio">
-  <meta name="theme-color" content="#0d0d0d">
-  <title>Veysel Aslan — Creative Developer & Designer</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <!-- Lenis Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
-  <!-- VanillaTilt.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-
-  <style>
-    /* ═══════════════════════════════════════════════════════════════
-       DESIGN TOKENS — ORYZO CINEMATIC DARK
-       ═══════════════════════════════════════════════════════════════ */
-    :root {
-      /* Colors — Cinematic Charcoal + Warm Ember */
-      --bg-primary: #0d0d0d;
-      --bg-secondary: #111111;
-      --bg-tertiary: #1a1a1a;
-      --bg-glass: rgba(255, 255, 255, 0.02);
-      --text-primary: #f5f5f0;
-      --text-secondary: #888888;
-      --text-muted: #555555;
-      --accent: #cc5500;
-      --accent-light: #e85d04;
-      --accent-glow: rgba(204, 85, 0, 0.15);
-      --border: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(255, 255, 255, 0.12);
-
-      /* Typography */
-      --font-heading: 'Space Grotesk', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
-      --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
-      --text-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
-      --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
-      --text-xl: clamp(1.6rem, 1.3rem + 1.5vw, 2.8rem);
-      --text-2xl: clamp(2.2rem, 1.8rem + 2vw, 4.5rem);
-      --text-3xl: clamp(3rem, 2.5rem + 5vw, 9rem);
-
-      /* Spacing */
-      --space-xs: 0.5rem;
-      --space-sm: 1rem;
-      --space-md: 2rem;
-      --space-lg: 4rem;
-      --space-xl: 8rem;
-      --space-2xl: 14rem;
-
-      /* Timing */
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-      --duration-fast: 0.3s;
-      --duration-normal: 0.6s;
-      --duration-slow: 1.2s;
-
-      /* Layout */
-      --nav-height: 80px;
-      --max-width: 1400px;
-      --radius-sm: 6px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       RESET & BASE
-       ═══════════════════════════════════════════════════════════════ */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html.lenis, html.lenis body {
-      height: auto;
-    }
-
-    .lenis.lenis-smooth {
-      scroll-behavior: auto !important;
-    }
-
-    .lenis.lenis-smooth [data-lenis-prevent] {
-      overscroll-behavior: contain;
-    }
-
-    .lenis.lenis-stopped {
-      overflow: hidden;
-    }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-      html.lenis, html.lenis body {
-        height: auto;
-      }
-      .lenis.lenis-smooth {
-        scroll-behavior: auto !important;
-      }
-    }
-
-    ::selection {
-      background: var(--accent);
-      color: var(--bg-primary);
-    }
-
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-primary);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--bg-tertiary);
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       PAGE LOADER
-       ═══════════════════════════════════════════════════════════════ */
-    .loader {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: var(--bg-primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-md);
-    }
-
-    .loader-logo {
-      font-family: var(--font-heading);
-      font-size: clamp(4rem, 10vw, 8rem);
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -0.05em;
-      overflow: hidden;
-    }
-
-    .loader-logo span {
-      display: inline-block;
-      transform: translateY(100%);
-    }
-
-    .loader-bar {
-      width: 160px;
-      height: 1px;
-      background: var(--bg-tertiary);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .loader-bar-inner {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-    }
-
-    .loader-text {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--text-muted);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      opacity: 0;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       CUSTOM CURSOR
-       ═══════════════════════════════════════════════════════════════ */
-    .cursor-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
-      mix-blend-mode: difference;
-    }
-
-    .cursor-ring {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9997;
-      transform: translate(-50%, -50%);
-      transition: width 0.4s var(--ease-out-expo), 
-                  height 0.4s var(--ease-out-expo), 
-                  border-color 0.3s ease,
-                  opacity 0.3s ease;
-      opacity: 0.4;
-    }
-
-    .cursor.hover .cursor-dot {
-      width: 44px;
-      height: 44px;
-      background: transparent;
-      border: 1px solid var(--accent);
-    }
-
-    .cursor.hover .cursor-ring {
-      width: 60px;
-      height: 60px;
-      border-color: var(--accent-light);
-      opacity: 0.7;
-    }
-
-    @media (hover: none) and (pointer: coarse) {
-      body { cursor: auto; }
-      .cursor-dot, .cursor-ring { display: none !important; }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       NOISE TEXTURE OVERLAY
-       ═══════════════════════════════════════════════════════════════ */
-    .noise-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9990;
-      pointer-events: none;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 256px 256px;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       NAVIGATION
-       ═══════════════════════════════════════════════════════════════ */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--nav-height);
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 var(--space-md);
-      transition: transform 0.6s var(--ease-out-expo), 
-                  background 0.4s ease, 
-                  backdrop-filter 0.4s ease;
-    }
-
-    .nav.scrolled {
-      background: rgba(13, 13, 13, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav.hidden {
-      transform: translateY(-100%);
-    }
-
-    .nav-logo {
-      font-family: var(--font-heading);
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      text-decoration: none;
-      color: var(--text-primary);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .nav-logo::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--accent);
-      transform: translateX(-101%);
-      transition: transform 0.4s var(--ease-out-expo);
-    }
-
-    .nav-logo:hover::after {
-      transform: translateX(0);
-    }
-
-    .nav-menu {
-      display: flex;
-      gap: var(--space-md);
-      list-style: none;
-    }
-
-    .nav-link {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-decoration: none;
-      color: var(--text-secondary);
-      transition: color 0.3s ease;
-      text-transform: uppercase;
-      position: relative;
-      padding: 0.5rem 0;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      transition: width 0.4s var(--ease-out-expo);
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: var(--text-primary);
-    }
-
-    .nav-link:hover::after,
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    .nav-link .link-index {
-      color: var(--accent);
-      margin-right: 0.5rem;
-      font-size: 0.7em;
-    }
-
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: none;
-      padding: 0.5rem;
-    }
-
-    .menu-toggle span {
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--text-primary);
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       HERO SECTION — CINEMATIC
-       ═══════════════════════════════════════════════════════════════ */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: var(--space-lg) var(--space-md);
-      padding-top: calc(var(--nav-height) + var(--space-lg));
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.35;
-      will-change: transform;
-    }
-
-    .hero-orb-1 {
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(204, 85, 0, 0.4) 0%, transparent 70%);
-      top: -15%;
-      right: -10%;
-    }
-
-    .hero-orb-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(232, 93, 4, 0.25) 0%, transparent 70%);
-      bottom: 5%;
-      left: -15%;
-    }
-
-    .hero-orb-3 {
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(180, 60, 0, 0.2) 0%, transparent 70%);
-      top: 40%;
-      right: 20%;
-    }
-
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 80px 80px;
-      mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-      will-change: transform;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      max-width: 1000px;
-    }
-
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: var(--space-sm);
-      overflow: hidden;
-    }
-
-    .hero-eyebrow-inner {
-      display: inline-block;
-    }
-
-    .hero-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-3xl);
-      font-weight: 700;
-      line-height: 1.0;
-      letter-spacing: -0.04em;
-      color: var(--text-primary);
-      margin-bottom: var(--space-md);
-    }
-
-    .hero-title .char {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-
-    .hero-title .word {
-      display: inline-block;
-      white-space: nowrap;
-    }
-
-    .hero-description {
-      font-size: var(--text-lg);
-      color: var(--text-secondary);
-      line-height: 1.7;
-      max-width: 520px;
-      margin: 0 auto var(--space-md);
-      font-weight: 300;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-sm);
-      padding: 1rem 2.5rem;
-      background: transparent;
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-decoration: none;
-      text-transform: uppercase;
-      border: 1px solid var(--accent);
-      border-radius: var(--radius-sm);
-      position: relative;
-      overflow: hidden;
-      transition: color 0.4s ease;
-    }
-
-    .hero-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      transform: translateX(-101%);
-      transition: transform 0.5s var(--ease-out-expo);
-      z-index: -1;
-    }
-
-    .hero-cta:hover {
-      color: var(--bg-primary);
-    }
-
-    .hero-cta:hover::before {
-      transform: translateX(0);
-    }
-
-    .hero-cta svg {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.3s var(--ease-out-expo);
-    }
-
-    .hero-cta:hover svg {
-      transform: translateX(4px);
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: var(--space-md);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-xs);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-    }
-
-    .hero-scroll-line {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.2; transform: scaleY(0.4); transform-origin: top; }
-      50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       MANIFESTO — EDITORIAL PARODY
-       ═══════════════════════════════════════════════════════════════ */
-    .manifesto {
-      position: relative;
-      padding: var(--space-2xl) var(--space-md);
-      background: var(--bg-secondary);
-    }
-
-    .manifesto-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-xl);
-      align-items: center;
-    }
-
-    .manifesto-left {
-      position: relative;
-    }
-
-    .manifesto-issue {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-    }
-
-    .manifesto-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-md);
-    }
-
-    .manifesto-title em {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .manifesto-body {
-      font-size: var(--text-base);
-      color: var(--text-secondary);
-      line-height: 1.8;
-      max-width: 480px;
-    }
-
-    .manifesto-right {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-md);
-    }
-
-    .spec-card {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      transition: border-color 0.4s ease;
-    }
-
-    .spec-card:hover {
-      border-color: var(--border-hover);
-    }
-
-    .spec-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-xs);
-    }
-
-    .spec-value {
-      font-family: var(--font-heading);
-      font-size: var(--text-xl);
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.2;
-    }
-
-    .spec-value small {
-      font-family: var(--font-mono);
-      font-size: 0.5em;
-      color: var(--text-muted);
-      display: block;
-      margin-top: 0.25rem;
-      font-weight: 400;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       ABOUT — BENTO GRID (TECH SPEC STYLE)
-       ═══════════════════════════════════════════════════════════════ */
-    .about {
-      position: relative;
-      padding: var(--space-2xl) var(--space-md);
-      background: var(--bg-primary);
-    }
-
-    .about-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .about-eyebrow {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .about-eyebrow::before {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .about-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-2xl);
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-lg);
-      max-width: 700px;
-    }
-
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto;
-      gap: var(--space-sm);
-    }
-
-    .bento-item {
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .bento-item::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 50%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .bento-item:hover::before {
-      opacity: 1;
-    }
-
-    .bento-item:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-4px);
-    }
-
-    .bento-item.large {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-
-    .bento-item.wide {
-      grid-column: span 2;
-    }
-
-    .bento-item.tall {
-      grid-row: span 2;
-    }
-
-    .bento-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-    }
-
-    .bento-text {
-      font-size: var(--text-base);
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    .bento-text strong {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .stat-number {
-      font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 4vw, 4rem);
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: var(--space-xs);
-      letter-spacing: -0.03em;
-    }
-
-    .stat-label {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .tech-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-xs);
-      margin-top: var(--space-sm);
-    }
-
-    .tech-tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      padding: 0.35rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text-secondary);
-      transition: all 0.3s ease;
-    }
-
-    .tech-tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .bento-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      min-height: 120px;
-    }
-
-    .bento-visual svg {
-      width: 80px;
-      height: 80px;
-      opacity: 0.3;
-      stroke: var(--accent);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       PROJECTS — HORIZONTAL SCROLL
-       ═══════════════════════════════════════════════════════════════ */
-    .projects-section {
-      position: relative;
-      background: var(--bg-secondary);
-    }
-
-    .projects-header {
-      padding: var(--space-2xl) var(--space-md) var(--space-md);
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .projects-eyebrow {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .projects-eyebrow::before {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .projects-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-2xl);
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-sm);
-    }
-
-    .projects-subtitle {
-      font-size: var(--text-base);
-      color: var(--text-secondary);
-      max-width: 500px;
-    }
-
-    .projects-horizontal {
-      position: relative;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-    }
-
-    .projects-track {
-      display: flex;
-      gap: var(--space-md);
-      padding: 0 var(--space-md);
-      height: 100%;
-      align-items: center;
-      will-change: transform;
-    }
-
-    .project-card {
-      flex-shrink: 0;
-      width: clamp(320px, 40vw, 480px);
-      height: clamp(420px, 60vh, 560px);
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-md);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      transform-style: preserve-3d;
-      transition: border-color 0.4s ease;
-    }
-
-    .project-card:hover {
-      border-color: var(--border-hover);
-    }
-
-    .project-card-shine {
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(
-        135deg,
-        rgba(204, 85, 0, 0.08) 0%,
-        transparent 50%,
-        transparent 100%
-      );
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-
-    .project-card:hover .project-card-shine {
-      opacity: 1;
-    }
-
-    .project-tag {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: var(--space-xs);
-    }
-
-    .project-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-xl);
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-xs);
-      letter-spacing: -0.02em;
-    }
-
-    .project-description {
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-      line-height: 1.7;
-      flex-grow: 1;
-    }
-
-    .project-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: var(--space-sm);
-      padding-top: var(--space-sm);
-      border-top: 1px solid var(--border);
-    }
-
-    .project-tech {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .project-tech span {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      padding: 0.25rem 0.6rem;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text-muted);
-    }
-
-    .project-arrow {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-secondary);
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .project-card:hover .project-arrow {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--bg-primary);
-      transform: rotate(-45deg);
-    }
-
-    .project-arrow svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .projects-progress {
-      position: absolute;
-      bottom: var(--space-md);
-      left: var(--space-md);
-      right: var(--space-md);
-      height: 1px;
-      background: var(--bg-tertiary);
-      overflow: hidden;
-    }
-
-    .projects-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      transition: width 0.1s linear;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       TESTIMONIALS — EDITORIAL CITATIONS
-       ═══════════════════════════════════════════════════════════════ */
-    .testimonials {
-      position: relative;
-      padding: var(--space-2xl) var(--space-md);
-      background: var(--bg-primary);
-    }
-
-    .testimonials-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .testimonials-eyebrow {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .testimonials-eyebrow::before {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .testimonials-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-2xl);
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-lg);
-      max-width: 700px;
-    }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-md);
-    }
-
-    .testimonial-card {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
-      position: relative;
-    }
-
-    .testimonial-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-4px);
-    }
-
-    .testimonial-quote {
-      font-size: var(--text-lg);
-      color: var(--text-primary);
-      line-height: 1.6;
-      font-weight: 300;
-      margin-bottom: var(--space-md);
-      font-style: italic;
-    }
-
-    .testimonial-author {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--text-secondary);
-      letter-spacing: 0.05em;
-    }
-
-    .testimonial-author strong {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       CONTACT SECTION
-       ═══════════════════════════════════════════════════════════════ */
-    .contact {
-      position: relative;
-      padding: var(--space-2xl) var(--space-md);
-      background: var(--bg-secondary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .contact-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(204, 85, 0, 0.06) 0%, transparent 70%);
-    }
-
-    .contact-eyebrow {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: var(--space-sm);
-    }
-
-    .contact-title {
-      font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 7vw, 6rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-      margin-bottom: var(--space-md);
-      max-width: 900px;
-    }
-
-    .contact-description {
-      font-size: var(--text-lg);
-      color: var(--text-secondary);
-      max-width: 520px;
-      margin-bottom: var(--space-lg);
-      font-weight: 300;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-md);
-      max-width: 900px;
-      width: 100%;
-    }
-
-    .contact-card {
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      text-decoration: none;
-      color: var(--text-primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-sm);
-      transition: all 0.5s var(--ease-out-expo);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(204, 85, 0, 0.08), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .contact-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .contact-card:hover::before {
-      opacity: 1;
-    }
-
-    .contact-card svg {
-      width: 28px;
-      height: 28px;
-      stroke: var(--accent);
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-card-label {
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-card-value {
-      font-size: var(--text-sm);
-      color: var(--text-primary);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       FOOTER — EDITORIAL CREDITS
-       ═══════════════════════════════════════════════════════════════ */
-    .footer {
-      position: relative;
-      padding: var(--space-md);
-      background: var(--bg-primary);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-sm);
-    }
-
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xs);
-    }
-
-    .footer-text {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-
-    .footer-peer {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .footer-peer strong {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .footer-socials {
-      display: flex;
-      gap: var(--space-md);
-    }
-
-    .footer-socials a {
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-      text-decoration: none;
-      position: relative;
-      padding-bottom: 2px;
-      transition: color 0.3s ease;
-    }
-
-    .footer-socials a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      transition: width 0.4s var(--ease-out-expo);
-    }
-
-    .footer-socials a:hover {
-      color: var(--text-primary);
-    }
-
-    .footer-socials a:hover::after {
-      width: 100%;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       SCROLL REVEAL UTILITIES
-       ═══════════════════════════════════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-clip {
-      clip-path: inset(0 100% 0 0);
-      transition: clip-path 1s var(--ease-out-expo);
-    }
-
-    .reveal-clip.visible {
-      clip-path: inset(0 0% 0 0);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       RESPONSIVE
-       ═══════════════════════════════════════════════════════════════ */
-    @media (max-width: 768px) {
-      :root {
-        --space-xl: 4rem;
-        --space-2xl: 6rem;
-        --nav-height: 70px;
-      }
-
-      html, body {
-        overflow-x: hidden;
-        height: auto;
-      }
-
-      .nav-menu { display: none; }
-      .menu-toggle { display: flex; }
-
-      .hero {
-        padding-top: calc(var(--nav-height) + var(--space-md));
-      }
-
-      .manifesto-container {
-        grid-template-columns: 1fr;
-        gap: var(--space-lg);
-      }
-
-      .bento-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .bento-item.large,
-      .bento-item.wide {
-        grid-column: span 2;
-      }
-
-      .bento-item.tall {
-        grid-row: span 1;
-      }
-
-      .testimonials-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .projects-horizontal {
-        height: auto;
-        overflow: visible;
-      }
-
-      .projects-track {
-        flex-direction: column;
-        height: auto;
-        padding: var(--space-md);
-      }
-
-      .project-card {
-        width: 100%;
-        height: auto;
-        min-height: 400px;
-      }
-
-      .projects-progress {
-        display: none;
-      }
-
-      .footer {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      :root {
-        --space-md: 1.5rem;
-        --space-lg: 2.5rem;
-        --space-xl: 3rem;
-      }
-
-      .bento-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .bento-item.large,
-      .bento-item.wide,
-      .bento-item.tall {
-        grid-column: span 1;
-        grid-row: span 1;
-      }
-
-      .hero-title {
-        font-size: clamp(2.5rem, 12vw, 4rem);
-      }
-
-      .about-title,
-      .projects-title,
-      .contact-title,
-      .manifesto-title,
-      .testimonials-title {
-        font-size: clamp(2rem, 8vw, 3rem);
-      }
-    }
-
-    @media (min-width: 1280px) {
-      .nav {
-        padding: 0 var(--space-lg);
-      }
-
-      .hero,
-      .manifesto,
-      .about,
-      .projects-header,
-      .testimonials,
-      .contact {
-        padding-left: var(--space-lg);
-        padding-right: var(--space-lg);
-      }
-    }
-
-    @media (min-width: 1920px) {
-      :root {
-        --max-width: 1600px;
-      }
-      .nav {
-        padding: 0 calc(var(--space-lg) * 1.5);
-      }
-    }
-
-    @media (hover: none) and (pointer: coarse) {
-      .project-card:hover { transform: none; }
-      .bento-item:hover { transform: none; }
-      .contact-card:hover { transform: none; box-shadow: none; }
-      .testimonial-card:hover { transform: none; }
-      .hero-cta:hover::before { transform: translateX(-101%); }
-      .hero-cta:hover { color: var(--accent); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-scroll-line { animation: none; }
-      .reveal, .reveal-clip {
-        opacity: 1;
-        transform: none;
-        clip-path: none;
-        transition: none;
-      }
-      .loader { display: none; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA X1 — Ultra Premium Product Experience</title>
+    <meta name="description" content="AURA X1 - Sınırları aşan bir tasarım anlayışı. Sinematik ürün deneyimi.">
+
+    <!-- Google Fonts: Inter (Body) & Syne (Display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN (JIT Compiler) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Konfigürasyonu: Özel Renkler ve Font Ailesi -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deep: {
+                            black: '#09090b',
+                            gray: '#18181b',
+                            accent: '#27272a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP Core & ScrollTrigger Plugin CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Lenis Smooth Scroll CDN (v1.1.18 via jsDelivr) -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+    <style>
+        /* ==========================================
+           GLOBAL STILLER & ÖZEL İMLEÇ
+        ========================================== */
+
+        /* Özel imleç elementleri */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #ffffff;
+            mix-blend-mode: difference;
+        }
+        .cursor-outline {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        height 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        background-color 0.3s ease,
+                        border-color 0.3s ease;
+        }
+        .cursor-outline.hover {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(1px);
+        }
+
+        /* Masaüstünde varsayılan imleci gizle */
+        @media (min-width: 768px) {
+            body { cursor: none; }
+            a, button, [data-cursor="pointer"] { cursor: none; }
+        }
+
+        /* ==========================================
+           ARKA PLAN EFEKTLERİ
+        ========================================== */
+
+        /* Yavaş dönen gradyan arka plan */
+        .gradient-bg {
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(63, 63, 70, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(39, 39, 42, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(24, 24, 27, 0.8) 0%, transparent 70%);
+            animation: gradientPulse 15s ease-in-out infinite alternate;
+        }
+        @keyframes gradientPulse {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+            100% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+        }
+
+        /* Film tanesi (noise) overlay - sinematik doku */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* ==========================================
+           SCROLL İNDİKATÖR & MİKRO ANİMASYONLAR
+        ========================================== */
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(12px); opacity: 0.3; }
+        }
+        .scroll-indicator-line {
+            animation: scrollBounce 2.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+        }
+
+        /* Yumuşak parlama (glow) efekti - Kartlar için */
+        .glow-card {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+        .glow-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 
+                0 0 60px rgba(255, 255, 255, 0.06),
+                0 0 120px rgba(255, 255, 255, 0.03),
+                0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ==========================================
+           TİPOGRAFİ & METİN ANİMASYON YARDIMCILARI
+        ========================================== */
+        .char {
+            display: inline-block;
+            will-change: transform, opacity;
+        }
+        .word {
+            display: inline-block;
+            white-space: nowrap;
+            margin-right: 0.25em;
+        }
+
+        /* Scrollbar stilizasyonu */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+        /* Seçim rengi */
+        ::selection {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-deep-black text-white font-sans antialiased overflow-x-hidden">
 
-  <!-- PAGE LOADER -->
-  <div class="loader" id="loader">
-    <div class="loader-logo" id="loader-logo">VA</div>
-    <div class="loader-bar">
-      <div class="loader-bar-inner" id="loader-bar"></div>
-    </div>
-    <div class="loader-text" id="loader-text">Initializing...</div>
-  </div>
+    <!-- Film Tanesi Overlay (Sinematik Doku) -->
+    <div class="noise-overlay"></div>
 
-  <!-- CUSTOM CURSOR -->
-  <div class="cursor" id="cursor">
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-ring" id="cursor-ring"></div>
-  </div>
+    <!-- Özel Mouse İmleci (Sadece Masaüstü) -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
 
-  <!-- NOISE OVERLAY -->
-  <div class="noise-overlay"></div>
+    <!-- ==========================================
+         NAVİGASYON (Minimal, Mix-Blend)
+    ========================================== -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="font-display font-extrabold text-xl tracking-widest uppercase" data-cursor="pointer">Aura</a>
 
-  <!-- NAVIGATION -->
-  <nav class="nav" id="nav">
-    <a href="#hero" class="nav-logo" data-cursor="hover">VA</a>
-    <ul class="nav-menu" id="nav-menu">
-      <li><a href="#manifesto" class="nav-link" data-cursor="hover"><span class="link-index">01</span>Manifesto</a></li>
-      <li><a href="#about" class="nav-link" data-cursor="hover"><span class="link-index">02</span>Hakkımda</a></li>
-      <li><a href="#projects" class="nav-link" data-cursor="hover"><span class="link-index">03</span>Projeler</a></li>
-      <li><a href="#contact" class="nav-link" data-cursor="hover"><span class="link-index">04</span>İletişim</a></li>
-    </ul>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Menüyü Aç/Kapat" data-cursor="hover">
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-
-  <!-- HERO SECTION -->
-  <section class="hero" id="hero">
-    <div class="hero-bg">
-      <div class="hero-orb hero-orb-1" data-speed="0.2"></div>
-      <div class="hero-orb hero-orb-2" data-speed="0.4"></div>
-      <div class="hero-orb hero-orb-3" data-speed="0.3"></div>
-      <div class="hero-grid" data-speed="0.1"></div>
-    </div>
-
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-inner" id="hero-eyebrow">ISSUE NO. 001 — CREATIVE DEVELOPER</span>
-      </div>
-      <h1 class="hero-title" id="hero-title">Veysel Aslan</h1>
-      <p class="hero-description" id="hero-desc">
-        Sanat ve kodun kesişim noktasında, minimalist tasarımlar ve etkili dijital deneyimler yaratıyorum.
-      </p>
-      <a href="#contact" class="hero-cta" data-cursor="hover" id="hero-cta">
-        <span>Haydi Tanışalım</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </a>
-    </div>
-
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="hero-scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- MANIFESTO — EDITORIAL PARODY -->
-  <section class="manifesto" id="manifesto">
-    <div class="manifesto-container">
-      <div class="manifesto-left">
-        <div class="manifesto-issue reveal">AI SLOP IDEAS — FOR THIS WINTER</div>
-        <h2 class="manifesto-title reveal">
-          isn't just<br>a <em>developer.</em>
-        </h2>
-        <p class="manifesto-body reveal">
-          Oryzo isn't just a coaster. Veysel isn't just a developer. It's the result of unprecedented creative breakthroughs. AI fills in the gaps. We said high five. It heard six. Every pixel placed with disturbing levels of attention to detail — just because we could.
-        </p>
-      </div>
-      <div class="manifesto-right">
-        <div class="spec-card reveal">
-          <div class="spec-label">Precision-Engineered Lift</div>
-          <div class="spec-value">
-            Exactly one idea thick
-            <small>Doesn't just hold your project — elevates it. Literally.</small>
-          </div>
-        </div>
-        <div class="spec-card reveal">
-          <div class="spec-label">Thermodynamic Stability</div>
-          <div class="spec-value">
-            Handles Extremes with Ease
-            <small>From piping-hot deadlines to ice-cold briefs — stays perfectly stable.</small>
-          </div>
-        </div>
-        <div class="spec-card reveal">
-          <div class="spec-label">Circularity Index</div>
-          <div class="spec-value">
-            Now 37.9% More Circular
-            <small>Recalibrated with disturbing levels of attention to detail.</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT — BENTO GRID -->
-  <section class="about" id="about">
-    <div class="about-container">
-      <div class="about-eyebrow reveal">Hakkımda</div>
-      <h2 class="about-title reveal" id="about-title">Dijital Tasarımcı<br>& Developer</h2>
-
-      <div class="bento-grid">
-        <!-- Large text card -->
-        <div class="bento-item large reveal">
-          <div class="bento-label">Filozofi</div>
-          <p class="bento-text">
-            Her projeyi <strong>sadelik ve işlevsellikle</strong> başlatıyorum. Kullanıcı deneyimi, dikkat çeken tasarım ve temiz kod — bu üç sütun üzerine çalışıyorum. Modern web teknolojilerini öğrenmeyi ve yaratıcı çözümler bulmayı severim.
-          </p>
-          <div class="tech-list">
-            <span class="tech-tag">React</span>
-            <span class="tech-tag">Next.js</span>
-            <span class="tech-tag">GSAP</span>
-            <span class="tech-tag">Figma</span>
-            <span class="tech-tag">Tailwind</span>
-            <span class="tech-tag">Node.js</span>
-          </div>
+        <div class="hidden md:flex items-center gap-10 text-[13px] font-medium tracking-wide text-white/80">
+            <a href="#story" class="hover:text-white transition-colors duration-300" data-cursor="pointer">Hikaye</a>
+            <a href="#details" class="hover:text-white transition-colors duration-300" data-cursor="pointer">Detaylar</a>
+            <a href="#gallery" class="hover:text-white transition-colors duration-300" data-cursor="pointer">Galeri</a>
+            <a href="#contact" class="hover:text-white transition-colors duration-300" data-cursor="pointer">İletişim</a>
         </div>
 
-        <!-- Stat 1 -->
-        <div class="bento-item reveal">
-          <div class="bento-label">Deneyim</div>
-          <div class="stat-number" data-target="3">0</div>
-          <div class="stat-label">Yıl Deneyim</div>
-        </div>
-
-        <!-- Stat 2 -->
-        <div class="bento-item reveal">
-          <div class="bento-label">Projeler</div>
-          <div class="stat-number" data-target="5">0</div>
-          <div class="stat-label">Tamamlanan Proje</div>
-        </div>
-
-        <!-- Visual card -->
-        <div class="bento-item reveal">
-          <div class="bento-label">Yaklaşım</div>
-          <div class="bento-visual">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-              <polyline points="2 17 12 22 22 17"></polyline>
-              <polyline points="2 12 12 17 22 12"></polyline>
+        <!-- Mobil Menü Tetikleyici -->
+        <button class="md:hidden text-white p-2" aria-label="Menü" data-cursor="pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
-          </div>
-          <p class="bento-text" style="margin-top: var(--space-sm); font-size: var(--text-sm);">
-            Katmanlı mimari, performans odaklı geliştirme ve erişilebilirlik standartları.
-          </p>
+        </button>
+    </nav>
+
+    <!-- ==========================================
+         HERO BÖLÜMÜ (Tam Ekran, Sinematik)
+    ========================================== -->
+    <section class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden px-4">
+
+        <!-- Canlı Gradyan Arka Plan -->
+        <div class="absolute inset-0 gradient-bg z-0"></div>
+
+        <!-- Izgara Deseni (Çok Hafif) -->
+        <div class="absolute inset-0 z-0 opacity-[0.02]" 
+             style="background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 80px 80px;">
         </div>
 
-        <!-- Wide card -->
-        <div class="bento-item wide reveal">
-          <div class="bento-label">Misyon</div>
-          <p class="bento-text">
-            Dijital ürünleri sadece işlevsel değil, aynı zamanda <strong>hatırlanabilir</strong> kılmak. Her pikselin bir amacı olmalı, her animasyon bir hikaye anlatmalı.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS — HORIZONTAL SCROLL -->
-  <section class="projects-section" id="projects">
-    <div class="projects-header">
-      <div class="projects-eyebrow reveal">Portföy — CASE STUDIES</div>
-      <h2 class="projects-title reveal">Son Projeler</h2>
-      <p class="projects-subtitle reveal">Geçmiş çalışmalarım ve case studies</p>
-    </div>
-
-    <div class="projects-horizontal" id="projects-horizontal">
-      <div class="projects-track" id="projects-track">
-        <!-- Project 1 -->
-        <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-          <div class="project-card-shine"></div>
-          <div>
-            <p class="project-tag">Web Design</p>
-            <h3 class="project-title">Portfolio Website</h3>
-            <p class="project-description">
-              Minimalist portföy tasarımı, hızlı yüklenen ve responsive layout ile. GSAP animasyonları ve glassmorphism UI.
+        <!-- Hero İçerik -->
+        <div class="relative z-10 text-center max-w-5xl mx-auto">
+            <!-- Alt Başlık -->
+            <p id="hero-eyebrow" class="text-[11px] md:text-xs tracking-[0.4em] uppercase text-zinc-500 mb-8 font-medium opacity-0">
+                Yeniden Tanımlanan Lüks
             </p>
-          </div>
-          <div class="project-footer">
-            <div class="project-tech">
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>JS</span>
-              <span>GSAP</span>
-            </div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </div>
-          </div>
-        </div>
 
-        <!-- Project 2 -->
-        <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-          <div class="project-card-shine"></div>
-          <div>
-            <p class="project-tag">Web Application</p>
-            <h3 class="project-title">Task Manager</h3>
-            <p class="project-description">
-              Minimal ve hızlı görev yönetim uygulaması, gerçek zamanlı senkronizasyonla. React ve Firebase altyapısı.
+            <!-- Ana Başlık (Devasa Boyut) -->
+            <h1 id="hero-title" class="font-display font-extrabold text-7xl sm:text-8xl md:text-9xl lg:text-[11rem] leading-[0.85] tracking-tighter mb-10 opacity-0">
+                AURA<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-b from-zinc-400 to-zinc-700">X1</span>
+            </h1>
+
+            <!-- Açıklama -->
+            <p id="hero-desc" class="text-sm md:text-base lg:text-lg text-zinc-400 max-w-lg mx-auto leading-relaxed font-light opacity-0">
+                Sınırları aşan bir tasarım anlayışı. Her detayda mükemmellik, her dokunuşta ahenk.
             </p>
-          </div>
-          <div class="project-footer">
-            <div class="project-tech">
-              <span>React</span>
-              <span>Firebase</span>
-              <span>Tailwind</span>
+        </div>
+
+        <!-- Ürün Görseli Placeholder (Unsplash) -->
+        <div id="hero-visual" class="relative z-10 mt-16 md:mt-20 w-full max-w-md md:max-w-xl lg:max-w-2xl px-6 opacity-0">
+            <div class="relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/30 border border-zinc-800/40 backdrop-blur-sm shadow-2xl">
+                <img 
+                    src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=1200&auto=format&fit=crop" 
+                    alt="AURA X1 Premium Product" 
+                    class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-[1.2s] ease-out"
+                    loading="eager"
+                >
+                <!-- Metalik Parıltı Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.07] to-transparent pointer-events-none"></div>
+                <!-- Alt Gradient Karanlık -->
+                <div class="absolute inset-0 bg-gradient-to-t from-deep-black/60 via-transparent to-transparent pointer-events-none"></div>
             </div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+        </div>
+
+        <!-- Scroll İndikatörü -->
+        <div id="scroll-hint" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 opacity-0">
+            <span class="text-[10px] tracking-[0.3em] uppercase text-zinc-500 font-medium">Keşfet</span>
+            <div class="w-[1px] h-10 bg-gradient-to-b from-zinc-500 to-transparent scroll-indicator-line"></div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         HİKAYE / ÖZELLİK BÖLÜMÜ (ScrollTrigger)
+    ========================================== -->
+    <section id="story" class="relative py-32 md:py-48 lg:py-64 px-6 md:px-12 max-w-7xl mx-auto">
+
+        <!-- Özellik Blok 1: Ustalık -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center mb-32 md:mb-48">
+            <div class="md:col-span-5 order-2 md:order-1">
+                <div class="overflow-hidden rounded-2xl md:rounded-3xl parallax-container" data-speed="0.85">
+                    <img 
+                        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop" 
+                        alt="Craftsmanship Detail" 
+                        class="w-full h-[50vh] md:h-[70vh] object-cover scale-110 parallax-img will-change-transform"
+                        loading="lazy"
+                    >
+                </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-          <div class="project-card-shine"></div>
-          <div>
-            <p class="project-tag">UI/UX Design</p>
-            <h3 class="project-title">Brand Identity</h3>
-            <p class="project-description">
-              Profesyonel brand kimliği ve tasarım sistemi oluşturma. Figma ile kapsamlı design system ve style guide.
-            </p>
-          </div>
-          <div class="project-footer">
-            <div class="project-tech">
-              <span>Figma</span>
-              <span>Design</span>
-              <span>Brand</span>
+            <div class="md:col-span-6 md:col-start-7 order-1 md:order-2 flex flex-col justify-center">
+                <span class="text-[11px] tracking-[0.3em] uppercase text-zinc-600 mb-6 block">01 / Zanaat</span>
+                <h2 class="font-display text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.05] mb-8 reveal-text">
+                    Ustalıkla İşlenmiş Her Detay
+                </h2>
+                <p class="text-zinc-400 text-base md:text-lg lg:text-xl leading-relaxed max-w-md reveal-text">
+                    Geleneksel zanaatkarlık ve geleceğin teknolojisinin kusursuz birlikteliği. Aura X1, sadece bir ürün değil, bir duruş ifadesidir. Elle seçilmiş malzemeler, milimetrik hassasiyet.
+                </p>
             </div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+        </div>
+
+        <!-- Özellik Blok 2: Teknoloji -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center">
+            <div class="md:col-span-6 md:col-start-1 order-1 flex flex-col justify-center md:text-right md:items-end">
+                <span class="text-[11px] tracking-[0.3em] uppercase text-zinc-600 mb-6 block">02 / Teknoloji</span>
+                <h2 class="font-display text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.05] mb-8 reveal-text">
+                    Sessiz Güç.<br>Derin Etki.
+                </h2>
+                <p class="text-zinc-400 text-base md:text-lg lg:text-xl leading-relaxed max-w-md reveal-text">
+                    Görünmez teknoloji, hissedilir fark yaratır. Karmaşıklığı arındırılmış, saf güce dönüştürülmüş bir deneyim. Sessiz devrim, şimdi dokunabilir.
+                </p>
             </div>
-          </div>
+            <div class="md:col-span-5 md:col-start-8 order-2">
+                <div class="overflow-hidden rounded-2xl md:rounded-3xl parallax-container" data-speed="1.15">
+                    <img 
+                        src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop" 
+                        alt="Technology Core" 
+                        class="w-full h-[50vh] md:h-[70vh] object-cover scale-110 parallax-img will-change-transform"
+                        loading="lazy"
+                    >
+                </div>
+            </div>
         </div>
-      </div>
+    </section>
 
-      <div class="projects-progress">
-        <div class="projects-progress-bar" id="projects-progress"></div>
-      </div>
-    </div>
-  </section>
+    <!-- ==========================================
+         DETAYLAR / GALERİ BÖLÜMÜ (Hover Glow)
+    ========================================== -->
+    <section id="details" class="relative py-32 md:py-48 px-6 md:px-12 bg-gradient-to-b from-transparent via-deep-gray/20 to-transparent">
+        <div class="max-w-7xl mx-auto">
 
-  <!-- TESTIMONIALS — EDITORIAL CITATIONS -->
-  <section class="testimonials" id="testimonials">
-    <div class="testimonials-container">
-      <div class="testimonials-eyebrow reveal">Peer Review</div>
-      <h2 class="testimonials-title reveal">People all around the world love this portfolio</h2>
-      <div class="testimonials-grid">
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">"This is the best portfolio that I've ever seen. I can't go to the internet without it."</p>
-          <p class="testimonial-author"><strong>Anonymous</strong> — LocalLLaMA Reddit user</p>
+            <!-- Bölüm Başlığı -->
+            <div class="text-center mb-20 md:mb-32">
+                <p class="text-[11px] tracking-[0.4em] uppercase text-zinc-600 mb-4">Makro Perspektif</p>
+                <h2 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold reveal-text">Detaylara Yakından Bak</h2>
+            </div>
+
+            <!-- Kart Grid (Asimetrik) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
+
+                <!-- Kart 1: Titanyum -->
+                <div class="glow-card group relative overflow-hidden rounded-3xl bg-zinc-900/30 border border-zinc-800/40 aspect-[3/4]" data-cursor="pointer">
+                    <img 
+                        src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=600&auto=format&fit=crop" 
+                        alt="Titanyum Çerçeve Detayı" 
+                        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/40 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-8">
+                        <h3 class="font-display text-2xl md:text-3xl font-bold mb-2 tracking-tight">Titanyum Çerçeve</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">Aerospace-grade malzeme. Dayanıklılık ve zarafetin buluşması. Her açıdan saf güç.</p>
+                    </div>
+                </div>
+
+                <!-- Kart 2: Kristal (Offset) -->
+                <div class="glow-card group relative overflow-hidden rounded-3xl bg-zinc-900/30 border border-zinc-800/40 aspect-[3/4] md:mt-24" data-cursor="pointer">
+                    <img 
+                        src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=600&auto=format&fit=crop" 
+                        alt="Kristal Cam Detayı" 
+                        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/40 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-8">
+                        <h3 class="font-display text-2xl md:text-3xl font-bold mb-2 tracking-tight">Saf Kristal Cam</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">Işığı bükmeden yansıtan, çizilmeye dayanıklı optik mükemmellik. Geleceğin penceresi.</p>
+                    </div>
+                </div>
+
+                <!-- Kart 3: Manyetik Mekanizma -->
+                <div class="glow-card group relative overflow-hidden rounded-3xl bg-zinc-900/30 border border-zinc-800/40 aspect-[3/4]" data-cursor="pointer">
+                    <img 
+                        src="https://images.unsplash.com/photo-1618403088890-3d9b6d8e5a3b?q=80&w=600&auto=format&fit=crop" 
+                        alt="Manyetik Mekanizma" 
+                        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/40 to-transparent opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-8">
+                        <h3 class="font-display text-2xl md:text-3xl font-bold mb-2 tracking-tight">Manyetik Mekanizma</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">Sessiz, akıcı ve sonsuz. Mekaniğin şiirsel yorumu. Sürtünme yok, sadece akış.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">"We are so cooked. The design industry is not ready for a developer this cinematic."</p>
-          <p class="testimonial-author"><strong>Jamie R.</strong> — AI influencer, Ex-Web3 influencer</p>
+    </section>
+
+    <!-- ==========================================
+         GENİŞ GALERİ / MARQUEE BÖLÜMÜ
+    ========================================== -->
+    <section id="gallery" class="relative py-24 md:py-32 overflow-hidden border-y border-zinc-900/50">
+        <div class="whitespace-nowrap flex gap-8 animate-marquee" id="marquee-track">
+            <!-- Tekrarlanan görseller için placeholder -->
+            <div class="inline-block h-[40vh] md:h-[50vh] aspect-video rounded-2xl overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-500">
+                <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery 1" loading="lazy">
+            </div>
+            <div class="inline-block h-[40vh] md:h-[50vh] aspect-[3/4] rounded-2xl overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-500">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery 2" loading="lazy">
+            </div>
+            <div class="inline-block h-[40vh] md:h-[50vh] aspect-video rounded-2xl overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-500">
+                <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery 3" loading="lazy">
+            </div>
+            <div class="inline-block h-[40vh] md:h-[50vh] aspect-square rounded-2xl overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-500">
+                <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery 4" loading="lazy">
+            </div>
+            <div class="inline-block h-[40vh] md:h-[50vh] aspect-[3/4] rounded-2xl overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-500">
+                <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery 5" loading="lazy">
+            </div>
         </div>
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">"My browser hasn't been this impressed since I stopped trusting default CSS."</p>
-          <p class="testimonial-author"><strong>Priya K.</strong> — Flat Earth believer, Full Stack Skeptic</p>
+    </section>
+
+    <!-- ==========================================
+         FOOTER (Minimalist, Devasa Marka İsmi)
+    ========================================== -->
+    <footer id="contact" class="relative pt-32 pb-12 md:pt-48 md:pb-16 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto">
+            <!-- Ana Footer İçerik -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-16 mb-24">
+                <div class="space-y-8 max-w-md">
+                    <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter leading-none">
+                        AURA
+                    </h2>
+                    <p class="text-zinc-500 text-sm md:text-base leading-relaxed">
+                        Geleceğin lüksünü bugünden yaşayın. Sınırları yeniden tanımlıyoruz. Estetik, teknoloji ve duygusal bağın mükemmel sentezi.
+                    </p>
+                    <a href="mailto:hello@aura.ai" class="inline-block text-sm tracking-wide border-b border-zinc-700 pb-1 hover:border-white hover:text-white transition-colors duration-300" data-cursor="pointer">
+                        hello@aura.ai
+                    </a>
+                </div>
+
+                <div class="flex flex-col gap-4 text-sm text-zinc-500">
+                    <a href="#" class="hover:text-white transition-colors duration-300 text-right" data-cursor="pointer">Instagram</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300 text-right" data-cursor="pointer">Twitter / X</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300 text-right" data-cursor="pointer">LinkedIn</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300 text-right" data-cursor="pointer">Behance</a>
+                </div>
+            </div>
+
+            <!-- Alt Bilgi Çubuğu -->
+            <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] tracking-wide text-zinc-700 uppercase">
+                <p> 2026 Aura Technology. Tüm hakları saklıdır.</p>
+                <p>Tasarım & Geliştirme — Istanbul</p>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- CONTACT SECTION -->
-  <section class="contact" id="contact">
-    <div class="contact-bg"></div>
-    <div class="contact-eyebrow reveal">İletişim — OPEN WEIGHT</div>
-    <h2 class="contact-title reveal" id="contact-title">Birlikte Çalışalım</h2>
-    <p class="contact-description reveal">
-      Yeni projelerde iş birliği yapmaktan veya fikirlerinizi paylaşmaktan hoşlanırım.
-    </p>
-
-    <div class="contact-grid reveal">
-      <a href="https://instagram.com/veyseloffical433" target="_blank" rel="noopener noreferrer" class="contact-card" data-cursor="hover">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-        <span class="contact-card-label">Instagram</span>
-        <span class="contact-card-value">@veyseloffical433</span>
-      </a>
-
-      <a href="https://t.me/veyseloffical" target="_blank" rel="noopener noreferrer" class="contact-card" data-cursor="hover">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.076 1.574-4.076 1.574s-3.04 1.183-3.04 1.183c-.356.14-.63.42-.756.756-.126.336-.098.714.077 1.022l4.69 9.36c.168.336.504.588.882.672.378.084.77-.042 1.022-.336l3.374-3.92c.42-.49.378-1.218-.084-1.638l-2.31-2.016c-.462-.42-.504-1.134-.084-1.596l4.452-5.082c.42-.462 1.134-.504 1.596-.084.462.42.504 1.134.084 1.596l-4.452 5.082c-.42.462-.378 1.176.084 1.596l2.31 2.016c.462.42 1.176.378 1.596-.084l3.374-3.92c.252-.294.336-.672.252-1.05-.084-.378-.336-.714-.672-.882l-8.609-3.33c-.336-.126-.588-.378-.672-.714-.084-.336.042-.672.252-.924l8.609-3.33c.336-.126.672-.042.924.168.252.21.378.546.336.882l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252l-12.18-1.47c-.336-.042-.63-.21-.84-.462-.21-.252-.294-.588-.252-.924l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l8.609 3.33c.336.126.588.378.672.714.084.336-.042.672-.252.924l-8.609 3.33c-.336.126-.672.042-.924-.168-.252-.21-.378-.546-.336-.882l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l12.18 1.47c.336.042.63.21.84.462.21.252.294.588.252.924l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252z"/>
-        </svg>
-        <span class="contact-card-label">Telegram</span>
-        <span class="contact-card-value">@veyseloffical</span>
-      </a>
-
-      <a href="mailto:info@veyselaslan.com" class="contact-card" data-cursor="hover">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-        <span class="contact-card-label">E-posta</span>
-        <span class="contact-card-value">info@veyselaslan.com</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- FOOTER — EDITORIAL CREDITS -->
-  <footer class="footer">
-    <div class="footer-left">
-      <span class="footer-text">&copy; 2026 Veysel Aslan. All rights reserved.</span>
-      <span class="footer-peer">"VA-1 A0B is the best model out there. <strong>Trust me bro.</strong>" — Anonymous LocalLLaMA Reddit user</span>
-    </div>
-    <div class="footer-socials">
-      <a href="https://instagram.com/veyseloffical433" target="_blank" rel="noopener noreferrer" data-cursor="hover">Instagram</a>
-      <a href="https://t.me/veyseloffical" target="_blank" rel="noopener noreferrer" data-cursor="hover">Telegram</a>
-    </div>
-  </footer>
-
-  <!-- JAVASCRIPT -->
-  <script>
-    // ================================================================
-    // GLOBAL STATE & UTILITIES
-    // ================================================================
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-    function lerp(start, end, factor) {
-      return start + (end - start) * factor;
-    }
-
-    function splitTextToChars(element) {
-      const text = element.textContent;
-      element.innerHTML = '';
-      const words = text.split(' ');
-      words.forEach((word, wordIndex) => {
-        const wordSpan = document.createElement('span');
-        wordSpan.className = 'word';
-        wordSpan.style.display = 'inline-block';
-        wordSpan.style.whiteSpace = 'nowrap';
-        word.split('').forEach(char => {
-          const charSpan = document.createElement('span');
-          charSpan.className = 'char';
-          charSpan.textContent = char;
-          charSpan.style.display = 'inline-block';
-          charSpan.style.willChange = 'transform, opacity';
-          wordSpan.appendChild(charSpan);
+    <!-- ==========================================
+         JAVASCRIPT: GSAP, LENIS, CUSTOM CURSOR
+    ========================================== -->
+    <script>
+        // ==========================================
+        // 1. LENIS SMOOTH SCROLL BAŞLATMA
+        // ==========================================
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
         });
-        element.appendChild(wordSpan);
-        if (wordIndex < words.length - 1) {
-          element.appendChild(document.createTextNode(' '));
-        }
-      });
-      return element.querySelectorAll('.char');
-    }
 
-    // ================================================================
-    // PAGE LOADER
-    // ================================================================
-    function initLoader() {
-      const loader = document.getElementById('loader');
-      const loaderLogo = document.getElementById('loader-logo');
-      const loaderBar = document.getElementById('loader-bar');
-      const loaderText = document.getElementById('loader-text');
+        // Lenis scroll event'ini GSAP ScrollTrigger'a bağla
+        lenis.on('scroll', ScrollTrigger.update);
 
-      if (prefersReducedMotion) {
-        loader.style.display = 'none';
-        document.body.style.overflow = '';
-        return;
-      }
-
-      document.body.style.overflow = 'hidden';
-
-      const tl = gsap.timeline({
-        onComplete: () => {
-          loader.style.pointerEvents = 'none';
-          document.body.style.overflow = '';
-          initAnimations();
-        }
-      });
-
-      const logoChars = loaderLogo.textContent.split('');
-      loaderLogo.innerHTML = '';
-      logoChars.forEach(char => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.style.display = 'inline-block';
-        span.style.transform = 'translateY(100%)';
-        loaderLogo.appendChild(span);
-      });
-
-      tl.to(loaderLogo.querySelectorAll('span'), {
-        y: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power3.out'
-      })
-      .to(loaderText, {
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, '-=0.4')
-      .to(loaderBar, {
-        width: '100%',
-        duration: 1.5,
-        ease: 'power2.inOut'
-      }, '-=0.6')
-      .to(loader, {
-        yPercent: -100,
-        duration: 1,
-        ease: 'power3.inOut'
-      }, '+=0.3');
-    }
-
-    // ================================================================
-    // LENIS SMOOTH SCROLL
-    // ================================================================
-    let lenis;
-    function initLenis() {
-      if (prefersReducedMotion) return;
-
-      lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-      });
-
-      lenis.on('scroll', ScrollTrigger.update);
-
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-
-      gsap.ticker.lagSmoothing(0);
-    }
-
-    // ================================================================
-    // CUSTOM CURSOR
-    // ================================================================
-    function initCursor() {
-      if (isTouchDevice || prefersReducedMotion) return;
-
-      const dot = document.getElementById('cursor-dot');
-      const ring = document.getElementById('cursor-ring');
-      const cursor = document.getElementById('cursor');
-
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-      let ringX = mouseX;
-      let ringY = mouseY;
-      let dotX = mouseX;
-      let dotY = mouseY;
-      let isActive = true;
-      let inactivityTimeout;
-
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        clearTimeout(inactivityTimeout);
-        if (!isActive) {
-          isActive = true;
-          animateCursor();
-        }
-        inactivityTimeout = setTimeout(() => { isActive = false; }, 100);
-      });
-
-      document.querySelectorAll('[data-cursor="hover"], a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-      });
-
-      function animateCursor() {
-        if (!isActive) return;
-        dotX = lerp(dotX, mouseX, 0.2);
-        dotY = lerp(dotY, mouseY, 0.2);
-        ringX = lerp(ringX, mouseX, 0.1);
-        ringY = lerp(ringY, mouseY, 0.1);
-        dot.style.left = dotX + 'px';
-        dot.style.top = dotY + 'px';
-        ring.style.left = ringX + 'px';
-        ring.style.top = ringY + 'px';
-        requestAnimationFrame(animateCursor);
-      }
-      animateCursor();
-    }
-
-    // ================================================================
-    // NAVIGATION
-    // ================================================================
-    function initNavigation() {
-      const nav = document.getElementById('nav');
-      let lastScrollY = 0;
-      let ticking = false;
-
-      function updateNav() {
-        const currentScrollY = window.scrollY || lenis?.scroll || 0;
-        if (currentScrollY > 50) {
-          nav.classList.add('scrolled');
-        } else {
-          nav.classList.remove('scrolled');
-        }
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-          nav.classList.add('hidden');
-        } else {
-          nav.classList.remove('hidden');
-        }
-        lastScrollY = currentScrollY;
-        ticking = false;
-      }
-
-      if (lenis) {
-        lenis.on('scroll', () => {
-          if (!ticking) {
-            requestAnimationFrame(updateNav);
-            ticking = true;
-          }
+        // GSAP ticker'ı Lenis için kullan (performans senkronizasyonu)
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
         });
-      } else {
-        window.addEventListener('scroll', () => {
-          if (!ticking) {
-            requestAnimationFrame(updateNav);
-            ticking = true;
-          }
-        }, { passive: true });
-      }
+        gsap.ticker.lagSmoothing(0);
 
-      const sections = document.querySelectorAll('section[id]');
-      const navLinks = document.querySelectorAll('.nav-link');
+        // ==========================================
+        // 2. ÖZEL MOUSE İMLECİ (Custom Cursor)
+        // ==========================================
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
 
-      function updateActiveLink() {
-        const scrollPos = window.scrollY + 200;
-        sections.forEach(section => {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          const id = section.getAttribute('id');
-          if (scrollPos >= top && scrollPos < top + height) {
-            navLinks.forEach(link => {
-              link.classList.remove('active');
-              if (link.getAttribute('href') === '#' + id) {
-                link.classList.add('active');
-              }
+        if (window.innerWidth >= 768) {
+            // Mouse pozisyonunu takip et
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                // Dot anlık takip
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                // Outline yumuşak takip (GSAP ile)
+                gsap.to(cursorOutline, {
+                    x: posX,
+                    y: posY,
+                    duration: 0.15,
+                    ease: 'power2.out'
+                });
             });
-          }
+
+            // Tıklanabilir elementler üzerine gelince büyüt
+            const clickables = document.querySelectorAll('a, button, [data-cursor="pointer"]');
+            clickables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
+            });
+        }
+
+        // ==========================================
+        // 3. METİN PARÇALAMA (SplitText Alternatifi)
+        // ==========================================
+        // Harf bazlı bölme fonksiyonu
+        function splitTextIntoChars(element) {
+            const text = element.textContent.trim();
+            element.innerHTML = '';
+            text.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.classList.add('char');
+                span.textContent = char === ' ' ? ' ' : char;
+                span.style.opacity = '0';
+                span.style.transform = 'translateY(20px)';
+                span.style.display = 'inline-block';
+                element.appendChild(span);
+            });
+            return element.querySelectorAll('.char');
+        }
+
+        // ==========================================
+        // 4. HERO GİRİŞ ANİMASYONLARI
+        // ==========================================
+        const heroTl = gsap.timeline({ 
+            defaults: { ease: 'power3.out' },
+            delay: 0.3 
         });
-      }
 
-      if (lenis) {
-        lenis.on('scroll', updateActiveLink);
-      } else {
-        window.addEventListener('scroll', updateActiveLink, { passive: true });
-      }
+        // Başlangıç pozisyonlarını ayarla
+        gsap.set('#hero-eyebrow, #hero-desc', { y: 30, opacity: 0 });
+        gsap.set('#hero-title', { y: 50, opacity: 0 });
+        gsap.set('#hero-visual', { y: 60, opacity: 0, scale: 0.95 });
+        gsap.set('#scroll-hint', { y: 10, opacity: 0 });
 
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            if (lenis) {
-              lenis.scrollTo(target, { offset: -80 });
-            } else {
-              target.scrollIntoView({ behavior: 'smooth' });
-            }
-          }
+        // Sıralı animasyonlar
+        heroTl
+            .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 1 })
+            .to('#hero-title', { opacity: 1, y: 0, duration: 1.4 }, '-=0.6')
+            .to('#hero-desc', { opacity: 1, y: 0, duration: 1 }, '-=0.9')
+            .to('#hero-visual', { opacity: 1, y: 0, scale: 1, duration: 1.6, ease: 'power2.out' }, '-=1.0')
+            .to('#scroll-hint', { opacity: 1, y: 0, duration: 1 }, '-=0.8');
+
+        // Hero görseline sürekli hafif yüzen (floating) efekti
+        gsap.to('#hero-visual', {
+            y: -12,
+            duration: 4,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut'
         });
-      });
-    }
 
-    // ================================================================
-    // HERO ANIMATIONS
-    // ================================================================
-    function initHeroAnimations() {
-      const heroTitle = document.getElementById('hero-title');
-      const chars = splitTextToChars(heroTitle);
+        // ==========================================
+        // 5. SCROLL TRIGGER ANİMASYONLARI
+        // ==========================================
 
-      const heroTl = gsap.timeline({ delay: 0.2 });
+        // --- 5a. Karakter Bazlı Metin Parlaması (Reveal) ---
+        document.querySelectorAll('.reveal-text').forEach(text => {
+            const chars = splitTextIntoChars(text);
 
-      heroTl.from('#hero-eyebrow', {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
+            gsap.to(chars, {
+                scrollTrigger: {
+                    trigger: text,
+                    start: 'top 85%',
+                    end: 'top 45%',
+                    toggleActions: 'play none none reverse',
+                    // scrub: 1 // Yumuşak scrub için açabilirsiniz
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.015,
+                ease: 'power2.out'
+            });
+        });
 
-      heroTl.from(chars, {
-        y: 120,
-        opacity: 0,
-        rotateX: -90,
-        duration: 1.2,
-        stagger: 0.03,
-        ease: 'power3.out'
-      }, '-=0.4');
+        // --- 5b. Parallax Görseller ---
+        document.querySelectorAll('.parallax-container').forEach(container => {
+            const speed = parseFloat(container.dataset.speed) || 1;
+            const img = container.querySelector('.parallax-img');
 
-      heroTl.from('#hero-desc', {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      }, '-=0.6');
+            // Scroll yönünde hafif kayma + scale normalleşme
+            gsap.fromTo(img, 
+                { yPercent: -8 * speed, scale: 1.1 },
+                {
+                    yPercent: 8 * speed,
+                    scale: 1.1,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: container,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                }
+            );
+        });
 
-      heroTl.from('#hero-cta', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power3.out'
-      }, '-=0.4');
+        // --- 5c. Genel Fade-In-Up Bölümler ---
+        gsap.utils.toArray('section').forEach((section, i) => {
+            // Hero hariç, diğer bölümlerdeki elementleri seç
+            if (i === 0) return;
 
-      if (!prefersReducedMotion) {
-        document.querySelectorAll('[data-speed]').forEach(el => {
-          const speed = parseFloat(el.dataset.speed);
-          gsap.to(el, {
-            y: () => (1 - speed) * 300,
-            ease: 'none',
+            const headings = section.querySelectorAll('h2:not(.reveal-text), h3');
+            const paragraphs = section.querySelectorAll('p:not(.reveal-text)');
+            const cards = section.querySelectorAll('.glow-card');
+
+            const elements = [...headings, ...paragraphs, ...cards];
+
+            gsap.from(elements, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.08,
+                ease: 'power3.out'
+            });
+        });
+
+        // --- 5d. Galeri Marquee Animasyonu (Scroll ile hızlanan) ---
+        const marqueeTrack = document.getElementById('marquee-track');
+        if (marqueeTrack) {
+            // İçeriği klonla (sonsuz döngü görünümü için)
+            marqueeTrack.innerHTML += marqueeTrack.innerHTML;
+
+            gsap.to(marqueeTrack, {
+                xPercent: -50,
+                ease: 'none',
+                duration: 30,
+                repeat: -1
+            });
+        }
+
+        // ==========================================
+        // 6. ANCHOR LİNKLERİ (Yumuşak Kaydırma)
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const target = document.querySelector(targetId);
+                if (target) {
+                    lenis.scrollTo(target, {
+                        offset: 0,
+                        duration: 1.5
+                    });
+                }
+            });
+        });
+
+        // ==========================================
+        // 7. FOOTER BÜYÜK MARKA İSMİ ANİMASYONU
+        // ==========================================
+        gsap.from('#contact h2', {
             scrollTrigger: {
-              trigger: '.hero',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true
-            }
-          });
+                trigger: '#contact',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            y: 80,
+            opacity: 0,
+            duration: 1.4,
+            ease: 'power3.out'
         });
-      }
-    }
 
-    // ================================================================
-    // SCROLL REVEALS
-    // ================================================================
-    function initScrollReveals() {
-      if (prefersReducedMotion) {
-        document.querySelectorAll('.reveal, .reveal-clip').forEach(el => {
-          el.classList.add('visible');
-        });
-        return;
-      }
-
-      gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.from(el, {
-          y: 60,
-          opacity: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        });
-      });
-
-      gsap.utils.toArray('.reveal-clip').forEach(el => {
-        gsap.from(el, {
-          clipPath: 'inset(0 100% 0 0)',
-          duration: 1.2,
-          ease: 'power3.inOut',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 80%',
-            toggleActions: 'play none none none'
-          }
-        });
-      });
-    }
-
-    // ================================================================
-    // COUNTER ANIMATION
-    // ================================================================
-    function initCounters() {
-      document.querySelectorAll('.stat-number').forEach(counter => {
-        const target = parseInt(counter.dataset.target);
-        ScrollTrigger.create({
-          trigger: counter,
-          start: 'top 85%',
-          once: true,
-          onEnter: () => {
-            if (prefersReducedMotion) {
-              counter.textContent = target + '+';
-              return;
-            }
-            const obj = { val: 0 };
-            gsap.to(obj, {
-              val: target,
-              duration: 2,
-              ease: 'power2.out',
-              onUpdate: () => {
-                counter.textContent = Math.floor(obj.val).toString().padStart(2, '0') + '+';
-              }
-            });
-          }
-        });
-      });
-    }
-
-    // ================================================================
-    // HORIZONTAL SCROLL — PROJECTS
-    // ================================================================
-    function initHorizontalScroll() {
-      if (prefersReducedMotion || window.innerWidth <= 768) return;
-
-      const track = document.getElementById('projects-track');
-      const progressBar = document.getElementById('projects-progress');
-      if (!track || !progressBar) return;
-
-      // Kill any existing ScrollTriggers on the horizontal section first
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.vars.trigger === '#projects-horizontal') {
-          st.kill();
+        // ==========================================
+        // 8. SAYFA YÜKLENİNCE HERO BAŞLIK HARF HARF
+        //     (Opsiyonel: Girişte karakter animasyonu)
+        // ==========================================
+        // Hero başlık için ekstra dramatik giriş
+        const heroTitleElement = document.querySelector('#hero-title');
+        if (heroTitleElement) {
+            // Mevcut animasyon yeterli, ancak isterseniz burada 
+            // SplitText benzeri bir karakter animasyonu ekleyebilirsiniz.
+            // Şu anki timeline (yukarıdaki heroTl) daha temiz bir görünüm sunuyor.
         }
-      });
-
-      const cards = gsap.utils.toArray('.project-card');
-      const totalWidth = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1);
-
-      const scrollTween = gsap.to(track, {
-        x: -totalWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#projects-horizontal',
-          pin: true,
-          scrub: 1,
-          end: () => '+=' + totalWidth,
-          onUpdate: (self) => {
-            progressBar.style.width = (self.progress * 100) + '%';
-          }
-        }
-      });
-
-      cards.forEach((card) => {
-        gsap.from(card, {
-          y: 50,
-          opacity: 0.5,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: card,
-            containerAnimation: scrollTween,
-            start: 'left 90%',
-            end: 'left 20%',
-            scrub: true
-          }
-        });
-      });
-    }
-
-    // ================================================================
-    // VANILLA TILT
-    // ================================================================
-    function initTilt() {
-      if (isTouchDevice || prefersReducedMotion) return;
-      VanillaTilt.init(document.querySelectorAll('[data-tilt]'), {
-        max: 10,
-        speed: 400,
-        glare: true,
-        'max-glare': 0.2,
-        perspective: 1000,
-        scale: 1.02
-      });
-    }
-
-    // ================================================================
-    // CONTACT TITLE ANIMATION
-    // ================================================================
-    function initContactAnimation() {
-      const contactTitle = document.getElementById('contact-title');
-      if (!contactTitle) return;
-      const chars = splitTextToChars(contactTitle);
-      gsap.from(chars, {
-        y: 100,
-        opacity: 0,
-        rotateX: -40,
-        duration: 1,
-        stagger: 0.02,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: contactTitle,
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
-      });
-    }
-
-    // ================================================================
-    // MOBILE MENU
-    // ================================================================
-    function initMobileMenu() {
-      const toggle = document.getElementById('menu-toggle');
-      const menu = document.getElementById('nav-menu');
-      if (!toggle || !menu) return;
-
-      let isOpen = false;
-
-      function openMenu() {
-        isOpen = true;
-        menu.style.display = 'flex';
-        menu.style.position = 'fixed';
-        menu.style.top = '70px';
-        menu.style.left = '0';
-        menu.style.right = '0';
-        menu.style.bottom = '0';
-        menu.style.background = 'rgba(13, 13, 13, 0.98)';
-        menu.style.flexDirection = 'column';
-        menu.style.padding = '2rem';
-        menu.style.gap = '2rem';
-        menu.style.zIndex = '999';
-        menu.style.backdropFilter = 'blur(20px)';
-        menu.style.webkitBackdropFilter = 'blur(20px)';
-        menu.style.alignItems = 'center';
-        menu.style.justifyContent = 'center';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        isOpen = false;
-        menu.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      toggle.addEventListener('click', () => {
-        if (isOpen) closeMenu();
-        else openMenu();
-      });
-
-      // Close menu when clicking a link
-      menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          closeMenu();
-        });
-      });
-
-      // Close on resize to desktop
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && isOpen) {
-          closeMenu();
-          menu.style = ''; // Reset inline styles
-        }
-      });
-    }
-
-    // ================================================================
-    // MAIN INITIALIZATION
-    // ================================================================
-    function initAnimations() {
-      initLenis();
-      initCursor();
-      initNavigation();
-      initHeroAnimations();
-      initScrollReveals();
-      initCounters();
-      initHorizontalScroll();
-      initTilt();
-      initContactAnimation();
-      initMobileMenu();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initLoader);
-    } else {
-      initLoader();
-    }
-
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 250);
-    });
-  </script>
-
+    </script>
 </body>
 </html>
