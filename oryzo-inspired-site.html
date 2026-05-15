@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEVHA-1 — Open Weight Cutting Board Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #100904;
+    --cream: #ffedd7;
+    --cream-dim: rgba(255,237,215,0.5);
+    --cream-faint: rgba(255,237,215,0.15);
+    --accent: #dc5000;
+    --accent-dim: rgba(220,80,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Playfair Display', Georgia, serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--cream-dim);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 40px;
+    transition: opacity 0.4s;
+  }
+  nav.hidden { opacity: 0; pointer-events: none; }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex; gap: 12px; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    border: 1px solid var(--cream-faint);
+    padding: 6px 14px;
+    border-radius: 100px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .nav-links a:hover { color: var(--cream); border-color: var(--cream-dim); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  #hero-canvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    margin-bottom: 28px;
+    opacity: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(56px, 8vw, 110px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    opacity: 0;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--cream-dim);
+  }
+
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--cream-dim);
+    max-width: 480px;
+    line-height: 1.8;
+    opacity: 0;
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    display: flex; gap: 12px; justify-content: center;
+    opacity: 0;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border: 1px solid var(--cream);
+    background: transparent;
+    color: var(--cream);
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn:hover { background: var(--cream); color: var(--bg); }
+  .btn.ghost {
+    border-color: var(--cream-faint);
+    color: var(--cream-dim);
+  }
+  .btn.ghost:hover { border-color: var(--cream); color: var(--cream); background: transparent; }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--cream-faint);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: fadeInUp 1s 2s forwards;
+  }
+  .scroll-hint::after {
+    content: '';
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--cream-faint), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 120px 40px;
+  }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .section-title em { font-style: italic; color: var(--cream-dim); }
+
+  .section-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 2;
+    color: var(--cream-dim);
+    max-width: 560px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%; max-width: 1100px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--cream-faint), transparent);
+  }
+
+  /* ── FEATURES ── */
+  #features { padding: 80px 40px; }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px dashed var(--cream-faint);
+  }
+
+  .feature-item {
+    padding: 48px 40px;
+    border-right: 1px dashed var(--cream-faint);
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .feature-item:last-child { border-right: none; }
+
+  .feature-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .feature-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .feature-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.9;
+    color: var(--cream-dim);
+  }
+
+  /* ── STATS BAR ── */
+  #stats {
+    max-width: 100%;
+    padding: 0;
+    border-top: 1px dashed var(--cream-faint);
+    border-bottom: 1px dashed var(--cream-faint);
+  }
+
+  .stats-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    divide-x: 1px;
+  }
+
+  .stat-item {
+    padding: 48px 40px;
+    border-right: 1px dashed var(--cream-faint);
+    opacity: 0;
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-value {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+  }
+
+  /* ── PAPER SECTION ── */
+  #paper {
+    background: rgba(255,237,215,0.03);
+    border-top: 1px dashed var(--cream-faint);
+    border-bottom: 1px dashed var(--cream-faint);
+    padding: 80px 0;
+  }
+
+  .paper-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .paper-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--cream-dim);
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--cream-faint);
+    padding-bottom: 20px;
+    display: flex; justify-content: space-between;
+  }
+
+  .paper-h1 {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .paper-authors {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+
+  .paper-abstract {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+    color: var(--cream-dim);
+  }
+
+  .paper-abstract strong {
+    color: var(--cream);
+    font-weight: 700;
+  }
+
+  /* ── QUOTE ── */
+  .testimonial {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 40px;
+    text-align: center;
+    opacity: 0;
+  }
+
+  .testimonial-quote {
+    font-size: clamp(24px, 3.5vw, 44px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.3;
+    margin-bottom: 32px;
+  }
+
+  .testimonial-attr {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--cream-dim);
+  }
+
+  /* ── CTA SECTION ── */
+  #cta-section {
+    text-align: center;
+    padding: 160px 40px;
+    opacity: 0;
+  }
+
+  #cta-section .section-title {
+    font-size: clamp(48px, 7vw, 96px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--cream-faint);
+    padding: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-right {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--cream-faint);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal { opacity: 0; transform: translateY(40px); }
+
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-item { border-right: none; border-bottom: 1px dashed var(--cream-faint); }
+    .stats-inner { grid-template-columns: repeat(2,1fr); }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">LEVHA — 1</a>
+  <ul class="nav-links">
+    <li><a href="#features">Özellikler</a></li>
+    <li><a href="#paper">Araştırma</a></li>
+    <li><a href="#cta-section">İndir</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-tag" id="h-tag">Büyük Model Lansmanı · Mart 2026</p>
+    <h1 class="hero-title" id="h-title">
+      LEVHA<br><em>Bir.</em>
+    </h1>
+    <p class="hero-sub" id="h-sub">
+      Açık ağırlıklı kesme tahtası modeli ailesi.<br>
+      Pasif yüzey koruması, doğrusal bıçak hareketi<br>
+      ve yerel deployment için tasarlandı.
+    </p>
+    <div class="hero-cta" id="h-cta">
+      <a href="#paper" class="btn">Teknik Raporu Oku</a>
+      <a href="#" class="btn ghost">GitHub'da Gör</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL TO CONTINUE</div>
+</div>
+
+<!-- DIVIDER -->
+<div class="divider"></div>
+
+<!-- INTRO SECTION -->
+<section id="intro">
+  <div class="section-tag">Giriş</div>
+  <h2 class="section-title reveal">
+    Bir kesme tahtası.<br><em>Yeniden hayal edildi.</em>
+  </h2>
+  <p class="section-body reveal">
+    LEVHA-1, çığır açan yapay zeka atılımlarının ürünü. Açık ağırlıklı, hafif ve 
+    son derece taşınabilir tasarımı ile LEVHA-1 yalnızca bir tahta değil — 
+    bir paradigma kayması. Yapay zeka boşlukları doldurdu. Biz beş dedik, o altı anladı.
+  </p>
+</section>
+
+<!-- FEATURES -->
+<div class="divider"></div>
+<div id="features">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="padding:48px 40px 24px;">
+      <div class="section-tag">Özellikler</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <p class="feature-number">01</p>
+        <h3 class="feature-title">Pasif Termal Koruma</h3>
+        <p class="feature-body">Sıcak tavadan soğuk sebzeye — LEVHA-1 sabit kalır. 
+        Mutfak masanız zaten üç domates önce çökmüştü.</p>
+      </div>
+      <div class="feature-item">
+        <p class="feature-number">02</p>
+        <h3 class="feature-title">Hassas Doğrusallık</h3>
+        <p class="feature-body">Mühendislerimiz dikdörtgen geometrisini rahatsız 
+        edici seviyelerde özenle kalibre etti. Çünkü yapabiliyorduk.</p>
+      </div>
+      <div class="feature-item">
+        <p class="feature-number">03</p>
+        <h3 class="feature-title">Yerel Deployment</h3>
+        <p class="feature-body">İnternet bağlantısı gerektirmez. Bulut bağımlılığı 
+        yoktur. Sadece yerçekimi, bir bıçak ve insan eli gereklidir.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-value">168<em style="font-size:0.5em;font-style:normal;">B</em></div>
+      <div class="stat-label">Parametre Yok</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">∞</div>
+      <div class="stat-label">Konteks Penceresi</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">0</div>
+      <div class="stat-label">GPU İhtiyacı</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">1×</div>
+      <div class="stat-label">Tahta Kalınlığı</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAPER -->
+<div id="paper">
+  <div class="paper-inner">
+    <div class="paper-meta">
+      <span>arXiv:2026.00001 [cs.KB]</span>
+      <span>Gönderim: 19 Mart 2026</span>
+    </div>
+    <h2 class="paper-h1">LEVHA-1: Pasif Yüzey Koruması için Açık-Ağırlıklı Kesme Tahtası Modeli</h2>
+    <p class="paper-authors">LEVHA Araştırma Takımı · Yazarlar: Anonim (Güvenlik Amaçlı)</p>
+    <p class="paper-abstract">
+      <strong>Özet.</strong> Bu çalışmada sunulan LEVHA-1, masaüstü yüzey koruması, 
+      doğrusal bıçak dinamiği ve pasif nem emilimi için açık ağırlıklı bir model ailesidir. 
+      Modelin temel yetenekleri arasında mükemmel düzlemsellik, geniş kullanım alanı 
+      uyumluluğu ve tartışmalı şekilde bilenmiş kenarlık özellikleri yer almaktadır. 
+      Sonuçlar kendi tek masada gerçekleştirilen WoodenBench değerlendirme paketimizde 
+      elde edilmiştir ve büyük ihtimalle tarafımızca manipüle edilmiştir. 
+      Kısıtlamalar arasında yerçekimine ağır bağımlılık, bıçak ve insan eli 
+      gerekliliği sayılabilir. <strong>"LEVHA-1 orada bulunan en iyi model."</strong> 
+      — Anonim Reddit kullanıcısı
+    </p>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<div class="testimonial" id="testimonial">
+  <p class="testimonial-quote">
+    "LEVHA-1 benim işimi elimden aldı.<br>
+    Ve yerine yapay zeka koydu."
+  </p>
+  <p class="testimonial-attr">— Anonim Aşçı · LocalLLaMA Subreddit</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<div id="cta-section">
+  <div class="section-tag" style="justify-content:center;">Erken Erişim</div>
+  <h2 class="section-title">
+    Devrim<br><em>bekliyor.</em>
+  </h2>
+  <div style="margin-top: 48px; display: flex; gap: 16px; justify-content: center; flex-wrap:wrap;">
+    <a href="#" class="btn">OBJ Olarak İndir</a>
+    <a href="#" class="btn ghost">Teknik Raporu Oku</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="divider"></div>
+<footer>
+  <div class="footer-left">LEVHA-1 © 2026 — Tüm hakları saklıdır ve büyük ihtimalle anlamsızdır.</div>
+  <div class="footer-right">Masa Koruması · Pişirme Yüzeyi · Lokal Deployment</div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '14px'; cursor.style.height = '14px';
+      ring.style.width = '52px'; ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px'; cursor.style.height = '8px';
+      ring.style.width = '36px'; ring.style.height = '36px';
+    });
+  });
+
+  // ── THREE.JS HERO ──
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0xffedd7, 0.3);
+  scene.add(ambientLight);
+
+  const pointLight1 = new THREE.PointLight(0xffedd7, 2, 20);
+  pointLight1.position.set(3, 3, 3);
+  scene.add(pointLight1);
+
+  const pointLight2 = new THREE.PointLight(0xdc5000, 1, 20);
+  pointLight2.position.set(-3, -2, 2);
+  scene.add(pointLight2);
+
+  const rimLight = new THREE.DirectionalLight(0xffedd7, 0.5);
+  rimLight.position.set(0, -3, -3);
+  scene.add(rimLight);
+
+  // Cutting board geometry — a rounded box
+  const boardGeo = new THREE.BoxGeometry(2.8, 1.8, 0.12, 4, 4, 1);
+  const boardMat = new THREE.MeshStandardMaterial({
+    color: 0x8B5E3C,
+    roughness: 0.85,
+    metalness: 0.02,
+  });
+  const board = new THREE.Mesh(boardGeo, boardMat);
+  scene.add(board);
+
+  // Wood grain lines
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x6B4423, transparent: true, opacity: 0.4 });
+  for (let i = -3; i <= 3; i++) {
+    const pts = [];
+    pts.push(new THREE.Vector3(-1.35, i * 0.25, 0.07));
+    pts.push(new THREE.Vector3(1.35, i * 0.25 + (Math.random()-0.5)*0.08, 0.07));
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.Line(lineGeo, lineMat));
+  }
+
+  // Handle hole
+  const holeGeo = new THREE.TorusGeometry(0.12, 0.025, 12, 32);
+  const holeMat = new THREE.MeshStandardMaterial({ color: 0x100904, roughness: 1 });
+  const hole = new THREE.Mesh(holeGeo, holeMat);
+  hole.position.set(1.1, 0.65, 0.065);
+  scene.add(hole);
+
+  // Floating particles
+  const particleCount = 60;
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i*3] = (Math.random()-0.5)*8;
+    positions[i*3+1] = (Math.random()-0.5)*8;
+    positions[i*3+2] = (Math.random()-0.5)*4 - 1;
+  }
+  const particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particleMat = new THREE.PointsMaterial({ color: 0xffedd7, size: 0.015, transparent: true, opacity: 0.4 });
+  scene.add(new THREE.Points(particleGeo, particleMat));
+
+  // Mouse parallax
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Scroll-based 3D transform
+  let scrollProgress = 0;
+  window.addEventListener('scroll', () => {
+    scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  });
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.008;
+
+    board.rotation.y = mouseX * 0.3 + Math.sin(t * 0.5) * 0.1;
+    board.rotation.x = -mouseY * 0.2 + Math.cos(t * 0.3) * 0.05;
+    board.rotation.z = scrollProgress * 0.5;
+    board.position.y = Math.sin(t * 0.4) * 0.06;
+
+    hole.rotation.y = board.rotation.y;
+    hole.rotation.x = board.rotation.x;
+    hole.position.y = 0.65 + Math.sin(t * 0.4) * 0.06;
+
+    pointLight1.position.x = Math.sin(t * 0.7) * 3;
+    pointLight1.position.y = Math.cos(t * 0.5) * 3;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // ── NAV HIDE/SHOW ──
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('nav');
+    if (window.scrollY > lastScroll && window.scrollY > 80) {
+      nav.classList.add('hidden');
+    } else {
+      nav.classList.remove('hidden');
+    }
+    lastScroll = window.scrollY;
+  });
+
+  // ── HERO ENTRANCE ──
+  const heroTl = gsap.timeline({ delay: 0.3 });
+  heroTl
+    .to('#h-tag', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+    .to('#h-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.4')
+    .to('#h-sub', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+    .to('#h-cta', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4');
+
+  // ── SCROLL REVEALS ──
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 80%' }
+    });
+  });
+
+  // Feature items
+  gsap.utils.toArray('.feature-item').forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.12,
+      scrollTrigger: { trigger: el, start: 'top 85%' }
+    });
+  });
+
+  // Stat items
+  gsap.utils.toArray('.stat-item').forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 1, duration: 0.6, ease: 'power2.out', delay: i * 0.1,
+      scrollTrigger: { trigger: el, start: 'top 85%' }
+    });
+  });
+
+  // Testimonial
+  gsap.to('#testimonial', {
+    opacity: 1, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '#testimonial', start: 'top 75%' }
+  });
+
+  // CTA section
+  gsap.to('#cta-section', {
+    opacity: 1, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '#cta-section', start: 'top 80%' }
+  });
+</script>
+</body>
+</html>
