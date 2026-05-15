@@ -2,12 +2,24 @@ name = "veysel-aslan"
 type = "javascript"
 compatibility_date = "2026-05-15"
 
+[env.production]
+routes = [
+  { pattern = "veysel-aslan.pages.dev", zone_name = "pages.dev" }
+]
+
 [build]
-command = "echo 'No build required for static site'"
+command = "npm install"
+cwd = "./"
 
 [build.upload]
-format = "service-worker"
+format = "modules"
 
-[assets]
-directory = "."
-include = ["*.html", "*.css", "*.js", "*.json"]
+[[build.upload.rules]]
+type = "CompiledContentType"
+globs = ["**/*.wasm"]
+fallthrough = true
+
+[[build.upload.rules]]
+type = "Text"
+globs = ["**/*.html", "**/*.css", "**/*.js", "**/*.json"]
+fallthrough = true
