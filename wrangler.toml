@@ -1,13 +1,11 @@
-name = "veysel-aslan"
-type = "javascript"
-account_id = "YOUR_ACCOUNT_ID"
-workers_dev = true
+pages_build_output_dir = "."
+
+[build]
+command = "echo 'No build needed'"
+cwd = "."
 
 [env.production]
+name = "veysel-aslan"
 routes = [
   { pattern = "veyselaslan.com/*", zone_name = "veyselaslan.com" }
 ]
-
-[site]
-bucket = "."
-include = ["*.html", "*.css", "*.js"]
