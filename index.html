@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="no-js">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Veysel Aslan — Creative Developer & Designer Portfolio">
   <meta name="theme-color" content="#0a0a0f">
   <title>Veysel Aslan — Creative Developer & Designer</title>
-
+  
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
+  
   <!-- Lenis Smooth Scroll -->
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
+  
   <!-- VanillaTilt.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-
+  
   <style>
     /* ═══════════════════════════════════════════════════════════════
        CSS CUSTOM PROPERTIES (Design Tokens)
@@ -40,7 +40,7 @@
       --accent-dark: #b08d3f;
       --border: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.15);
-
+      
       /* Typography Scale — Fluid */
       --font-heading: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -52,7 +52,7 @@
       --text-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
       --text-2xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
       --text-3xl: clamp(2.5rem, 2rem + 5vw, 8rem);
-
+      
       /* Spacing */
       --space-xs: 0.5rem;
       --space-sm: 1rem;
@@ -60,7 +60,7 @@
       --space-lg: 4rem;
       --space-xl: 8rem;
       --space-2xl: 12rem;
-
+      
       /* Timing */
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -68,7 +68,7 @@
       --duration-fast: 0.3s;
       --duration-normal: 0.6s;
       --duration-slow: 1.2s;
-
+      
       /* Layout */
       --nav-height: 80px;
       --max-width: 1400px;
@@ -115,6 +115,14 @@
       line-height: 1.6;
       overflow-x: hidden;
       cursor: none;
+    }
+
+    /* Fallback: ensure content is visible without JS */
+    .no-js .reveal,
+    .no-js .reveal-clip {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
     }
 
     /* Reduced motion baseline */
@@ -327,6 +335,7 @@
       color: var(--text-primary);
       position: relative;
       overflow: hidden;
+      z-index: 1001;
     }
 
     .nav-logo::after {
@@ -395,19 +404,34 @@
     .menu-toggle {
       display: none;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
       gap: 6px;
       background: none;
       border: none;
       cursor: none;
       padding: 0.5rem;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      z-index: 1001;
     }
 
     .menu-toggle span {
       display: block;
       width: 24px;
-      height: 1px;
+      height: 1.5px;
       background: var(--text-primary);
       transition: all 0.4s var(--ease-out-expo);
+      transform-origin: center;
+    }
+
+    .menu-toggle.open span:first-child {
+      transform: translateY(3.75px) rotate(45deg);
+    }
+
+    .menu-toggle.open span:last-child {
+      transform: translateY(-3.75px) rotate(-45deg);
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -645,10 +669,10 @@
     }
 
     .bento-item {
-      background: var(--bg-glass);
+      background: var(--bg-tertiary);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: var(--radius-md);
       padding: var(--space-md);
       transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
@@ -820,6 +844,7 @@
       position: relative;
       height: 100vh;
       overflow: hidden;
+      touch-action: pan-y;
     }
 
     .projects-track {
@@ -829,6 +854,7 @@
       height: 100%;
       align-items: center;
       will-change: transform;
+      touch-action: pan-y;
     }
 
     .project-card {
@@ -873,7 +899,32 @@
       opacity: 1;
     }
 
-    
+    .project-image {
+      width: 100%;
+      height: 200px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-sm);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .project-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(212, 168, 83, 0.05) 100%);
+    }
+
+    .project-image svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.2;
+      stroke: var(--text-secondary);
+    }
 
     .project-tag {
       font-family: var(--font-mono);
@@ -1141,32 +1192,9 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       SCROLL REVEAL UTILITIES
-       ═══════════════════════════════════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-clip {
-      clip-path: inset(0 100% 0 0);
-      transition: clip-path 1s var(--ease-out-expo);
-    }
-
-    .reveal-clip.visible {
-      clip-path: inset(0 0% 0 0);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE BREAKPOINTS
        ═══════════════════════════════════════════════════════════════ */
-
+    
     /* Tablet: 768px */
     @media (max-width: 768px) {
       :root {
@@ -1175,8 +1203,37 @@
         --nav-height: 70px;
       }
 
+      .nav {
+        padding: 0 var(--space-sm);
+      }
+
       .nav-menu {
-        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100vh;
+        background: var(--bg-primary);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        transform: translateX(100%);
+        transition: transform 0.4s var(--ease-out-expo);
+        z-index: 998;
+        display: flex;
+        padding: 0;
+        margin: 0;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      .nav-menu.open {
+        transform: translateX(0);
+      }
+
+      .nav-link {
+        font-size: var(--text-xl);
       }
 
       .menu-toggle {
@@ -1184,19 +1241,30 @@
       }
 
       .hero {
+        margin-top: 0;
+        padding: var(--space-md);
         padding-top: calc(var(--nav-height) + var(--space-md));
+        min-height: auto;
+        padding-bottom: var(--space-xl);
+      }
+
+      .hero-title {
+        font-size: clamp(2.5rem, 10vw, 3rem);
+      }
+
+      .about {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
       }
 
       .bento-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
       }
 
       .bento-item.large,
-      .bento-item.wide {
-        grid-column: span 2;
-      }
-
+      .bento-item.wide,
       .bento-item.tall {
+        grid-column: span 1;
         grid-row: span 1;
       }
 
@@ -1213,6 +1281,7 @@
         flex-direction: column;
         height: auto;
         padding: var(--space-md);
+        touch-action: pan-y;
       }
 
       .project-card {
@@ -1228,6 +1297,7 @@
       .footer {
         flex-direction: column;
         text-align: center;
+        justify-content: center;
       }
     }
 
@@ -1239,19 +1309,8 @@
         --space-xl: 3rem;
       }
 
-      .bento-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .bento-item.large,
-      .bento-item.wide,
-      .bento-item.tall {
-        grid-column: span 1;
-        grid-row: span 1;
-      }
-
       .hero-title {
-        font-size: clamp(2.5rem, 12vw, 4rem);
+        font-size: clamp(2.5rem, 12vw, 3rem);
       }
 
       .about-title,
@@ -1297,9 +1356,17 @@
         transform: none;
       }
 
+      .bento-item:hover::before {
+        opacity: 0;
+      }
+
       .contact-card:hover {
         transform: none;
         box-shadow: none;
+      }
+
+      .contact-card:hover::before {
+        opacity: 0;
       }
 
       .hero-cta:hover::before {
@@ -1309,20 +1376,19 @@
       .hero-cta:hover {
         color: var(--accent);
       }
+
+      .project-card:hover .project-arrow {
+        transform: none;
+        background: transparent;
+        border-color: var(--border);
+        color: var(--text-secondary);
+      }
     }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       .hero-scroll-line {
         animation: none;
-      }
-
-      .reveal,
-      .reveal-clip {
-        opacity: 1;
-        transform: none;
-        clip-path: none;
-        transition: none;
       }
 
       .loader {
@@ -1487,7 +1553,13 @@
         <!-- Project 1 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          
+          <div class="project-image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
           <div>
             <p class="project-tag">Web Design</p>
             <h3 class="project-title">Portfolio Website</h3>
@@ -1514,7 +1586,13 @@
         <!-- Project 2 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          
+          <div class="project-image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
           <div>
             <p class="project-tag">Web Application</p>
             <h3 class="project-title">Task Manager</h3>
@@ -1540,7 +1618,13 @@
         <!-- Project 3 -->
         <div class="project-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
           <div class="project-card-shine"></div>
-          
+          <div class="project-image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+          </div>
           <div>
             <p class="project-tag">UI/UX Design</p>
             <h3 class="project-title">Brand Identity</h3>
@@ -1594,7 +1678,7 @@
 
       <a href="https://t.me/veyseloffical" target="_blank" rel="noopener noreferrer" class="contact-card" data-cursor="hover">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.076 1.574-4.076 1.574s-3.04 1.183-3.04 1.183c-.356.14-.63.42-.756.756-.126.336-.098.714.077 1.022l4.69 9.36c.168.336.504.588.882.672.378.084.77-.042 1.022-.336l3.374-3.92c.42-.49.378-1.218-.084-1.638l-2.31-2.016c-.462-.42-.504-1.134-.084-1.596l4.452-5.082c.42-.462 1.134-.504 1.596-.084.462.42.504 1.134.084 1.596l-4.452 5.082c-.42.462-.378 1.176.084 1.596l2.31 2.016c.462.42 1.176.378 1.596-.084l3.374-3.92c.252-.294.336-.672.252-1.05-.084-.378-.336-.714-.672-.882l-8.609-3.33c-.336-.126-.588-.378-.672-.714-.084-.336.042-.672.252-.924l8.609-3.33c.336-.126.672-.042.924.168.252.21.378.546.336.882l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252l-12.18-1.47c-.336-.042-.63-.21-.84-.462-.21-.252-.294-.588-.252-.924l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l8.609 3.33c.336.126.588.378.672.714.084.336-.042.672-.252.924l-8.609 3.33c-.336.126-.672.042-.924-.168-.252-.21-.378-.546-.336-.882l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l12.18 1.47c.336.042.63.21.84.462.21.252.294.588.252.924l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252z"/>
+          <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-8.609 3.33c-2.068.8-4.076 1.574-4.076 1.574s-3.04 1.183-3.04 1.183c-.356.14-.63.42-.756.756-.126.336-.098.714.077 1.022l4.69 9.36c.168.336.504.588.882.672.378.084.77-.042 1.022-.336l3.374-3.92c.42-.49.378-1.218-.084-1.638l-2.31-2.016c-.462-.42-.504-1.134-.084-1.596l4.452-5.082c.42-.462 1.134-.504 1.596-.084.462.42.504 1.134.084 1.596l-4.452 5.082c-.42.462-.378 1.176.084 1.596l2.31 2.016c.462.42 1.176.378 1.596-.084l3.374-3.92c.252-.294.336-.672.252-1.05-.084-.378-.336-.714-.672-.882l-8.609-3.33c-.336-.126-.588-.378-.672-.714-.084-.336.042-.672.252-.924l8.609-3.33c.336-.126.672-.042.924.168.252.21.378.546.336.882l-1.47 12.18c-.042.336-.21.63-.462.84-.252.21-.588.294-.924.252l-12.18-1.47c-.336-.042-.63-.21-.84-.462-.21-.252-.294-.588-.252-.924l1.47-12.18c.042-.336.21-.63.462-.84.252-.21.588-.294.924-.252l12.18 1.47c.336.042.63.21.84.462.21.252.294.588.252.924z"/>
         </svg>
         <span class="contact-card-label">Telegram</span>
         <span class="contact-card-value">@veyseloffical</span>
@@ -1626,6 +1710,9 @@
        JAVASCRIPT
        ═══════════════════════════════════════════════════════════════ -->
   <script>
+    // Remove no-js class immediately
+    document.documentElement.classList.remove('no-js');
+
     // ================================================================
     // GLOBAL STATE & UTILITIES
     // ================================================================
@@ -1647,7 +1734,7 @@
         wordSpan.className = 'word';
         wordSpan.style.display = 'inline-block';
         wordSpan.style.whiteSpace = 'nowrap';
-
+        
         word.split('').forEach(char => {
           const charSpan = document.createElement('span');
           charSpan.className = 'char';
@@ -1656,10 +1743,10 @@
           charSpan.style.willChange = 'transform, opacity';
           wordSpan.appendChild(charSpan);
         });
-
+        
         element.appendChild(wordSpan);
         if (wordIndex < words.length - 1) {
-          element.appendChild(document.createTextNode(' '));
+          element.appendChild(document.createTextNode('\u00A0'));
         }
       });
       return element.querySelectorAll('.char');
@@ -1734,8 +1821,8 @@
       lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
         smooth: true,
         mouseMultiplier: 1,
         smoothTouch: false,
@@ -1751,6 +1838,9 @@
       });
 
       gsap.ticker.lagSmoothing(0);
+
+      // Refresh ScrollTrigger after Lenis initializes
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     }
 
     // ================================================================
@@ -1775,13 +1865,13 @@
       document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-
+        
         clearTimeout(inactivityTimeout);
         if (!isActive) {
           isActive = true;
           animateCursor();
         }
-
+        
         inactivityTimeout = setTimeout(() => {
           isActive = false;
         }, 100);
@@ -1867,7 +1957,7 @@
           const top = section.offsetTop;
           const height = section.offsetHeight;
           const id = section.getAttribute('id');
-
+          
           if (scrollPos >= top && scrollPos < top + height) {
             navLinks.forEach(link => {
               link.classList.remove('active');
@@ -1907,7 +1997,7 @@
     function initHeroAnimations() {
       const heroTitle = document.getElementById('hero-title');
       const chars = splitTextToChars(heroTitle);
-
+      
       const heroTl = gsap.timeline({ delay: 0.2 });
 
       // Eyebrow reveal
@@ -1944,8 +2034,8 @@
         ease: 'power3.out'
       }, '-=0.4');
 
-      // Parallax layers on scroll
-      if (!prefersReducedMotion) {
+      // Parallax layers on scroll (disabled on mobile)
+      if (!prefersReducedMotion && window.innerWidth > 768) {
         document.querySelectorAll('[data-speed]').forEach(el => {
           const speed = parseFloat(el.dataset.speed);
           gsap.to(el, {
@@ -1966,15 +2056,10 @@
     // SCROLL REVEALS
     // ================================================================
     function initScrollReveals() {
-      if (prefersReducedMotion) {
-        document.querySelectorAll('.reveal, .reveal-clip').forEach(el => {
-          el.classList.add('visible');
-        });
-        return;
-      }
+      if (prefersReducedMotion) return;
 
-      // Standard reveal
-      gsap.utils.toArray('.reveal').forEach((el, i) => {
+      // Standard reveal — GSAP controls initial state via fromVars
+      gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
           y: 60,
           opacity: 0,
@@ -2009,7 +2094,7 @@
     function initCounters() {
       document.querySelectorAll('.stat-number').forEach(counter => {
         const target = parseInt(counter.dataset.target);
-
+        
         ScrollTrigger.create({
           trigger: counter,
           start: 'top 85%',
@@ -2019,7 +2104,7 @@
               counter.textContent = target + '+';
               return;
             }
-
+            
             const obj = { val: 0 };
             gsap.to(obj, {
               val: target,
@@ -2042,7 +2127,7 @@
 
       const track = document.getElementById('projects-track');
       const progressBar = document.getElementById('projects-progress');
-
+      
       if (!track || !progressBar) return;
 
       const cards = gsap.utils.toArray('.project-card');
@@ -2063,7 +2148,7 @@
       });
 
       // Individual card parallax within track
-      cards.forEach((card, i) => {
+      cards.forEach((card) => {
         gsap.from(card, {
           y: 50,
           opacity: 0.5,
@@ -2126,22 +2211,20 @@
     function initMobileMenu() {
       const toggle = document.getElementById('menu-toggle');
       const menu = document.getElementById('nav-menu');
-
+      
       if (!toggle || !menu) return;
 
       toggle.addEventListener('click', () => {
-        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-        menu.style.position = 'fixed';
-        menu.style.top = '70px';
-        menu.style.left = '0';
-        menu.style.right = '0';
-        menu.style.bottom = '0';
-        menu.style.background = 'var(--bg-primary)';
-        menu.style.flexDirection = 'column';
-        menu.style.padding = '2rem';
-        menu.style.gap = '2rem';
-        menu.style.zIndex = '999';
-        menu.style.backdropFilter = 'blur(20px)';
+        toggle.classList.toggle('open');
+        menu.classList.toggle('open');
+      });
+
+      // Close menu when a link is clicked
+      menu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          toggle.classList.remove('open');
+          menu.classList.remove('open');
+        });
       });
     }
 
@@ -2159,6 +2242,11 @@
       initTilt();
       initContactAnimation();
       initMobileMenu();
+
+      // Refresh ScrollTrigger after fonts load
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
     }
 
     // Start with loader
