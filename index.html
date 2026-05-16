@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Veysel Aslan — Creative Developer & Designer Portfolio">
   <meta name="theme-color" content="#0e0e0e">
   <title>Veysel Aslan — Creative Developer & Designer</title>
@@ -87,6 +87,7 @@
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html.lenis, html.lenis body {
@@ -111,7 +112,7 @@
       color: var(--text-primary);
       line-height: 1.6;
       overflow-x: hidden;
-      cursor: none;
+      touch-action: pan-y;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -130,10 +131,9 @@
       color: var(--text-on-primary);
     }
 
-    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--bg-primary); }
     ::-webkit-scrollbar-thumb { background: var(--bg-surface-high); border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
     /* ═══════════════════════════════════════════════════════════════
        PAGE LOADER
@@ -165,7 +165,7 @@
     }
 
     .loader-bar {
-      width: 160px;
+      width: 140px;
       height: 1px;
       background: var(--bg-surface-high);
       overflow: hidden;
@@ -191,7 +191,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       CUSTOM CURSOR
+       CUSTOM CURSOR — DESKTOP ONLY
        ═══════════════════════════════════════════════════════════════ */
     .cursor-dot {
       width: 5px;
@@ -249,7 +249,7 @@
       inset: 0;
       z-index: 9990;
       pointer-events: none;
-      opacity: 0.03;
+      opacity: 0.025;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 256px 256px;
@@ -277,7 +277,7 @@
     }
 
     .nav.scrolled {
-      background: rgba(14, 14, 14, 0.85);
+      background: rgba(14, 14, 14, 0.9);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
@@ -367,7 +367,7 @@
       gap: 6px;
       background: none;
       border: none;
-      cursor: none;
+      cursor: pointer;
       padding: 0.5rem;
     }
 
@@ -384,8 +384,7 @@
        ═══════════════════════════════════════════════════════════════ */
     .hero {
       position: relative;
-      min-height: 100vh;
-      min-height: 100dvh;
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -399,27 +398,28 @@
       inset: 0;
       z-index: 0;
       overflow: hidden;
+      pointer-events: none;
     }
 
     .hero-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(100px);
       opacity: 0.25;
       will-change: transform;
     }
 
     .hero-orb-1 {
-      width: 600px;
-      height: 600px;
+      width: 500px;
+      height: 500px;
       background: radial-gradient(circle, rgba(129, 208, 253, 0.35) 0%, transparent 70%);
-      top: -20%;
+      top: -15%;
       right: -5%;
     }
 
     .hero-orb-2 {
-      width: 400px;
-      height: 400px;
+      width: 350px;
+      height: 350px;
       background: radial-gradient(circle, rgba(76, 158, 201, 0.2) 0%, transparent 70%);
       bottom: 0%;
       left: -10%;
@@ -671,7 +671,6 @@
       position: relative;
     }
 
-    /* Technical corner framing for manifesto */
     .manifesto-right::before {
       content: '';
       position: absolute;
@@ -699,14 +698,9 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
-      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
+      transition: border-color 0.4s ease;
       position: relative;
       z-index: 1;
-    }
-
-    .spec-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
     }
 
     .spec-label {
@@ -764,38 +758,12 @@
 
     .bento-item {
       background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
-      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
+      transition: border-color 0.4s ease;
       overflow: hidden;
       position: relative;
-    }
-
-    .bento-item::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(129,208,253,0.06), transparent 50%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .bento-item:hover::before {
-      opacity: 1;
-    }
-
-    .bento-item:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-4px);
     }
 
     .bento-item.large {
@@ -864,12 +832,6 @@
       border: 1px solid var(--border);
       border-radius: 100px;
       color: var(--text-secondary);
-      transition: all 0.3s ease;
-    }
-
-    .tech-tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
     }
 
     .bento-visual {
@@ -888,7 +850,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       PROJECTS — HORIZONTAL SCROLL (3D)
+       PROJECTS — HORIZONTAL SCROLL (3D) DESKTOP
        ═══════════════════════════════════════════════════════════════ */
     .projects-section {
       position: relative;
@@ -941,8 +903,6 @@
       width: clamp(320px, 36vw, 440px);
       height: clamp(400px, 55vh, 520px);
       background: var(--bg-glass);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: var(--space-md);
@@ -952,12 +912,7 @@
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .project-card:hover {
-      border-color: var(--border-hover);
-      box-shadow: 0 0 40px var(--accent-glow);
+      transition: border-color 0.4s ease;
     }
 
     .project-card-shine {
@@ -973,10 +928,6 @@
       opacity: 0;
       transition: opacity 0.4s ease;
       pointer-events: none;
-    }
-
-    .project-card:hover .project-card-shine {
-      opacity: 1;
     }
 
     .project-tag {
@@ -1041,13 +992,6 @@
       transition: all 0.4s var(--ease-out-expo);
     }
 
-    .project-card:hover .project-arrow {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--text-on-primary);
-      transform: rotate(-45deg);
-    }
-
     .project-arrow svg {
       width: 14px;
       height: 14px;
@@ -1100,13 +1044,8 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
-      transition: border-color 0.4s ease, transform 0.4s var(--ease-out-expo);
+      transition: border-color 0.4s ease;
       position: relative;
-    }
-
-    .testimonial-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-4px);
     }
 
     .testimonial-quote {
@@ -1198,8 +1137,6 @@
 
     .contact-card {
       background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
@@ -1209,28 +1146,9 @@
       flex-direction: column;
       align-items: center;
       gap: var(--space-sm);
-      transition: all 0.5s var(--ease-out-expo);
+      transition: border-color 0.4s ease;
       position: relative;
       overflow: hidden;
-    }
-
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(129, 208, 253, 0.06), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .contact-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .contact-card:hover::before {
-      opacity: 1;
     }
 
     .contact-card svg {
@@ -1338,54 +1256,56 @@
        ═══════════════════════════════════════════════════════════════ */
     .reveal {
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+      transform: translateY(30px);
     }
 
     .reveal-3d {
       opacity: 0;
-      transform: perspective(1000px) rotateX(25deg) translateY(60px);
-      transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+      transform: perspective(1000px) rotateX(20deg) translateY(40px);
       transform-origin: center top;
-    }
-
-    .reveal-3d.visible {
-      opacity: 1;
-      transform: perspective(1000px) rotateX(0deg) translateY(0);
     }
 
     .reveal-clip {
       clip-path: inset(0 100% 0 0);
-      transition: clip-path 1s var(--ease-out-expo);
-    }
-
-    .reveal-clip.visible {
-      clip-path: inset(0 0% 0 0);
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       RESPONSIVE
+       RESPONSIVE — MOBILE OPTIMIZED
        ═══════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
       :root {
-        --space-xl: 4rem;
-        --space-2xl: 6rem;
-        --nav-height: 64px;
+        --space-xl: 3rem;
+        --space-2xl: 5rem;
+        --nav-height: 60px;
       }
 
-      html, body {
-        overflow-x: hidden;
-        height: auto;
+      .nav {
+        padding: 0 20px;
+        height: var(--nav-height);
       }
-
-      .nav { padding: 0 20px; }
-      .nav-menu { display: none; }
-      .menu-toggle { display: flex; }
+      .nav-menu {
+        display: none;
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(14, 14, 14, 0.98);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem;
+        z-index: 999;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .nav-menu.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
 
       .hero,
       .section-padding,
@@ -1396,7 +1316,43 @@
       }
 
       .hero {
+        min-height: 100svh;
         padding-top: calc(var(--nav-height) + var(--space-md));
+        padding-bottom: var(--space-md);
+      }
+
+      .hero-orb {
+        opacity: 0.15;
+        filter: blur(60px);
+      }
+      .hero-orb-1 {
+        width: 250px;
+        height: 250px;
+        top: 5%;
+        right: -10%;
+      }
+      .hero-orb-2 {
+        width: 200px;
+        height: 200px;
+        bottom: 10%;
+        left: -15%;
+      }
+
+      .hero-title {
+        font-size: clamp(2.8rem, 12vw, 4.5rem);
+      }
+
+      .hero-description {
+        font-size: var(--text-base);
+        max-width: 100%;
+      }
+
+      .hero-cta {
+        padding: 0.875rem 2rem;
+      }
+
+      .hero-scroll {
+        display: none;
       }
 
       .manifesto-container {
@@ -1409,25 +1365,38 @@
         display: none;
       }
 
+      .manifesto-title,
+      .about-title,
+      .projects-title,
+      .contact-title,
+      .testimonials-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+      }
+
       .bento-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
       }
 
       .bento-item.large,
-      .bento-item.wide {
-        grid-column: span 2;
-      }
-
+      .bento-item.wide,
       .bento-item.tall {
+        grid-column: span 1;
         grid-row: span 1;
       }
 
       .testimonials-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-sm);
       }
 
       .contact-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-sm);
+      }
+
+      .contact-title {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
       }
 
       .projects-horizontal {
@@ -1439,19 +1408,25 @@
       .projects-track {
         flex-direction: column;
         height: auto;
-        padding: 20px;
+        padding: 0 20px;
         transform-style: flat;
+        gap: var(--space-sm);
       }
 
       .project-card {
         width: 100%;
         height: auto;
-        min-height: 380px;
+        min-height: 320px;
         transform-style: flat;
+        padding: var(--space-sm);
       }
 
       .projects-progress {
         display: none;
+      }
+
+      .projects-header {
+        padding: var(--space-2xl) 20px var(--space-sm);
       }
 
       .footer {
@@ -1459,36 +1434,81 @@
         text-align: center;
         padding: var(--space-md) 20px;
       }
+
+      .noise-overlay {
+        opacity: 0.015;
+      }
     }
 
     @media (max-width: 480px) {
       :root {
-        --space-md: 1.5rem;
-        --space-lg: 2.5rem;
-        --space-xl: 3rem;
-      }
-
-      .bento-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .bento-item.large,
-      .bento-item.wide,
-      .bento-item.tall {
-        grid-column: span 1;
-        grid-row: span 1;
+        --space-md: 1.25rem;
+        --space-lg: 2rem;
+        --space-xl: 2.5rem;
+        --space-2xl: 4rem;
       }
 
       .hero-title {
-        font-size: clamp(2.8rem, 12vw, 4.5rem);
+        font-size: clamp(2.4rem, 11vw, 3.5rem);
+        letter-spacing: -0.03em;
       }
 
-      .about-title,
-      .projects-title,
-      .contact-title,
-      .manifesto-title,
-      .testimonials-title {
+      .hero-eyebrow::before,
+      .hero-eyebrow::after {
+        width: 16px;
+      }
+
+      .spec-value {
+        font-size: var(--text-lg);
+      }
+
+      .stat-number {
         font-size: clamp(2rem, 8vw, 3rem);
+      }
+
+      .project-card {
+        min-height: 280px;
+      }
+
+      .testimonial-quote {
+        font-size: var(--text-base);
+      }
+    }
+
+    @media (min-width: 769px) {
+      .bento-item:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-4px);
+      }
+      .spec-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+      .testimonial-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-4px);
+      }
+      .contact-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+      .project-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: 0 0 40px var(--accent-glow);
+      }
+      .project-card:hover .project-card-shine {
+        opacity: 1;
+      }
+      .project-card:hover .project-arrow {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--text-on-primary);
+        transform: rotate(-45deg);
+      }
+      .tech-tag:hover {
+        border-color: var(--accent);
+        color: var(--accent);
       }
     }
 
@@ -1507,23 +1527,12 @@
       .nav { padding: 0 160px; }
     }
 
-    @media (hover: none) and (pointer: coarse) {
-      .project-card:hover { transform: none; box-shadow: none; }
-      .bento-item:hover { transform: none; }
-      .contact-card:hover { transform: none; box-shadow: none; }
-      .testimonial-card:hover { transform: none; }
-      .spec-card:hover { transform: none; }
-      .hero-cta:hover::before { transform: translateX(-101%); }
-      .hero-cta:hover { color: var(--accent); }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .hero-scroll-line { animation: none; }
       .reveal, .reveal-3d, .reveal-clip {
         opacity: 1;
         transform: none;
         clip-path: none;
-        transition: none;
       }
       .loader { display: none; }
     }
@@ -1559,7 +1568,7 @@
       <li><a href="#projects" class="nav-link" data-cursor="hover"><span class="link-index">03</span>Projeler</a></li>
       <li><a href="#contact" class="nav-link" data-cursor="hover"><span class="link-index">04</span>İletişim</a></li>
     </ul>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Menüyü Aç/Kapat" data-cursor="hover">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menüyü Aç/Kapat">
       <span></span>
       <span></span>
     </button>
@@ -1646,7 +1655,6 @@
       <h2 class="about-title reveal-3d" id="about-title">Dijital Tasarımcı<br>& Developer</h2>
 
       <div class="bento-grid">
-        <!-- Large text card -->
         <div class="bento-item large reveal">
           <div class="bento-label">Filozofi</div>
           <p class="bento-text">
@@ -1662,21 +1670,18 @@
           </div>
         </div>
 
-        <!-- Stat 1 -->
         <div class="bento-item reveal">
           <div class="bento-label">Deneyim</div>
           <div class="stat-number" data-target="3">0</div>
           <div class="stat-label">Yıl Deneyim</div>
         </div>
 
-        <!-- Stat 2 -->
         <div class="bento-item reveal">
           <div class="bento-label">Projeler</div>
           <div class="stat-number" data-target="5">0</div>
           <div class="stat-label">Tamamlanan Proje</div>
         </div>
 
-        <!-- Visual card -->
         <div class="bento-item reveal">
           <div class="bento-label">Yaklaşım</div>
           <div class="bento-visual">
@@ -1691,7 +1696,6 @@
           </p>
         </div>
 
-        <!-- Wide card -->
         <div class="bento-item wide reveal">
           <div class="bento-label">Misyon</div>
           <p class="bento-text">
@@ -1712,7 +1716,6 @@
 
     <div class="projects-horizontal" id="projects-horizontal">
       <div class="projects-track" id="projects-track">
-        <!-- Project 1 -->
         <div class="project-card" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
           <div class="project-card-shine"></div>
           <div>
@@ -1738,7 +1741,6 @@
           </div>
         </div>
 
-        <!-- Project 2 -->
         <div class="project-card" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
           <div class="project-card-shine"></div>
           <div>
@@ -1763,7 +1765,6 @@
           </div>
         </div>
 
-        <!-- Project 3 -->
         <div class="project-card" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
           <div class="project-card-shine"></div>
           <div>
@@ -1875,6 +1876,7 @@
     // ================================================================
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const isMobile = window.innerWidth <= 768;
 
     function lerp(start, end, factor) {
       return start + (end - start) * factor;
@@ -1914,9 +1916,10 @@
       const loaderBar = document.getElementById('loader-bar');
       const loaderText = document.getElementById('loader-text');
 
-      if (prefersReducedMotion) {
+      if (prefersReducedMotion || isMobile) {
         loader.style.display = 'none';
         document.body.style.overflow = '';
+        initAnimations();
         return;
       }
 
@@ -1964,21 +1967,21 @@
     }
 
     // ================================================================
-    // LENIS SMOOTH SCROLL
+    // LENIS SMOOTH SCROLL — MOBILE OPTIMIZED
     // ================================================================
     let lenis;
     function initLenis() {
       if (prefersReducedMotion) return;
 
       lenis = new Lenis({
-        duration: 1.2,
+        duration: isMobile ? 0.8 : 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         direction: 'vertical',
         gestureDirection: 'vertical',
         smooth: true,
         mouseMultiplier: 1,
         smoothTouch: false,
-        touchMultiplier: 2,
+        touchMultiplier: isMobile ? 1.5 : 2,
         infinite: false,
       });
 
@@ -1992,7 +1995,7 @@
     }
 
     // ================================================================
-    // CUSTOM CURSOR
+    // CUSTOM CURSOR — DESKTOP ONLY
     // ================================================================
     function initCursor() {
       if (isTouchDevice || prefersReducedMotion) return;
@@ -2123,13 +2126,43 @@
     }
 
     // ================================================================
+    // MOBILE MENU
+    // ================================================================
+    function initMobileMenu() {
+      const toggle = document.getElementById('menu-toggle');
+      const menu = document.getElementById('nav-menu');
+      if (!toggle || !menu) return;
+
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('active');
+        const isOpen = menu.classList.contains('active');
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          menu.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          menu.classList.remove('active');
+          menu.style.display = '';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    // ================================================================
     // HERO ANIMATIONS — 3D TEXT REVEAL
     // ================================================================
     function initHeroAnimations() {
       const heroTitle = document.getElementById('hero-title');
       const chars = splitTextToChars(heroTitle);
 
-      const heroTl = gsap.timeline({ delay: 0.2 });
+      const heroTl = gsap.timeline({ delay: isMobile ? 0.1 : 0.2 });
 
       heroTl.from('#hero-eyebrow', {
         y: 30,
@@ -2139,10 +2172,10 @@
       });
 
       heroTl.from(chars, {
-        y: 120,
+        y: isMobile ? 60 : 120,
         opacity: 0,
-        rotateX: -90,
-        duration: 1.4,
+        rotateX: isMobile ? -45 : -90,
+        duration: isMobile ? 1.0 : 1.4,
         stagger: 0.03,
         ease: 'power3.out',
         transformOrigin: 'center bottom'
@@ -2162,7 +2195,7 @@
         ease: 'power3.out'
       }, '-=0.5');
 
-      if (!prefersReducedMotion) {
+      if (!prefersReducedMotion && !isMobile) {
         document.querySelectorAll('[data-speed]').forEach(el => {
           const speed = parseFloat(el.dataset.speed);
           gsap.to(el, {
@@ -2180,25 +2213,27 @@
     }
 
     // ================================================================
-    // SCROLL REVEALS — 3D
+    // SCROLL REVEALS — MOBILE OPTIMIZED
     // ================================================================
     function initScrollReveals() {
       if (prefersReducedMotion) {
         document.querySelectorAll('.reveal, .reveal-3d, .reveal-clip').forEach(el => {
-          el.classList.add('visible');
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          el.style.clipPath = 'none';
         });
         return;
       }
 
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.from(el, {
-          y: 60,
+          y: isMobile ? 40 : 60,
           opacity: 0,
-          duration: 1,
+          duration: isMobile ? 0.8 : 1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 88%',
             toggleActions: 'play none none none'
           }
         });
@@ -2206,15 +2241,15 @@
 
       gsap.utils.toArray('.reveal-3d').forEach((el) => {
         gsap.from(el, {
-          rotateX: 35,
-          y: 80,
+          rotateX: isMobile ? 20 : 35,
+          y: isMobile ? 50 : 80,
           opacity: 0,
-          duration: 1.2,
+          duration: isMobile ? 0.9 : 1.2,
           ease: 'power3.out',
           transformOrigin: 'center top',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 88%',
             toggleActions: 'play none none none'
           }
         });
@@ -2227,7 +2262,7 @@
           ease: 'power3.inOut',
           scrollTrigger: {
             trigger: el,
-            start: 'top 80%',
+            start: 'top 85%',
             toggleActions: 'play none none none'
           }
         });
@@ -2242,7 +2277,7 @@
         const target = parseInt(counter.dataset.target);
         ScrollTrigger.create({
           trigger: counter,
-          start: 'top 85%',
+          start: 'top 90%',
           once: true,
           onEnter: () => {
             if (prefersReducedMotion) {
@@ -2252,7 +2287,7 @@
             const obj = { val: 0 };
             gsap.to(obj, {
               val: target,
-              duration: 2,
+              duration: isMobile ? 1.2 : 2,
               ease: 'power2.out',
               onUpdate: () => {
                 counter.textContent = Math.floor(obj.val).toString().padStart(2, '0') + '+';
@@ -2264,10 +2299,10 @@
     }
 
     // ================================================================
-    // HORIZONTAL SCROLL — PROJECTS (3D PERSPECTIVE)
+    // HORIZONTAL SCROLL — DESKTOP ONLY
     // ================================================================
     function initHorizontalScroll() {
-      if (prefersReducedMotion || window.innerWidth <= 768) return;
+      if (prefersReducedMotion || isMobile) return;
 
       const track = document.getElementById('projects-track');
       const progressBar = document.getElementById('projects-progress');
@@ -2315,10 +2350,10 @@
     }
 
     // ================================================================
-    // VANILLA TILT
+    // VANILLA TILT — DESKTOP ONLY
     // ================================================================
     function initTilt() {
-      if (isTouchDevice || prefersReducedMotion) return;
+      if (isTouchDevice || prefersReducedMotion || isMobile) return;
       VanillaTilt.init(document.querySelectorAll('[data-tilt]'), {
         max: 8,
         speed: 400,
@@ -2330,79 +2365,24 @@
     }
 
     // ================================================================
-    // CONTACT TITLE ANIMATION — 3D CHAR REVEAL
+    // CONTACT TITLE ANIMATION
     // ================================================================
     function initContactAnimation() {
       const contactTitle = document.getElementById('contact-title');
       if (!contactTitle) return;
       const chars = splitTextToChars(contactTitle);
       gsap.from(chars, {
-        y: 100,
+        y: isMobile ? 60 : 100,
         opacity: 0,
-        rotateX: -40,
-        duration: 1.2,
+        rotateX: isMobile ? -20 : -40,
+        duration: isMobile ? 0.9 : 1.2,
         stagger: 0.02,
         ease: 'power3.out',
         transformOrigin: 'center bottom',
         scrollTrigger: {
           trigger: contactTitle,
-          start: 'top 80%',
+          start: 'top 85%',
           toggleActions: 'play none none none'
-        }
-      });
-    }
-
-    // ================================================================
-    // MOBILE MENU
-    // ================================================================
-    function initMobileMenu() {
-      const toggle = document.getElementById('menu-toggle');
-      const menu = document.getElementById('nav-menu');
-      if (!toggle || !menu) return;
-
-      let isOpen = false;
-
-      function openMenu() {
-        isOpen = true;
-        menu.style.display = 'flex';
-        menu.style.position = 'fixed';
-        menu.style.top = '64px';
-        menu.style.left = '0';
-        menu.style.right = '0';
-        menu.style.bottom = '0';
-        menu.style.background = 'rgba(14, 14, 14, 0.98)';
-        menu.style.flexDirection = 'column';
-        menu.style.padding = '2rem';
-        menu.style.gap = '2rem';
-        menu.style.zIndex = '999';
-        menu.style.backdropFilter = 'blur(20px)';
-        menu.style.webkitBackdropFilter = 'blur(20px)';
-        menu.style.alignItems = 'center';
-        menu.style.justifyContent = 'center';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        isOpen = false;
-        menu.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      toggle.addEventListener('click', () => {
-        if (isOpen) closeMenu();
-        else openMenu();
-      });
-
-      menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          closeMenu();
-        });
-      });
-
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && isOpen) {
-          closeMenu();
-          menu.style = '';
         }
       });
     }
@@ -2414,13 +2394,13 @@
       initLenis();
       initCursor();
       initNavigation();
+      initMobileMenu();
       initHeroAnimations();
       initScrollReveals();
       initCounters();
       initHorizontalScroll();
       initTilt();
       initContactAnimation();
-      initMobileMenu();
     }
 
     if (document.readyState === 'loading') {
